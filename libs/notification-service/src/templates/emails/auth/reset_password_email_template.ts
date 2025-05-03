@@ -135,7 +135,7 @@ export const reset_password_html_content = () => {
   <div class="main-content">
     <div class="email-container">
       <div class="logo-container">
-        <img src="https://d3d4p0pie749ab.cloudfront.net/versions/small/0b4c8014-45af-4583-a201-371b64cc72ba.jpeg"  
+        <img src="https://d3d4p0pie749ab.cloudfront.net/versions/original/25e6530d-480a-4c61-b061-0f805a1c007e.jpeg"  
           alt="Logo" 
           class="logo"
           style="margin: 0 auto;"

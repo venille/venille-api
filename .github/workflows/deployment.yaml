@@ -1,0 +1,59 @@
+name: Deploy to Medexer Server
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.10.0
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-node-
+      - name: Install Dependencies
+        run: npm install
+      - name: Build NestJs application
+        run: npm run build
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+
+  deploy-production:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+      - name: Deploy to Production Server
+        env:
+          HOST: ${{ secrets.EC2_HOST_VENILLE_SERVER}}
+          USER: ${{ secrets.EC2_USER_VENILLE_SERVER}}
+          KEY: ${{ secrets.EC2_SSH_KEY_VENILLE_SERVER}}
+        run: |
+          echo "$KEY" > keys-medexer-server.pem && chmod 600 keys-medexer-server.pem
+          ssh -o StrictHostKeyChecking=no -i keys-medexer-server.pem ${USER}@${HOST} '
+            pwd &&
+            cd infra &&
+            git pull origin main &&
+            npm install &&
+            npm run build
+            pm2 restart infra
+          '

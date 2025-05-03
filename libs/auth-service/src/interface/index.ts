@@ -75,15 +75,6 @@ export class CreateAccountDTO {
   // @MaxLength(10)
   referralCode: string;
 
-  @ApiProperty({
-    example: 'ADMIN',
-    default: AccountType.INDIVIDUAL,
-    description: 'Role of the user.',
-  })
-  @IsEnum(AccountType)
-  @IsOptional()
-  role: AccountType;
-
   @ApiPropertyOptional({
     example: 'Lagos',
     description: 'State of the user.',

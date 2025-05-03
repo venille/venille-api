@@ -8,9 +8,8 @@ import { reset_password_html_content } from '../../templates/emails/auth/reset_p
 import { EmailSenderService } from 'libs/helper-service/src/services/email-sender.service';
 import { forgot_password_html_content } from '../../templates/emails/auth/forgot_password_email_template';
 import { email_verification_html_content } from '../../templates/emails/auth/email_verification_email_template';
-import { welcome_customer_email_html_content } from '../../templates/emails/auth/welcome_buyer_email_template';
+import { welcome_customer_email_html_content } from '../../templates/emails/auth/welcome_customer_email_template';
 import { update_account_email_html_content } from '../../templates/emails/auth/update_account_email_template';
-import { welcome_seller_email_html_content } from '../../templates/emails/auth/welcome_seller_email_template';
 
 @Injectable()
 export class AuthEmailNotificationService {

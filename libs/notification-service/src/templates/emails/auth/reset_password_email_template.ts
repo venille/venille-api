@@ -54,8 +54,8 @@ export const reset_password_html_content = () => {
     }
 
     .logo {
-      width: 26px;
-      height: 26px;
+      width: 60px;
+      height: 60px;
       display: block;
       margin: 0 auto;
     }
@@ -146,7 +146,7 @@ export const reset_password_html_content = () => {
 
       <div class="content">
         <p>Hello,<br><br>
-          We wanted to let you know that the password for your Livestocx account has been successfully reset. If you made this change, no further action is required. If you didn't reset your password, please contact our support team immediately to secure your account.
+          We wanted to let you know that the password for your Venille account has been successfully reset. If you made this change, no further action is required. If you didn't reset your password, please contact our support team immediately to secure your account.
         </p>
 
         <ul class="bullet-points">
@@ -155,24 +155,24 @@ export const reset_password_html_content = () => {
         </ul>
 
         <br/>
-        <p>Best regards,<br>Team Livestocx.</p>
+        <p>Best regards,<br>Team Venille.</p>
       </div>
 
       <div class="social-links">
-        <a href="https://www.facebook.com/livestocx" style="text-decoration: none;">
+        <a href="" style="text-decoration: none;">
           <img title="Facebook" src="https://fryrscb.stripocdn.email/content/assets/img/social-icons/rounded-black/facebook-rounded-black.png" alt="Fb" width="24" height="24">
         </a>
-        <a href="https://twitter.com/livestocx" style="text-decoration: none;">
+        <a href="" style="text-decoration: none;">
           <img title="X" src="https://fryrscb.stripocdn.email/content/assets/img/social-icons/rounded-black/x-rounded-black.png" alt="X" width="24" height="24">
         </a>
-        <a href="https://www.linkedin.com/company/livestocxltd" style="text-decoration: none;">
+        <a href="" style="text-decoration: none;">
           <img title="LinkedIn" src="https://fryrscb.stripocdn.email/content/assets/img/social-icons/rounded-black/linkedin-rounded-black.png" alt="In" width="24" height="24">
         </a>
       </div>
 
       <div class="footer">
-        <p>For assistance, contact <strong><a href="mailto:support@livestocx.com">support@livestocx.com</a></strong></p>
-        <p style="margin-top: 10px;"><strong><a href="https://livestocx.com/privacy-policy/" style="color: #1C3B4E;">Privacy policy</a></strong></p>
+        <p>For assistance, contact <strong><a href="">support@venille.com.ng</a></strong></p>
+        <p style="margin-top: 10px;"><strong><a href="" style="color: #1C3B4E;">Privacy policy</a></strong></p>
       </div>
     </div>
   </div>

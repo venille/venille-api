@@ -64,8 +64,8 @@ export const forgot_password_html_content = (passwordResetCode: string) => {
           }
   
           .logo {
-              width: 26px;
-              height: 26px;
+              width: 60px;
+              height: 60px;
           }
   
           .header {
@@ -162,7 +162,7 @@ export const forgot_password_html_content = (passwordResetCode: string) => {
   
               <div class="content">
                   <p>Hello,<br><br>
-                  We received a request to reset the password for your Medexer account. To proceed, please verify your email address.</p>
+                  We received a request to reset the password for your Venille account. To proceed, please verify your email address.</p>
                   
                   <p>Here is your reset password code (OTP):</p>
                   
@@ -177,13 +177,13 @@ export const forgot_password_html_content = (passwordResetCode: string) => {
                   <table cellpadding="0" cellspacing="0" border="0">
                       <tr>
                           <td align="center">
-                              <a target="_blank" href="https://www.facebook.com/livestocx" style="display: inline-block; margin: 0 10px;">
+                              <a target="_blank" href="" style="display: inline-block; margin: 0 10px;">
                                   <img title="Facebook" src="https://fryrscb.stripocdn.email/content/assets/img/social-icons/rounded-black/facebook-rounded-black.png" alt="Fb" width="24" height="24">
                               </a>
-                              <a target="_blank" href="https://twitter.com/livestocx" style="display: inline-block; margin: 0 10px;">
+                              <a target="_blank" href="" style="display: inline-block; margin: 0 10px;">
                                   <img title="X" src="https://fryrscb.stripocdn.email/content/assets/img/social-icons/rounded-black/x-rounded-black.png" alt="X" width="24" height="24">
                               </a>
-                              <a target="_blank" href="https://www.linkedin.com/company/livestocxltd" style="display: inline-block; margin: 0 10px;">
+                              <a target="_blank" href="" style="display: inline-block; margin: 0 10px;">
                                   <img title="LinkedIn" src="https://fryrscb.stripocdn.email/content/assets/img/social-icons/rounded-black/linkedin-rounded-black.png" alt="In" width="24" height="24">
                               </a>
                           </td>
@@ -192,8 +192,8 @@ export const forgot_password_html_content = (passwordResetCode: string) => {
               </div>
   
               <div class="footer">
-                  <p>For assistance, contact <strong><a href="mailto:support@livestocx.com">support@livestocx.com</a></strong></p>
-                  <a href="https://livestocx.com/privacy-policy/" class="privacy-link"><strong>Privacy policy</strong></a>
+                  <p>For assistance, contact <strong><a href="mailto:support@venille.com.ng">support@venille.com.ng</a></strong></p>
+                  <a href="" class="privacy-link"><strong>Privacy policy</strong></a>
               </div>
           </div>
       </div>

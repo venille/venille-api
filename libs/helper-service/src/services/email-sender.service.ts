@@ -18,7 +18,7 @@ export class EmailSenderService {
     const apiKey = process.env.BREVO_API_KEY;
     const emailRequest: EmailRequest = {
       sender: {
-        name: this.configService.get<string>('MAIL_FROM_NAME') ?? 'Livestocx',
+        name: this.configService.get<string>('MAIL_FROM_NAME') ?? 'Venille',
         email: this.configService.get<string>('MAIL_FROM_EMAIL'),
       },
       to: [

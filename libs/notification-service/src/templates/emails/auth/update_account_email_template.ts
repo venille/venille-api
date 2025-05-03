@@ -47,8 +47,8 @@ export const update_account_email_html_content = (
         }
 
         .logo {
-            width: 35px;
-            height: 35px;
+            width: 60px;
+            height: 60px;
         }
 
         .title {
@@ -122,7 +122,7 @@ export const update_account_email_html_content = (
                 
                 <div class="message">
                     Hello ${donor},<br><br>
-                    We received a request to update the email for your Animaff account. To proceed, verify your new email address with this activation code:
+                    We received a request to update the email for your Venille account. To proceed, verify your new email address with this activation code:
                 </div>
                 
                 <div class="verification-code">
@@ -136,19 +136,19 @@ export const update_account_email_html_content = (
 
             <div class="footer">
                 <div class="social-links">
-                    <a target="_blank" href="https://www.facebook.com/livestocx" >
+                    <a target="_blank" href="">
                       <img title="Facebook" src="https://fryrscb.stripocdn.email/content/assets/img/social-icons/rounded-black/facebook-rounded-black.png" alt="Fb" width="24" height="24">
                     </a>
-                    <a target="_blank" href="https://twitter.com/livestocx">
+                    <a target="_blank" href="">
                       <img title="X" src="https://fryrscb.stripocdn.email/content/assets/img/social-icons/rounded-black/x-rounded-black.png" alt="X" width="24" height="24">
                     </a>
-                    <a target="_blank" href="https://www.linkedin.com/company/livestocxltd" >
+                    <a target="_blank" href="">
                       <img title="LinkedIn" src="https://fryrscb.stripocdn.email/content/assets/img/social-icons/rounded-black/linkedin-rounded-black.png" alt="In" width="24" height="24">
                     </a>
                 </div>
                 
-                <p>For assistance, contact <strong><a href="mailto:support@livestocx.com">support@livestocx.com</a></strong></p>
-                <p><strong><a href="https://livestocx.com/privacy-policy/">Privacy policy</a></strong></p>
+                <p>For assistance, contact <strong><a href="">support@venille.com.ng</a></strong></p>
+                <p><strong><a href="">Privacy policy</a></strong></p>
             </div>
         </div>
     </div>

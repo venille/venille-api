@@ -45,8 +45,8 @@ export const welcome_customer_email_html_content = (customerName: string) => {
     }
 
     .logo {
-      width: 35px;
-      height: 35px;
+      width: 60px;
+      height: 60px;
       margin: 0 auto;
       display: block;
     }
@@ -150,44 +150,47 @@ export const welcome_customer_email_html_content = (customerName: string) => {
       
       <div class="message">
         Hello ${customerName},
+           <br><br>
+        Welcome to <strong>Venille</strong>! We're excited to support your journey toward better menstrual health. Venille is more than just premium sanitary pads—we’re building a full menstrual wellness experience through our mobile app.
         <br><br>
-        Welcome to Livestocx! We're thrilled to have you join our community where we make buying livestock simple and reliable. <strong>With Livestocx, you can:</strong>
+        <strong>With Venille, you can:</strong>
       </div>
       
       <ul class="benefits-list">
-        <li>Connect with reputable sellers you can trust.</li>
-        <li>Book hassle-free farm visits anytime.</li>
-        <li>Manage your buying history in one place.</li>
+        <li>Track your menstrual cycle and receive health insights.</li>
+        <li>Set reminders for pad changes and period predictions.</li>
+        <li>Access trusted information on reproductive health and hygiene.</li>
+        <li>Order quality sanitary products directly to your door.</li>
       </ul>
       
-      <div class="message">
-        We’re here to make your livestock purchasing experience seamless and rewarding. Together, let’s build a stronger future.
+       <div class="message">
+        We’re committed to empowering every woman and girl to feel confident and in control of their menstrual health. We’re glad to have you with us.
         <br><br>
-        Warm regards,
+        With care,  
         <br>
-        Team Livestocx.
+        Team Venille
       </div>
     </div>
     
     <div class="footer">
       <div class="social-links">
-       <a target="_blank" href="https://www.facebook.com/livestocx" style="mso-line-height-rule:exactly;text-decoration:underline;color:#1C3B4E;font-size:14px">
+       <a target="_blank" href="" style="mso-line-height-rule:exactly;text-decoration:underline;color:#1C3B4E;font-size:14px">
           <img title="Facebook" src="https://fryrscb.stripocdn.email/content/assets/img/social-icons/rounded-black/facebook-rounded-black.png" alt="Fb" width="24" height="24" style="display:block;font-size:18px;border:0;outline:none;text-decoration:none">
         </a>
-        <a target="_blank" href="https://twitter.com/livestocx" style="mso-line-height-rule:exactly;text-decoration:underline;color:#1C3B4E;font-size:14px">
+        <a target="_blank" href="" style="mso-line-height-rule:exactly;text-decoration:underline;color:#1C3B4E;font-size:14px">
           <img title="X" src="https://fryrscb.stripocdn.email/content/assets/img/social-icons/rounded-black/x-rounded-black.png" alt="X" width="24" height="24" style="display:block;font-size:18px;border:0;outline:none;text-decoration:none">
         </a>
-        <a target="_blank" href="https://www.linkedin.com/company/livestocxltd" style="mso-line-height-rule:exactly;text-decoration:underline;color:#1C3B4E;font-size:14px">
+        <a target="_blank" href="" style="mso-line-height-rule:exactly;text-decoration:underline;color:#1C3B4E;font-size:14px">
           <img title="LinkedIn" src="https://fryrscb.stripocdn.email/content/assets/img/social-icons/rounded-black/linkedin-rounded-black.png" alt="In" width="24" height="24" style="display:block;font-size:18px;border:0;outline:none;text-decoration:none">
         </a>
       </div>
-      
+
       <div class="contact-info">
-        For assistance, contact <strong><a href="mailto:support@livestocx.com">support@livestocx.com</a>
+        For assistance, contact <strong><a href="">support@venille.com.ng</a>
       </div>
       
       <div class="contact-info">
-        <a href="https://livestocx.com/privacy-policy/" class="privacy-link">Privacy policy</a>
+        <a href="" class="privacy-link">Privacy policy</a>
       </div>
     </div>
   </div>

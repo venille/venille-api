@@ -52,8 +52,8 @@ export class CreateAccountEventHandler
       }
 
       await this.notificationRepository.save({
-        title: '👋 Welcome to Livestocx',
-        message: `We’re thrilled to have you on board. Whether you’re buying or selling, Livestocx is here to support your livestock/animals needs. Explore now and see what’s waiting for you!`,
+        title: '👋 Welcome to Venille',
+        message: `We’re thrilled to have you on board. Whether you’re buying or selling, Venille is here to support your livestock/animals needs. Explore now and see what’s waiting for you!`,
         user: newUser,
       });
 

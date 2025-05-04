@@ -14,6 +14,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from 'libs/common/src/auth/jwt.strategy';
 import { AppLogger } from 'libs/common/src/logger/logger.service';
 import { DatabaseSource } from 'libs/common/src/database/database-source';
+import { AccountServiceModule } from '@app/account-service/src/account-service.module';
 import { DeviceInfoMiddleware } from 'libs/common/src/middlewares/device.info.middleware';
 import { SuccessResponseMiddleware } from 'libs/common/src/middlewares/success.middleware';
 import { NotificationServiceModule } from '@app/notification-service/src/notification-service.module';
@@ -23,6 +24,7 @@ import { NotificationServiceModule } from '@app/notification-service/src/notific
     HealthModule,
     CommonModule,
     AuthServiceModule,
+    AccountServiceModule,
     NotificationServiceModule,
     TypeOrmModule.forRoot(DatabaseSource),
     CacheModule.register({ isGlobal: true }),
@@ -38,10 +40,10 @@ import { NotificationServiceModule } from '@app/notification-service/src/notific
       inject: [ConfigService],
     }),
     RouterModule.register([
-      // {
-      //   path: 'v1/account',
-      //   module: AccountServiceModule,
-      // },
+      {
+        path: 'v1/account',
+        module: AccountServiceModule,
+      },
       {
         path: 'v1/auth',
         module: AuthServiceModule,

@@ -144,7 +144,8 @@
       "<rootDir>/libs/"
     ],
     "moduleNameMapper": {
-      "^@app/auth-service(|/.*)$": "<rootDir>/libs/auth-service/src/$1"
+      "^@app/auth-service(|/.*)$": "<rootDir>/libs/auth-service/src/$1",
+      "^@app/account-service(|/.*)$": "<rootDir>/libs/account-service/src/$1"
     }
   }
 }

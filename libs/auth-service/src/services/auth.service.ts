@@ -83,7 +83,7 @@ export class AuthService {
     };
   }
 
-  async testGeminiAPI(query: string): Promise<string> {
+  async generateVellaAiAPI(query: string): Promise<string> {
     try {
       this.logger.log(`[TEST-GEMINI-API-PROCESSING]`);
 

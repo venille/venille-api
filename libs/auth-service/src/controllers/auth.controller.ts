@@ -149,10 +149,10 @@ export class AuthController {
     description: 'What do you want to ask the AI',
   })
   @ApiConflictResponse()
-  async testGeminiAI(
+  async generateVellaAiPrompt(
     @Req() req: Request,
     @Query('query') query: string
   ): Promise<string> {
-    return await this.authService.testGeminiAPI(query);
+    return await this.authService.generateVellaAiAPI(query);
   }
 }

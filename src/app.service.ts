@@ -3,6 +3,6 @@ import { Injectable } from '@nestjs/common';
 @Injectable()
 export class AppService {
   getHello(): string {
-    return 'Venille server(v1)';
+    return 'Venille Period Tracker Server(v1)';
   }
 }

@@ -10,6 +10,9 @@ import { GenerateContentResponse, GoogleGenAI } from '@google/genai';
 import { AppLogger } from '../../../common/src/logger/logger.service';
 import { ReferralCodeGenerator } from '@app/common/src/utils/id.generator';
 
+
+
+
 @Injectable()
 export class AuthService {
   private geminiAI: GoogleGenAI;

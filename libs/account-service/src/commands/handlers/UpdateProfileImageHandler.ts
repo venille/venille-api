@@ -39,7 +39,7 @@ export class UpdateProfileImageHandler
       }
 
       Object.assign(account, {
-        avatar: payload.imageUrl,
+        profilePhoto: payload.imageUrl,
       });
 
       await this.accountRepository.save(account);

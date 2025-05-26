@@ -28,21 +28,29 @@ export class UpdateProfileImageHandler
 
       const { payload, secureUser } = command;
 
-      const account = await this.accountRepository.findOne({
+      const _account = await this.accountRepository.findOne({
         where: {
           id: secureUser.id,
         },
       });
 
-      if (!account) {
+      if (!_account) {
         throw UserNotFoundException();
       }
 
-      Object.assign(account, {
+      Object.assign(_account, {
         profilePhoto: payload.imageUrl,
       });
 
-      await this.accountRepository.save(account);
+      await this.accountRepository.save(_account);
+
+      this.logger.log(`[UPDATE-ACCOUNT-PROFILE-PHOTO-IMAGE-URL] :: ${payload.imageUrl}`);
+
+      const account = await this.accountRepository.findOne({
+        where: {
+          id: secureUser.id,
+        },
+      });
 
       this.logger.log(`[UPDATE-ACCOUNT-PROFILE-PHOTO-HANDLER-SUCCESS]`);
 

@@ -75,27 +75,27 @@ export class CreateAccountDTO {
   // @MaxLength(10)
   referralCode: string;
 
-  @ApiPropertyOptional({
-    example: 'Lagos',
-    description: 'State of the user.',
-  })
-  @IsString()
-  @IsOptional()
-  @Transform(({ value }: { value: string }) =>
-    capitalizeWordsTransformer(value),
-  )
-  state: string;
+  // @ApiPropertyOptional({
+  //   example: 'Lagos',
+  //   description: 'State of the user.',
+  // })
+  // @IsString()
+  // @IsOptional()
+  // @Transform(({ value }: { value: string }) =>
+  //   capitalizeWordsTransformer(value),
+  // )
+  // state: string;
 
-  @ApiPropertyOptional({
-    example: 'Ikeja',
-    description: 'City of the user.',
-  })
-  @IsString()
-  @IsOptional()
-  @Transform(({ value }: { value: string }) =>
-    capitalizeWordsTransformer(value),
-  )
-  city: string;
+  // @ApiPropertyOptional({
+  //   example: 'Ikeja',
+  //   description: 'City of the user.',
+  // })
+  // @IsString()
+  // @IsOptional()
+  // @Transform(({ value }: { value: string }) =>
+  //   capitalizeWordsTransformer(value),
+  // )
+  // city: string;
 }
 
 export class CompleteSignupVerificationDTO {

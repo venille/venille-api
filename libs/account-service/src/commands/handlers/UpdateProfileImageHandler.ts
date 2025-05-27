@@ -52,6 +52,7 @@ export class UpdateProfileImageHandler
         },
       });
 
+      console.log(`[UPDATE-ACCOUNT-PROFILE-PHOTO-HANDLER-SUCCESS]`);
       this.logger.log(`[UPDATE-ACCOUNT-PROFILE-PHOTO-HANDLER-SUCCESS]`);
 
       return modelsFormatter.FormatAccountInfo(account);

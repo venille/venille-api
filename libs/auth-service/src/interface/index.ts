@@ -61,7 +61,7 @@ export class CreateAccountDTO {
     example: '+2348123456789',
     description: 'Phone number of the user.',
   })
-  @IsPhoneNumber()
+  @IsString()
   @IsNotEmpty()
   phone: string;
 

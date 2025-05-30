@@ -37,3 +37,16 @@ export enum ForumCategory {
   PREGNANCY = 'pregnancy',
   PARENTHOOD = 'parenthood',
 }
+
+export enum CourseCategory {
+  UNDERSTANDING_YOUR_BODY = 'understanding-your-body',
+  SEXUAL_PLEASURE_AND_WELLNESS = 'sexual-pleasure-and-wellness',
+  MENTAL_AND_EMOTIONAL_WELL_BEING = 'mental-and-emotional-well-being',
+  MENOPAUSE_AND_MIDLIFE_HEALTH = 'menopause-and-midlife-health',
+  CONTRACEPTION_AND_FAMILY_PLANNING = 'contraception-and-family-planning',
+  MENSTRUAL_HEALTH_AND_HYGIENE = 'menstrual-health-and-hygiene',
+  SEXUAL_AND_REPRODUCTIVE_RIGHTS = 'sexual-and-reproductive-rights',
+  SEXUALLY_TRANSMITTED_INFECTIONS = 'sexually-transmitted-infections',
+  FERTILITY_AND_INFERTILITY = 'fertility-and-infertility',
+  PREGNANCY_AND_POSTPARTUM_CARE = 'pregnancy-and-postpartum-care',
+}

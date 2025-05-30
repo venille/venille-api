@@ -1,6 +1,7 @@
+import { ForumInfo } from '../models/forum.model';
+import { Course, CourseInfo } from '../models/course.model';
 import { AccountInfo, Account } from '../models/account.model';
 import { Forum, ForumComment, ForumCommentInfo } from '../models/forum.model';
-import { ForumInfo } from '../models/forum.model';
 import { Notification, NotificationInfo } from '../models/notification.model';
 
 export function FormatAccountInfo(account: Account): AccountInfo {
@@ -51,11 +52,23 @@ export function FormatForumInfo(forum: Forum): ForumInfo {
   } as ForumInfo;
 }
 
-export function FormatForumCommentInfo(forumComment: ForumComment): ForumCommentInfo {
+export function FormatForumCommentInfo(
+  forumComment: ForumComment,
+): ForumCommentInfo {
   return {
     id: forumComment.id.toString(),
     content: forumComment.content,
   } as ForumCommentInfo;
+}
+
+export function FormatCourseInfo(course: Course): CourseInfo {
+  return {
+    id: course.id,
+    title: course.title,
+    description: course.description,
+    category: course.category,
+    coverPhoto: course.coverPhoto,
+  } as CourseInfo;
 }
 
 export default {
@@ -63,4 +76,5 @@ export default {
   FormatAccountInfo,
   FormatNotification,
   FormatForumCommentInfo,
+  FormatCourseInfo,
 };

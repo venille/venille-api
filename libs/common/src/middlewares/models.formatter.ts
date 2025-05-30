@@ -1,4 +1,6 @@
 import { AccountInfo, Account } from '../models/account.model';
+import { Forum, ForumComment, ForumCommentInfo } from '../models/forum.model';
+import { ForumInfo } from '../models/forum.model';
 import { Notification, NotificationInfo } from '../models/notification.model';
 
 export function FormatAccountInfo(account: Account): AccountInfo {
@@ -36,7 +38,29 @@ export function FormatNotification(
   } as unknown as NotificationInfo;
 }
 
+export function FormatForumInfo(forum: Forum): ForumInfo {
+  return {
+    id: forum.id.toString(),
+    title: forum.title,
+    description: forum.description,
+    category: forum.category,
+    image: forum.image,
+    likes: JSON.parse(forum.likes).length,
+    createdAt: forum.createdAt,
+    updatedAt: forum.updatedAt,
+  } as ForumInfo;
+}
+
+export function FormatForumCommentInfo(forumComment: ForumComment): ForumCommentInfo {
+  return {
+    id: forumComment.id.toString(),
+    content: forumComment.content,
+  } as ForumCommentInfo;
+}
+
 export default {
+  FormatForumInfo,
   FormatAccountInfo,
   FormatNotification,
+  FormatForumCommentInfo,
 };

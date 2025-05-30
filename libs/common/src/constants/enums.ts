@@ -21,3 +21,19 @@ export enum OptimizedImageType {
   medium = 'medium',
   large = 'large',
 }
+
+export enum ForumCategory {
+  GENERAL = 'general',
+  HEALTH = 'health',
+  FITNESS = 'fitness',
+  NUTRITION = 'nutrition',
+  MENTAL_HEALTH = 'mental-health',
+  MENSTRUAL_CYCLE = 'menstrual-cycle',
+  SEXUAL_HEALTH = 'sexual-health',
+  CONTRACEPTION = 'contraception',
+  RELATIONSHIPS = 'relationships',
+  FAMILY = 'family',
+  BEAUTY_AND_WELLNESS = 'beauty-and-wellness',
+  PREGNANCY = 'pregnancy',
+  PARENTHOOD = 'parenthood',
+}

@@ -17,6 +17,7 @@ import { DatabaseSource } from 'libs/common/src/database/database-source';
 import { AccountServiceModule } from '@app/account-service/src/account-service.module';
 import { DeviceInfoMiddleware } from 'libs/common/src/middlewares/device.info.middleware';
 import { SuccessResponseMiddleware } from 'libs/common/src/middlewares/success.middleware';
+import { EngagementServiceModule } from '@app/engagement-service/src/engagement-service.module';
 import { NotificationServiceModule } from '@app/notification-service/src/notification-service.module';
 
 @Module({
@@ -25,6 +26,7 @@ import { NotificationServiceModule } from '@app/notification-service/src/notific
     CommonModule,
     AuthServiceModule,
     AccountServiceModule,
+    EngagementServiceModule,
     NotificationServiceModule,
     TypeOrmModule.forRoot(DatabaseSource),
     CacheModule.register({ isGlobal: true }),
@@ -47,6 +49,10 @@ import { NotificationServiceModule } from '@app/notification-service/src/notific
       {
         path: 'v1/auth',
         module: AuthServiceModule,
+      },
+      {
+        path: 'v1/engagement',
+        module: EngagementServiceModule,
       },
     ]),
   ],

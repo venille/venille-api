@@ -24,6 +24,24 @@
       "compilerOptions": {
         "tsConfigPath": "libs/auth-service/tsconfig.lib.json"
       }
+    },
+    "engagement-service": {
+      "type": "library",
+      "root": "libs/engagement-service",
+      "entryFile": "index",
+      "sourceRoot": "libs/engagement-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/engagement-service/tsconfig.lib.json"
+      }
+    },
+    "notification-service": {
+      "type": "library",
+      "root": "libs/notification-service",
+      "entryFile": "index",
+      "sourceRoot": "libs/notification-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/notification-service/tsconfig.lib.json"
+      }
     }
   }
 }

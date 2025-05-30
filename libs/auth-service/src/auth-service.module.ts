@@ -9,6 +9,7 @@ import { Account } from 'libs/common/src/models/account.model';
 import { AuthController } from './controllers/auth.controller';
 import { setupSwaggerDocument } from '../../common/src/swagger';
 import { AuthServiceCommandHandlers } from './commands/handlers';
+import { Referral } from '@app/common/src/models/referral.model';
 import { AppLogger } from '../../common/src/logger/logger.service';
 import { GetSystemJWTModule } from 'libs/common/src/middlewares/config';
 import { Notification } from '@app/common/src/models/notification.model';
@@ -16,7 +17,6 @@ import { AuthHelperController } from './controllers/auth.helper.controller';
 import { HelperServiceModule } from 'libs/helper-service/src/helper-service.module';
 import { AddressHelperController } from 'libs/helper-service/src/controllers/address.helper.controller';
 import { AuthEmailNotificationService } from '@app/notification-service/src/services/email/auth.email.notification.service';
-import { Referral } from '@app/common/src/models/referral.model';
 
 @Module({
   imports: [

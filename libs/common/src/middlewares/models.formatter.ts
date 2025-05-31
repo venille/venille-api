@@ -46,7 +46,7 @@ export function FormatForumInfo(forum: Forum): ForumInfo {
     description: forum.description,
     category: forum.category,
     image: forum.image,
-    likes: JSON.parse(forum.likes) || [],
+    likes: JSON.parse(forum.likes).map((id: string) => parseInt(id)) || [],
     likeCount:
       JSON.parse(forum.likes) && JSON.parse(forum.likes).length > 0
         ? JSON.parse(forum.likes).length

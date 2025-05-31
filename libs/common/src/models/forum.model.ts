@@ -175,7 +175,7 @@ export class ForumFeedResponse {
 export class ForumCommentsResponse {
   @ApiProperty({
     isArray: true,
-    type: ForumInfo,
+    type: ForumCommentInfo,
   })
   comments: ForumCommentInfo[];
 

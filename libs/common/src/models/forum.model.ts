@@ -113,8 +113,11 @@ export class ForumInfo {
   })
   authorPhoto: string;
 
+  @ApiProperty({ example: [10], isArray: true, type: [1] })
+  likes: number[];
+
   @ApiProperty({ example: 10 })
-  likes: number;
+  likeCount: number;
 
   @ApiProperty({ example: 10 })
   comments: number;

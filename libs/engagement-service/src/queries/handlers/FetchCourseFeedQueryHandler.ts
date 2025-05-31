@@ -37,7 +37,7 @@ export class FetchCourseFeedQueryHandler
         this.logger.log(
           `[FETCH-COURSE-FEED-QUERY-HANDLER-CACHE-HIT]: ${cacheKey}`,
         );
-        // return cachedResult;
+        return cachedResult;
       }
 
       this.logger.log(
@@ -84,7 +84,7 @@ export class FetchCourseFeedQueryHandler
 
       const result = groupedCourses;
 
-      const CACHE_TTL_MS = 1 * 60 * 1000; // 1 minute
+      const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
       await this.cacheManager.set(cacheKey, result, CACHE_TTL_MS);
 
       this.logger.log(`[FETCH-COURSE-FEED-QUERY-HANDLER-SUCCESS]`);

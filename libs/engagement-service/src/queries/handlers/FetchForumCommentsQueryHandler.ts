@@ -48,6 +48,9 @@ export class FetchForumCommentsQueryHandler
             id: forumId,
           },
         },
+        order: {
+          createdAt: 'DESC',
+        },
         take: pageSize,
         skip: (page - 1) * pageSize,
       });

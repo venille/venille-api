@@ -1,1 +1,3 @@
-export const EngagementServiceEventHandlers = [];
+import { NewForumCommentEventHandler } from './NewForumCommentEventHandler';
+
+export const EngagementServiceEventHandlers = [NewForumCommentEventHandler];

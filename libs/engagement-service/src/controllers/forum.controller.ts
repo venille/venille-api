@@ -18,7 +18,13 @@ import {
 } from '@nestjs/swagger';
 import { CreateForumCommentDto, CreateForumDto } from '../interface';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { CreateForumCommand, CreateForumCommentCommand, DeleteForumCommand, DeleteForumCommentCommand } from '../commands/impl';
+import {
+  CreateForumCommand,
+  CreateForumCommentCommand,
+  DeleteForumCommand,
+  DeleteForumCommentCommand,
+  LikeUnlikeForumPostCommand,
+} from '../commands/impl';
 import { SecureUserPayload } from '@app/common/src/interface';
 import { AccountInfo } from '@app/common/src/models/account.model';
 import { JwtAuthGuard } from '@app/common/src/auth/jwt-auth.guard';
@@ -29,7 +35,7 @@ import {
   FetchUserForumFeedQuery,
 } from '../queries/impl';
 import {
-    ForumCommentInfo,
+  ForumCommentInfo,
   ForumCommentsResponse,
   ForumFeedResponse,
   ForumInfo,
@@ -58,6 +64,71 @@ export class ForumController {
   ): Promise<ForumFeedResponse> {
     return await this.queryBus.execute(
       new FetchForumFeedQuery(page, pageSize, secureUser),
+    );
+  }
+
+  @ApiTags('forum')
+  @Get('feed/comments')
+  @ApiOkResponse({ type: ForumCommentsResponse })
+  @ApiQuery({ name: 'page', example: 1, type: Number, required: true })
+  @ApiQuery({ name: 'forumId', example: 1, type: Number, required: true })
+  @ApiQuery({ name: 'pageSize', example: 20, type: Number, required: true })
+  @ApiInternalServerErrorResponse()
+  async fetchForumComments(
+    @Req() req: Request,
+    @Query('page') page: number,
+    @Query('forumId') forumId: number,
+    @Query('pageSize') pageSize: number,
+    @SecureUser() secureUser: SecureUserPayload,
+  ): Promise<ForumCommentsResponse> {
+    return await this.queryBus.execute(
+      new FetchForumCommentsQuery(forumId, page, pageSize, secureUser),
+    );
+  }
+
+  @ApiTags('forum')
+  @Post('feed/like-unlike')
+  @ApiOkResponse({ type: ForumInfo })
+  @ApiQuery({ name: 'forumId', example: 1, type: Number, required: true })
+  @ApiInternalServerErrorResponse()
+  async likeUnlikeForumPost(
+    @Req() req: Request,
+    @Query('forumId') forumId: number,
+    @SecureUser() secureUser: SecureUserPayload,
+  ): Promise<ForumInfo> {
+    return await this.commandBus.execute(
+      new LikeUnlikeForumPostCommand(forumId, secureUser),
+    );
+  }
+
+  @ApiTags('forum')
+  @Post('feed/add-comment')
+  @ApiOkResponse({ type: ForumCommentInfo })
+  @ApiQuery({ name: 'forumId', example: 1, type: Number, required: true })
+  @ApiInternalServerErrorResponse()
+  async addForumComment(
+    @Req() req: Request,
+    @Query('forumId') forumId: number,
+    @Body() payload: CreateForumCommentDto,
+    @SecureUser() secureUser: SecureUserPayload,
+  ): Promise<ForumCommentInfo> {
+    return await this.commandBus.execute(
+      new CreateForumCommentCommand(forumId, payload, secureUser),
+    );
+  }
+
+  @ApiTags('forum')
+  @Delete('feed/delete-comment')
+  @ApiOkResponse({ type: Boolean })
+  @ApiQuery({ name: 'commentId', example: 1, type: Number, required: true })
+  @ApiInternalServerErrorResponse()
+  async deleteForumComment(
+    @Req() req: Request,
+    @Query('commentId') commentId: number,
+    @SecureUser() secureUser: SecureUserPayload,
+  ): Promise<boolean> {
+    return await this.commandBus.execute(
+      new DeleteForumCommentCommand(commentId, secureUser),
     );
   }
 
@@ -104,56 +175,6 @@ export class ForumController {
   ): Promise<boolean> {
     return await this.commandBus.execute(
       new DeleteForumCommand(forumId, secureUser),
-    );
-  }
-
-  @ApiTags('forum')
-  @Get('feed/comments')
-  @ApiOkResponse({ type: ForumCommentsResponse })
-  @ApiQuery({ name: 'page', example: 1, type: Number, required: true })
-  @ApiQuery({ name: 'forumId', example: 1, type: Number, required: true })
-  @ApiQuery({ name: 'pageSize', example: 20, type: Number, required: true })
-  @ApiInternalServerErrorResponse()
-  async fetchForumComments(
-    @Req() req: Request,
-    @Query('page') page: number,
-    @Query('forumId') forumId: number,
-    @Query('pageSize') pageSize: number,
-    @SecureUser() secureUser: SecureUserPayload,
-  ): Promise<ForumCommentsResponse> {
-    return await this.queryBus.execute(
-      new FetchForumCommentsQuery(forumId, page, pageSize, secureUser),
-    );
-  }
-
-  @ApiTags('forum')
-  @Post('feed/add-comment')
-  @ApiOkResponse({ type: ForumCommentInfo })
-  @ApiQuery({ name: 'forumId', example: 1, type: Number, required: true })
-  @ApiInternalServerErrorResponse()
-  async addForumComment(
-    @Req() req: Request,
-    @Query('forumId') forumId: number,
-    @Body() payload: CreateForumCommentDto,
-    @SecureUser() secureUser: SecureUserPayload,
-  ): Promise<ForumCommentInfo> {
-    return await this.commandBus.execute(
-      new CreateForumCommentCommand(forumId, payload, secureUser),
-    );
-  }
-
-  @ApiTags('forum')
-  @Delete('feed/delete-comment')
-  @ApiOkResponse({ type: Boolean })
-  @ApiQuery({ name: 'commentId', example: 1, type: Number, required: true })
-  @ApiInternalServerErrorResponse()
-  async deleteForumComment(
-    @Req() req: Request,
-    @Query('commentId') commentId: number,
-    @SecureUser() secureUser: SecureUserPayload,
-  ): Promise<boolean> {
-    return await this.commandBus.execute(
-      new DeleteForumCommentCommand(commentId, secureUser),
     );
   }
 }

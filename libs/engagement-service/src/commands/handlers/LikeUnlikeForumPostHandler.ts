@@ -4,9 +4,10 @@ import {
   Forum,
   ForumComment,
   ForumCommentInfo,
+  ForumInfo,
 } from '@app/common/src/models/forum.model';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateForumCommentCommand } from '../impl';
+import { LikeUnlikeForumPostCommand } from '../impl';
 import { NewForumCommentEvent } from '../../events/impl';
 import { Inject, NotFoundException } from '@nestjs/common';
 import { Account } from '@app/common/src/models/account.model';
@@ -14,9 +15,9 @@ import { AppLogger } from 'libs/common/src/logger/logger.service';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import modelsFormatter from '@app/common/src/middlewares/models.formatter';
 
-@CommandHandler(CreateForumCommentCommand)
-export class CreateForumCommentHandler
-  implements ICommandHandler<CreateForumCommentCommand, ForumCommentInfo>
+@CommandHandler(LikeUnlikeForumPostCommand)
+export class LikeUnlikeForumPostHandler
+  implements ICommandHandler<LikeUnlikeForumPostCommand, ForumInfo>
 {
   constructor(
     private readonly eventBus: EventBus,
@@ -29,11 +30,11 @@ export class CreateForumCommentHandler
     private readonly forumCommentRepository: Repository<ForumComment>,
   ) {}
 
-  async execute(command: CreateForumCommentCommand) {
+  async execute(command: LikeUnlikeForumPostCommand) {
     try {
       this.logger.log(`[CREATE-FORUM-COMMENT-HANDLER-PROCESSING]`);
 
-      const { forumId, payload, secureUser } = command;
+      const { forumId, secureUser } = command;
 
       const account = await this.accountRepository.findOne({
         where: {
@@ -55,19 +56,24 @@ export class CreateForumCommentHandler
         throw new NotFoundException('Forum not found');
       }
 
-      const forumComment = await this.forumCommentRepository.save({
-        forum,
-        account: account,
-        content: payload.content,
+      console.log(forum.likes);
+
+      Object.assign(forum, {
+        likes:
+          forum.likes && forum.likes.includes(account.id.toString())
+            ? JSON.stringify(JSON.parse(forum.likes).filter(
+                (id: string) => id !== account.id.toString(),
+              ))
+            : JSON.stringify([...JSON.parse(forum.likes), account.id.toString()]),
       });
 
-      this.eventBus.publish(new NewForumCommentEvent(forumId));
+      await this.forumRepository.save(forum);
 
-      this.logger.log(`[CREATE-FORUM-COMMENT-HANDLER-SUCCESS]`);
+      this.logger.log(`[LIKE-UNLIKE-FORUM-POST-HANDLER-SUCCESS]`);
 
-      return modelsFormatter.FormatForumCommentInfo(forumComment);
+      return modelsFormatter.FormatForumInfo(forum);
     } catch (error) {
-      this.logger.log(`[CREATE-FORUM-COMMENT-HANDLER-ERROR] :: ${error}`);
+      this.logger.log(`[LIKE-UNLIKE-FORUM-POST-HANDLER-ERROR] :: ${error}`);
       console.log(error);
 
       throw error;

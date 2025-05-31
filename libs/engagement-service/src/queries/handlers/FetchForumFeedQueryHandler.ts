@@ -46,6 +46,9 @@ export class FetchForumFeedQueryHandler
       const [forums, totalCount] = await this.forumRepository.findAndCount({
         take: pageSize,
         skip: (page - 1) * pageSize,
+        order: {
+          createdAt: 'DESC',
+        },
       });
 
       const totalPages = Math.ceil(totalCount / pageSize);

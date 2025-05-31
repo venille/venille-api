@@ -29,3 +29,10 @@ export class DeleteForumCommentCommand {
     public readonly secureUser: SecureUserPayload,
   ) {}
 }
+
+export class LikeUnlikeForumPostCommand {
+  constructor(
+    public readonly forumId: number,
+    public readonly secureUser: SecureUserPayload,
+  ) {}
+}

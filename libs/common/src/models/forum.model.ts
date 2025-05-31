@@ -60,12 +60,21 @@ export class Forum {
 
   @Column({
     nullable: true,
-    default: '[]',
+    default: '[0]',
   })
   @ApiPropertyOptional({
     description: 'Forum likes e.g 10.',
   })
   likes: string;
+
+  @Column({
+    nullable: true,
+    default: 0,
+  })
+  @ApiPropertyOptional({
+    description: 'Forum likes e.g 10.',
+  })
+  comments: number;
 
   @ManyToOne(() => Account, {
     onDelete: 'CASCADE',

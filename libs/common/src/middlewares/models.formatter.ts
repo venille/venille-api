@@ -58,6 +58,7 @@ export function FormatForumCommentInfo(
   return {
     id: forumComment.id.toString(),
     content: forumComment.content,
+    authorPhoto: forumComment.account.photo,
   } as ForumCommentInfo;
 }
 

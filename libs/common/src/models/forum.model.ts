@@ -99,6 +99,11 @@ export class ForumInfo {
   })
   image: string;
 
+  @ApiProperty({
+    example: 'https://medexer.s3.amazonaws.com/avatars/avatar.png',
+  })
+  authorPhoto: string;
+
   @ApiProperty({ example: 10 })
   likes: number;
 

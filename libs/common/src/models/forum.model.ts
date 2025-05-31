@@ -160,6 +160,14 @@ export class ForumCommentInfo {
 
   @ApiProperty({ example: 'Tunde' })
   content: string;
+
+  @ApiProperty({
+    example: 'https://medexer.s3.amazonaws.com/avatars/avatar.png',
+  })
+  authorPhoto: string;
+
+  @ApiProperty({ example: '2024-01-01' })
+  createdAt: Date;
 }
 
 export class ForumFeedResponse {

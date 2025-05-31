@@ -60,6 +60,8 @@ export function FormatForumCommentInfo(
   return {
     id: forumComment.id.toString(),
     content: forumComment.content,
+    authorPhoto: forumComment.account.profilePhoto,
+    createdAt: forumComment.createdAt,
   } as ForumCommentInfo;
 }
 

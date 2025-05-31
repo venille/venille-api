@@ -47,6 +47,7 @@ export function FormatForumInfo(forum: Forum): ForumInfo {
     category: forum.category,
     image: forum.image,
     likes: JSON.parse(forum.likes).length,
+    comments: 0,
     createdAt: forum.createdAt,
     updatedAt: forum.updatedAt,
   } as ForumInfo;

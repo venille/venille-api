@@ -107,6 +107,9 @@ export class ForumInfo {
   @ApiProperty({ example: 10 })
   likes: number;
 
+  @ApiProperty({ example: 10 })
+  comments: number;
+
   @ApiProperty({ example: '2024-01-01' })
   createdAt: Date;
 

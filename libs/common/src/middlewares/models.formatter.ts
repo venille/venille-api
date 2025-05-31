@@ -50,6 +50,7 @@ export function FormatForumInfo(forum: Forum): ForumInfo {
     comments: 0,
     createdAt: forum.createdAt,
     updatedAt: forum.updatedAt,
+    authorPhoto: forum.account.profilePhoto,
   } as ForumInfo;
 }
 
@@ -59,7 +60,6 @@ export function FormatForumCommentInfo(
   return {
     id: forumComment.id.toString(),
     content: forumComment.content,
-    authorPhoto: forumComment.account.photo,
   } as ForumCommentInfo;
 }
 

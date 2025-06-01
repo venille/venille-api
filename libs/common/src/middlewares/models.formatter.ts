@@ -71,7 +71,7 @@ export function FormatForumCommentInfo(
 
 export function FormatCourseInfo(course: Course): CourseInfo {
   return {
-    id: course.id,
+    id: course.id.toString(),
     title: course.title,
     description: course.description,
     category: course.category,

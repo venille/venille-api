@@ -75,7 +75,7 @@ export class CourseInfo {
   @ApiProperty({
     description: 'Course ID (Auto generated).',
   })
-  id: number;
+  id: string;
 
   @ApiProperty({
     description: 'Course info title e.g Understanding Your Body.',

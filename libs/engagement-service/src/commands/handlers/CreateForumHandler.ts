@@ -10,6 +10,7 @@ import { AuthService } from '@app/auth-service/src/services/auth.service';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { AuthEmailNotificationService } from 'libs/notification-service/src/services/email/auth.email.notification.service';
 import modelsFormatter from '@app/common/src/middlewares/models.formatter';
+import { ForumCategory } from '@app/common/src/constants/enums';
 
 @CommandHandler(CreateForumCommand)
 export class CreateForumHandler
@@ -43,7 +44,7 @@ export class CreateForumHandler
       const forum = await this.forumRepository.save({
         title: payload.title,
         description: payload.description,
-        category: payload.category,
+        category: ForumCategory.GENERAL,
         image: payload.image,
         account: account,
       });

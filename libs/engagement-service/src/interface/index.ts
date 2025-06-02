@@ -28,14 +28,14 @@ export class CreateForumDto {
   @IsNotEmpty()
   image: string;
 
-  @ApiProperty({
-    enum: ForumCategory,
-    example: ForumCategory.GENERAL,
-    description: 'The category of the forum',
-  })
-  @IsEnum(ForumCategory)
-  @IsNotEmpty()
-  category: ForumCategory;
+  // @ApiProperty({
+  //   enum: ForumCategory,
+  //   example: ForumCategory.GENERAL,
+  //   description: 'The category of the forum',
+  // })
+  // @IsEnum(ForumCategory)
+  // @IsNotEmpty()
+  // category: ForumCategory;
 }
 
 export class CreateForumCommentDto {

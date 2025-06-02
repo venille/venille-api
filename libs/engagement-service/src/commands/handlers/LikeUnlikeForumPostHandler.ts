@@ -46,28 +46,34 @@ export class LikeUnlikeForumPostHandler
         throw new NotFoundException('Account not found');
       }
 
-      const forum = await this.forumRepository.findOne({
+      const _forum = await this.forumRepository.findOne({
         where: {
           id: forumId,
         },
       });
 
-      if (!forum) {
+      if (!_forum) {
         throw new NotFoundException('Forum not found');
       }
 
-      console.log(forum.likes);
+      // console.log(_forum.likes);
 
-      Object.assign(forum, {
+      Object.assign(_forum, {
         likes:
-          forum.likes && forum.likes.includes(account.id.toString())
-            ? JSON.stringify(JSON.parse(forum.likes).filter(
+          _forum.likes && _forum.likes.includes(account.id.toString())
+            ? JSON.stringify(JSON.parse(_forum.likes).filter(
                 (id: string) => id !== account.id.toString(),
               ))
-            : JSON.stringify([...JSON.parse(forum.likes), account.id.toString()]),
+            : JSON.stringify([...JSON.parse(_forum.likes), account.id.toString()]),
       });
 
-      await this.forumRepository.save(forum);
+      await this.forumRepository.save(_forum);
+
+      const forum = await this.forumRepository.findOne({
+        where: {
+          id: forumId,
+        },
+      });
 
       this.logger.log(`[LIKE-UNLIKE-FORUM-POST-HANDLER-SUCCESS]`);
 

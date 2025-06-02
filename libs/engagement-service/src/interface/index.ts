@@ -25,7 +25,7 @@ export class CreateForumDto {
     description: 'The image of the forum',
   })
   @IsString()
-  @IsNotEmpty()
+  // @IsNotEmpty()
   image: string;
 
   // @ApiProperty({

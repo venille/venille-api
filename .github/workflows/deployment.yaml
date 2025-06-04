@@ -1,4 +1,4 @@
-name: Deploy to Medexer Server
+name: Deploy to Venille Server
 
 on:
   push:

@@ -1,1 +1,5 @@
-export const AccountServiceQueryHandlers = [];
+import { FetchOnboardingQuestionsQueryHandler } from './FetchOnboardingQuestionsQueryHandler';
+
+export const AccountServiceQueryHandlers = [
+  FetchOnboardingQuestionsQueryHandler,
+];

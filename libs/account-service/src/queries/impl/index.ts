@@ -7,3 +7,7 @@ export class FetchExistingCommunityUsersQuery {
 export class FetchUserCommunityRecordsQuery {
   constructor(public readonly secureUser: SecureUserPayload) {}
 }
+
+export class FetchOnboardingQuestionsQuery {
+  constructor(public readonly secureUser: SecureUserPayload) {}
+}

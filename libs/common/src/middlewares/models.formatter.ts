@@ -3,6 +3,8 @@ import { Course, CourseInfo } from '../models/course.model';
 import { AccountInfo, Account } from '../models/account.model';
 import { Forum, ForumComment, ForumCommentInfo } from '../models/forum.model';
 import { Notification, NotificationInfo } from '../models/notification.model';
+import { OnboardingQuestion } from '../models/onboarding.question.model';
+import { OnboardingQuestionInfo } from '../models/onboarding.question.model';
 
 export function FormatAccountInfo(account: Account): AccountInfo {
   delete account.password;
@@ -77,6 +79,21 @@ export function FormatCourseInfo(course: Course): CourseInfo {
     category: course.category,
     coverPhoto: course.coverPhoto,
   } as CourseInfo;
+}
+
+export function FormatOnboardingQuestionInfo(
+  onboardingQuestion: OnboardingQuestion,
+): OnboardingQuestionInfo {
+  return {
+    id: onboardingQuestion.id.toString(),
+    question: onboardingQuestion.question,
+    questionType: onboardingQuestion.questionType,
+    optionType: onboardingQuestion.optionType,
+    enumType: onboardingQuestion.enumType,
+    options: JSON.parse(onboardingQuestion.options),
+    isUserInput: onboardingQuestion.isUserInput,
+    position: onboardingQuestion.position,
+  } as OnboardingQuestionInfo;
 }
 
 export default {

@@ -50,3 +50,91 @@ export enum CourseCategory {
   FERTILITY_AND_INFERTILITY = 'fertility-and-infertility',
   PREGNANCY_AND_POSTPARTUM_CARE = 'pregnancy-and-postpartum-care',
 }
+
+export enum PeriodSymptom {
+  CRAMPS = 'cramps',
+  BLOATING = 'bloating',
+  MOOD_SWINGS = 'mood_swings',
+  HEADACHE = 'headache',
+  ACNE = 'acne',
+  FATIGUE = 'fatigue',
+  TENDER_BREASTS = 'tender_breasts',
+  NAUSEA = 'nausea',
+  OTHER = 'other',
+}
+
+export enum BirthControlMethod {
+  NONE = 'none',
+  PILL = 'pill',
+  IUD = 'iud',
+  IMPLANT = 'implant',
+  INJECTION = 'injection',
+  PATCH = 'patch',
+  CONDOM = 'condom',
+  NATURAL = 'natural',
+  OTHER = 'other',
+}
+
+export enum HealthCondition {
+  PCOS = 'pcos',
+  ENDOMETRIOSIS = 'endometriosis',
+  THYROID = 'thyroid',
+  DIABETES = 'diabetes',
+  FIBROIDS = 'fibroids',
+  BLOOD_DISORDER = 'blood_disorder',
+  OTHER = 'other',
+}
+
+export enum AdditionalTracking {
+  MOOD = 'mood',
+  DISCHARGE = 'discharge',
+  TEMPERATURE = 'temperature',
+  CERVICAL_POSITION = 'cervical_position',
+  SLEEP = 'sleep',
+  SEX = 'sex',
+  EXERCISE = 'exercise',
+  NUTRITION = 'nutrition',
+  OTHER = 'other',
+}
+
+export enum ReminderType {
+  PERIOD_START = 'period_start',
+  FERTILE_WINDOW = 'fertile_window',
+  OVULATION = 'ovulation',
+  MEDICATION = 'medication',
+  CUSTOM = 'custom',
+}
+
+export enum CycleGoal {
+  JUST_TRACKING = 'just_tracking',
+  TRYING_TO_CONCEIVE = 'trying_to_conceive',
+  AVOIDING_PREGNANCY = 'avoiding_pregnancy',
+  MONITORING_HEALTH = 'monitoring_health',
+}
+
+export enum OnboardingQuestionType {
+  MULTIPLE_CHOICE = 'multiple_choice',
+  DATE_RANGE = 'date_range',
+  TEXT = 'text',
+  NUMBER = 'number',
+  DATE = 'date',
+  BOOLEAN = 'boolean',
+}
+
+export enum OnboardingQuestionOptionType {
+  TEXT = 'text',
+  NUMBER = 'number',
+  DATE = 'date',
+  BOOLEAN = 'boolean',
+}
+
+export enum QuestionEnumType {
+  PeriodSymptom = 'PeriodSymptom',
+  BirthControlMethod = 'BirthControlMethod',
+  HealthCondition = 'HealthCondition',
+  AdditionalTracking = 'AdditionalTracking',
+  ReminderType = 'ReminderType',
+  CycleGoal = 'CycleGoal',
+}
+
+

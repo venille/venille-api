@@ -7,6 +7,7 @@ import { UpdateAccountFCMTokenHandler } from './UpdateAccountFCMTokenHandler';
 import { UpdateAccountPasswordHandler } from './UpdateAccountPasswordHandler';
 import { VerifyNewAccountEmailHandler } from './VerifyNewAccountEmailHandler';
 import { UpdateAccountLocationHandler } from './UpdateAccountLocationHandler';
+import { RegisterPeriodTrackerHandler } from './RegisterPeriodTrackerHandler';
 
 export const AccountServiceCommandHandlers = [
   DeleteAccountHandler,
@@ -14,6 +15,7 @@ export const AccountServiceCommandHandlers = [
   UpdateAccountEmailHandler,
   UpdateAccountPhoneHandler,
   UpdateProfileImageHandler,
+  RegisterPeriodTrackerHandler,
   UpdateAccountLocationHandler,
   UpdateAccountPasswordHandler,
   VerifyNewAccountEmailHandler,

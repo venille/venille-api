@@ -8,6 +8,9 @@ import {
 export const EmailAlreadyUsedException = () =>
   new ConflictException('Email is already in use.');
 
+export const AlreadyExistsException = (message: string) =>
+  new ConflictException(message);
+
 export const AppointmentAlreadyExistsException = (donationCenter: string) =>
   new ConflictException(
     `You already have a pending appointment with ${donationCenter}. Please wait for your appointment to be completed or cancel it before creating a new one.`,

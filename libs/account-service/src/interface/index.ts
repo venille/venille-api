@@ -9,6 +9,9 @@ import {
   IsOptional,
   IsPhoneNumber,
   IsNumberString,
+  IsDate,
+  IsNumber,
+  IsBoolean,
 } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
@@ -16,6 +19,14 @@ import {
   trimTransformer,
   toLowerCaseTransformer,
 } from '@app/common/src/helpers/local-class-validator';
+import {
+  AdditionalTracking,
+  BirthControlMethod,
+  CycleGoal,
+  HealthCondition,
+  PeriodSymptom,
+  ReminderType,
+} from '@app/common/src/constants/enums';
 
 export class UpdateFCMTokenDTO {
   @ApiProperty({
@@ -139,4 +150,116 @@ export class UpdateAccountLocationDTO {
   @IsString()
   @IsNotEmpty()
   city: string;
+}
+
+export class RegisterPeriodTrackerDTO {
+  @ApiProperty({
+    example: '2024-01-01',
+    description: 'Date of first period.',
+  })
+  @IsDate()
+  @IsNotEmpty()
+  lastPeriodStartDate: Date;
+
+  @ApiProperty({
+    example: 28,
+    description: 'Length of period in days.',
+  })
+  @IsNumber()
+  @IsNotEmpty()
+  periodLengthDays: number;
+
+  @ApiProperty({
+    example: 28,
+    description: 'Length of cycle in days.',
+  })
+  @IsNumber()
+  @IsNotEmpty()
+  cycleLengthDays: number;
+
+  @ApiProperty({
+    example: true,
+    description: 'Is the period irregular?',
+  })
+  @IsBoolean()
+  @IsNotEmpty()
+  irregularPeriods: boolean;
+
+  @ApiProperty({
+    example: 'cramps',
+    enum: PeriodSymptom,
+    description: 'Period symptoms.',
+  })
+  @IsString()
+  @IsNotEmpty()
+  periodSymptoms: PeriodSymptom;
+
+  @ApiProperty({
+    example: true,
+    description: 'Is the user tracking ovulation?',
+  })
+  @IsBoolean()
+  @IsNotEmpty()
+  trackingOvulation: boolean;
+
+  @ApiProperty({
+    example: 28,
+    description: 'Age of the user.',
+  })
+  @IsNumber()
+  @IsNotEmpty()
+  age: number;
+
+  @ApiProperty({
+    example: 'pill',
+    enum: BirthControlMethod,
+    description: 'Birth control method.',
+  })
+  @IsString()
+  @IsNotEmpty()
+  birthControlMethods: BirthControlMethod;
+
+  @ApiProperty({
+    example: 'pcos',
+    enum: HealthCondition,
+    description: 'Health condition.',
+  })
+  @IsString()
+  @IsNotEmpty()
+  healthConditions: HealthCondition;
+
+  @ApiProperty({
+    example: 'mood',
+    enum: AdditionalTracking,
+    description: 'Additional tracking.',
+  })
+  @IsString()
+  @IsNotEmpty()
+  additionalTracking: AdditionalTracking;
+
+  @ApiProperty({
+    example: true,
+    description: 'Is the user want reminders?',
+  })
+  @IsBoolean()
+  @IsNotEmpty()
+  wantReminders: boolean;
+
+  @ApiProperty({
+    example: 'period_start',
+    enum: ReminderType,
+    description: 'Reminder type.',
+  })
+  @IsString()
+  @IsNotEmpty()
+  reminderTypes: ReminderType;
+
+  @ApiProperty({
+    example: 'just_tracking',
+    enum: CycleGoal,
+    description: 'Cycle goal.',
+  })
+  @IsString()
+  @IsNotEmpty()
+  cycleGoal: CycleGoal;
 }

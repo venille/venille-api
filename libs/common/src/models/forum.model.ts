@@ -60,7 +60,7 @@ export class Forum {
 
   @Column({
     nullable: true,
-    default: '[0]',
+    default: '[ ]',
   })
   @ApiPropertyOptional({
     description: 'Forum likes e.g 10.',

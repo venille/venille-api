@@ -111,7 +111,7 @@ export class OnboardingQuestionInfo {
   @ApiProperty({ example: 'PeriodSymptom' })
   enumType: QuestionEnumType;
 
-  @ApiProperty({ example: ['Yes', 'No', 'Maybe'], isArray: true })
+  @ApiProperty({ example: ['Yes', 'No', 'Maybe'], isArray: true, type: String })
   options: string[];
 
   @ApiProperty({ example: false })

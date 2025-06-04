@@ -135,6 +135,7 @@ export enum QuestionEnumType {
   AdditionalTracking = 'AdditionalTracking',
   ReminderType = 'ReminderType',
   CycleGoal = 'CycleGoal',
+  General = 'General',
 }
 
 

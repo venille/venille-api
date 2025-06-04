@@ -239,11 +239,18 @@ export class Account {
   })
 
   lastLogin: Date;
+  
   @Column({ default: '', nullable: true })
   @ApiPropertyOptional({
     description: 'Signup verification hash',
   })
   signupVerificationHash: string;
+
+  @Column({ default: false, nullable: true })
+  @ApiPropertyOptional({
+    description: 'Is onboarding uploaded',
+  })
+  isOnboardingUploaded: boolean;
 
   @CreateDateColumn({ nullable: true })
   @ApiPropertyOptional({
@@ -296,4 +303,7 @@ export class AccountInfo {
 
   @ApiProperty({ example: 'MDX-DF1LUVRU' })
   referralCode: string;
+
+  @ApiProperty({ example: false, type: Boolean })
+  isOnboardingUploaded: boolean;
 }

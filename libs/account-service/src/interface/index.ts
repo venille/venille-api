@@ -228,14 +228,14 @@ export class RegisterPeriodTrackerDTO {
   @IsNotEmpty()
   healthConditions: HealthCondition;
 
-  @ApiProperty({
-    example: 'mood',
-    enum: AdditionalTracking,
-    description: 'Additional tracking.',
-  })
-  @IsString()
-  @IsNotEmpty()
-  additionalTracking: AdditionalTracking;
+  // @ApiProperty({
+  //   example: 'mood',
+  //   enum: AdditionalTracking,
+  //   description: 'Additional tracking.',
+  // })
+  // @IsString()
+  // @IsNotEmpty()
+  // additionalTracking: AdditionalTracking;
 
   @ApiProperty({
     example: true,

@@ -57,12 +57,12 @@ export class PeriodTracker {
   })
   healthConditions: HealthCondition;
 
-  @Column({
-    enum: AdditionalTracking,
-    default: AdditionalTracking.OTHER,
-    nullable: true,
-  })
-  additionalTracking: AdditionalTracking;
+  // @Column({
+  //   enum: AdditionalTracking,
+  //   default: AdditionalTracking.OTHER,
+  //   nullable: true,
+  // })
+  // additionalTracking: AdditionalTracking;
 
   @Column({ nullable: true, default: false })
   wantReminders: boolean;

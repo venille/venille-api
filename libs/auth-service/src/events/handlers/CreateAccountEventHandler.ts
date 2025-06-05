@@ -53,7 +53,7 @@ export class CreateAccountEventHandler
 
       await this.notificationRepository.save({
         title: '👋 Welcome to Venille',
-        message: `We’re thrilled to have you on board. Whether you’re buying or selling, Venille is here to support your livestock/animals needs. Explore now and see what’s waiting for you!`,
+        message: `We’re thrilled to have you on board Venille. Lets help you track your period and get you started on your journey to a healthier period.`,
         user: newUser,
       });
 

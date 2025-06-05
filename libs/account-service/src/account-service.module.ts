@@ -15,8 +15,11 @@ import { GetSystemJWTModule } from 'libs/common/src/middlewares/config';
 import { Notification } from '@app/common/src/models/notification.model';
 import { OnboardingController } from './controllers/onboarding.controller';
 import { PeriodTracker } from '@app/common/src/models/period.tracker.model';
+import { PeriodSymptomLog } from '@app/common/src/models/period.record.model';
+import { PeriodTrackerRecord } from '@app/common/src/models/period.record.model';
 import { HelperServiceModule } from '@app/helper-service/src/helper-service.module';
 import { OnboardingQuestion } from '@app/common/src/models/onboarding.question.model';
+import { PeriodOvulationPrediction } from '@app/common/src/models/period.record.model';
 import { SupportService } from '@app/notification-service/src/services/support.service';
 import { EmailSenderService } from '@app/helper-service/src/services/email-sender.service';
 import { SupportController } from '@app/notification-service/src/controllers/support.controller';
@@ -35,7 +38,10 @@ import { AuthEmailNotificationService } from '@app/notification-service/src/serv
       Account,
       Notification,
       PeriodTracker,
+      PeriodSymptomLog,
       OnboardingQuestion,
+      PeriodTrackerRecord,
+      PeriodOvulationPrediction,
     ]),
   ],
   controllers: [

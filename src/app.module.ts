@@ -14,6 +14,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from 'libs/common/src/auth/jwt.strategy';
 import { AppLogger } from 'libs/common/src/logger/logger.service';
 import { DatabaseSource } from 'libs/common/src/database/database-source';
+import { PeriodTrackerServiceModule } from '@app/period-tracker-service/src';
 import { AccountServiceModule } from '@app/account-service/src/account-service.module';
 import { DeviceInfoMiddleware } from 'libs/common/src/middlewares/device.info.middleware';
 import { SuccessResponseMiddleware } from 'libs/common/src/middlewares/success.middleware';
@@ -28,6 +29,7 @@ import { NotificationServiceModule } from '@app/notification-service/src/notific
     AccountServiceModule,
     EngagementServiceModule,
     NotificationServiceModule,
+    PeriodTrackerServiceModule,
     TypeOrmModule.forRoot(DatabaseSource),
     CacheModule.register({ isGlobal: true }),
     LoggerModule.forRoot(),
@@ -53,6 +55,10 @@ import { NotificationServiceModule } from '@app/notification-service/src/notific
       {
         path: 'v1/engagement',
         module: EngagementServiceModule,
+      },
+      {
+        path: 'v1/period-tracker',
+        module: PeriodTrackerServiceModule,
       },
     ]),
   ],

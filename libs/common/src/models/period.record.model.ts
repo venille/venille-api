@@ -1,0 +1,155 @@
+import {
+  Entity,
+  Column,
+  OneToOne,
+  ManyToOne,
+  JoinColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Account } from './account.model';
+import { ApiProperty } from '@nestjs/swagger';
+
+@Entity()
+export class PeriodTrackerRecord {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @ManyToOne(() => Account, {
+    eager: true,
+    onDelete: 'CASCADE',
+  })
+  account: Account;
+
+  @Column({ type: 'date' })
+  startDate: Date;
+
+  @Column({ type: 'date', nullable: true })
+  endDate: Date;
+
+  @Column({ default: false })
+  isPredicted: boolean;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+}
+
+@Entity()
+export class PeriodOvulationPrediction {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @OneToOne(() => Account, { onDelete: 'CASCADE', eager: true })
+  @JoinColumn()
+  account: Account;
+
+  @Column({ type: 'date' })
+  ovulationDate: Date;
+
+  @Column({ default: false })
+  isPredicted: boolean;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+}
+
+@Entity()
+export class PeriodSymptomLog {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @ManyToOne(() => Account, {
+    eager: true,
+    onDelete: 'CASCADE',
+  })
+  account: Account;
+
+  @Column({ type: 'date' })
+  date: Date;
+
+  @Column({ default: '[ ]', nullable: true })
+  symptoms: string;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+}
+
+export class PeriodTrackerCalendarInfo {
+  @ApiProperty({ example: 'June' })
+  currentMonth: string; // e.g. "June"
+
+  @ApiProperty({ example: 2025 })
+  currentYear: number;
+
+  @ApiProperty({ example: ['2025-06-23', '2025-06-24'] })
+  periodDays: string[]; // e.g. ["2025-06-23", "2025-06-24", ...]
+
+  @ApiProperty({ example: ['2025-06-25', '2025-06-26'] })
+  predictedPeriodDays: string[]; // for next cycle
+
+  @ApiProperty({ example: '2025-06-18' })
+  ovulationDate: string; // e.g. "2025-06-18"
+}
+
+export class PeriodTrackerOvulationCountdown {
+  @ApiProperty({ example: 0 })
+  ovulationInDays: number; // e.g. 0 if it's today
+
+  @ApiProperty({ example: true })
+  isToday: boolean;
+}
+
+export class PeriodTrackerReminderInfo {
+  @ApiProperty({ example: 'Period Start' })
+  title: string;
+
+  @ApiProperty({ example: '2025-06-05T00:00:00.000Z' })
+  reminderTime: string; // ISO timestamp
+
+  @ApiProperty({ example: true })
+  isRecurring: boolean;
+
+  @ApiProperty({ example: ['Monday', 'Wednesday'] })
+  daysOfWeek: string[]; // optional if recurring
+}
+
+export class PeriodTrackerLastPeriodInfo {
+  @ApiProperty({ example: '2025-06-05' })
+  startDate: string;
+
+  @ApiProperty({ example: '2025-06-06' })
+  endDate: string;
+
+  @ApiProperty({ example: true })
+  isPredicted: boolean;
+}
+
+export class PeriodTrackerInfo {
+  @ApiProperty({ example: '2025-06-05', type: String })
+  today: string;
+
+  @ApiProperty({ type: PeriodTrackerCalendarInfo })
+  calendar: PeriodTrackerCalendarInfo;
+
+  @ApiProperty({ type: PeriodTrackerOvulationCountdown })
+  ovulationCountdown: PeriodTrackerOvulationCountdown;
+
+  @ApiProperty({ type: ['Cramps', 'Fatigue'], isArray: true })
+  symptomsLoggedToday: string[];
+
+  @ApiProperty({ type: PeriodTrackerReminderInfo, isArray: true })
+  reminders: PeriodTrackerReminderInfo[];
+
+  @ApiProperty({ type: PeriodTrackerLastPeriodInfo })
+  lastPeriod: PeriodTrackerLastPeriodInfo | null;
+}

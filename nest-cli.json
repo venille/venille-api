@@ -42,6 +42,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/notification-service/tsconfig.lib.json"
       }
+    },
+    "period-tracker-service": {
+      "type": "library",
+      "root": "libs/period-tracker-service",
+      "entryFile": "index",
+      "sourceRoot": "libs/period-tracker-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/period-tracker-service/tsconfig.lib.json"
+      }
     }
   }
 }

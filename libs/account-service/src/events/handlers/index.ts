@@ -1,2 +1,3 @@
-export const AccountServiceEventHandlers = [];
+import { RegisterPeriodTrackerEventHandler } from './RegisterPeriodTrackerEventHandler';
 
+export const AccountServiceEventHandlers = [RegisterPeriodTrackerEventHandler];

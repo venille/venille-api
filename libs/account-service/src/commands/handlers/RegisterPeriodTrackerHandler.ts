@@ -56,6 +56,7 @@ export class RegisterPeriodTrackerHandler
       const periodTracker = await this.periodTrackerRepository.create({
         ...payload,
         account: account,
+        lastPeriodStartDate: new Date(payload.lastPeriodStartDate),
       });
 
       await this.periodTrackerRepository.save(periodTracker);

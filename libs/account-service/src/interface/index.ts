@@ -157,9 +157,9 @@ export class RegisterPeriodTrackerDTO {
     example: '2024-01-01',
     description: 'Date of first period.',
   })
-  @IsDate()
+  @IsString()
   @IsNotEmpty()
-  lastPeriodStartDate: Date;
+  lastPeriodStartDate: string;
 
   @ApiProperty({
     example: 28,

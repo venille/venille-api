@@ -237,22 +237,22 @@ export class RegisterPeriodTrackerDTO {
   // @IsNotEmpty()
   // additionalTracking: AdditionalTracking;
 
-  @ApiProperty({
-    example: true,
-    description: 'Is the user want reminders?',
-  })
-  @IsBoolean()
-  @IsNotEmpty()
-  wantReminders: boolean;
+  // @ApiProperty({
+  //   example: true,
+  //   description: 'Is the user want reminders?',
+  // })
+  // @IsBoolean()
+  // @IsNotEmpty()
+  // wantReminders: boolean;
 
-  @ApiProperty({
-    example: 'period_start',
-    enum: ReminderType,
-    description: 'Reminder type.',
-  })
-  @IsString()
-  @IsNotEmpty()
-  reminderTypes: ReminderType;
+  // @ApiProperty({
+  //   example: 'period_start',
+  //   enum: ReminderType,
+  //   description: 'Reminder type.',
+  // })
+  // @IsString()
+  // @IsNotEmpty()
+  // reminderTypes: ReminderType;
 
   @ApiProperty({
     example: 'just_tracking',

@@ -25,6 +25,7 @@ import { PeriodTracker } from '@app/common/src/models/period.tracker.model';
 import { RegisterPeriodTrackerDTO } from '../interface';
 import { RegisterPeriodTrackerCommand } from '../commands/impl';
 import authUtils from '@app/common/src/security/auth.utils';
+import { AccountInfo } from '@app/common/src/models/account.model';
 
 @Controller({ path: 'onboarding' })
 @ApiBearerAuth()
@@ -51,13 +52,13 @@ export class OnboardingController {
 
   @ApiTags('onboarding')
   @Post('period-tracker')
-  @ApiOkResponse()
+  @ApiOkResponse({ type: AccountInfo })
   @ApiInternalServerErrorResponse()
   async registerPeriodTracker(
     @Req() req: Request,
     @SecureUser() secureUser: SecureUserPayload,
     @Body() registerPeriodTrackerDTO: RegisterPeriodTrackerDTO,
-  ): Promise<void> {
+  ): Promise<AccountInfo> {
     return await this.command.execute(
       new RegisterPeriodTrackerCommand(
         authUtils.getOriginHeader(req),

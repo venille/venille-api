@@ -6,14 +6,16 @@ import {
 } from 'libs/common/src/constants/exceptions';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RegisterPeriodTrackerCommand } from '../impl';
-import { Account } from 'libs/common/src/models/account.model';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { AppLogger } from 'libs/common/src/logger/logger.service';
+import { Account, AccountInfo } from 'libs/common/src/models/account.model';
 import { PeriodTracker } from '@app/common/src/models/period.tracker.model';
+import modelsFormatter from '@app/common/src/middlewares/models.formatter';
+
 
 @CommandHandler(RegisterPeriodTrackerCommand)
 export class RegisterPeriodTrackerHandler
-  implements ICommandHandler<RegisterPeriodTrackerCommand>
+  implements ICommandHandler<RegisterPeriodTrackerCommand, AccountInfo>
 {
   constructor(
     @Inject('Logger') private readonly logger: AppLogger,
@@ -58,7 +60,15 @@ export class RegisterPeriodTrackerHandler
 
       await this.periodTrackerRepository.save(periodTracker);
 
+      Object.assign(account, {
+        isOnboardingUploaded: true,
+      });
+
+      await this.accountRepository.save(account);
+
       this.logger.log(`[REGISTER-PERIOD-TRACKER-HANDLER-SUCCESS]`);
+
+      return modelsFormatter.FormatAccountInfo(account);
     } catch (error) {
       this.logger.log(`[REGISTER-PERIOD-TRACKER-HANDLER-ERROR] :: ${error}`);
 

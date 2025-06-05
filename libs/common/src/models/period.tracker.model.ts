@@ -57,22 +57,8 @@ export class PeriodTracker {
   })
   healthConditions: HealthCondition;
 
-  // @Column({
-  //   enum: AdditionalTracking,
-  //   default: AdditionalTracking.OTHER,
-  //   nullable: true,
-  // })
-  // additionalTracking: AdditionalTracking;
-
   @Column({ nullable: true, default: false })
   wantReminders: boolean;
-
-  // @Column({
-  //   enum: ReminderType,
-  //   default: ReminderType.PERIOD_START,
-  //   nullable: true,
-  // })
-  // reminderTypes: ReminderType;
 
   @Column({
     enum: CycleGoal,

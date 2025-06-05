@@ -228,32 +228,6 @@ export class RegisterPeriodTrackerDTO {
   @IsNotEmpty()
   healthConditions: HealthCondition;
 
-  // @ApiProperty({
-  //   example: 'mood',
-  //   enum: AdditionalTracking,
-  //   description: 'Additional tracking.',
-  // })
-  // @IsString()
-  // @IsNotEmpty()
-  // additionalTracking: AdditionalTracking;
-
-  // @ApiProperty({
-  //   example: true,
-  //   description: 'Is the user want reminders?',
-  // })
-  // @IsBoolean()
-  // @IsNotEmpty()
-  // wantReminders: boolean;
-
-  // @ApiProperty({
-  //   example: 'period_start',
-  //   enum: ReminderType,
-  //   description: 'Reminder type.',
-  // })
-  // @IsString()
-  // @IsNotEmpty()
-  // reminderTypes: ReminderType;
-
   @ApiProperty({
     example: 'just_tracking',
     enum: CycleGoal,

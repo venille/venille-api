@@ -91,7 +91,12 @@ export class PeriodTrackerCalendarInfo {
   @ApiProperty({ example: 2025 })
   currentYear: number;
 
-  @ApiProperty({ type: ['2025-06-25', '2025-06-26'], isArray: true })
+  @ApiProperty({
+    example: ['2025-06-25', '2025-06-26'],
+    type: String,
+    isArray: true,
+    items: { type: 'string' },
+  })
   predictedPeriodDays: string[]; // for next cycle
 
   @ApiProperty({ example: '2025-06-18' })
@@ -116,7 +121,12 @@ export class PeriodTrackerReminderInfo {
   @ApiProperty({ example: true })
   isRecurring: boolean;
 
-  @ApiProperty({ type: ['Monday', 'Wednesday'], isArray: true })
+  @ApiProperty({
+    example: ['Monday', 'Wednesday'],
+    type: String,
+    isArray: true,
+    items: { type: 'string' },
+  })
   daysOfWeek: string[]; // optional if recurring
 }
 
@@ -141,10 +151,22 @@ export class PeriodTrackerInfo {
   @ApiProperty({ type: PeriodTrackerOvulationCountdown })
   ovulationCountdown: PeriodTrackerOvulationCountdown;
 
-  @ApiProperty({ type: ['Cramps', 'Fatigue'], isArray: true })
+  @ApiProperty({
+    type: String,
+    isArray: true,
+    example: ['Cramps', 'Fatigue'],
+    items: { type: 'string' },
+  })
   symptomsLoggedToday: string[];
 
-  @ApiProperty({ type: PeriodTrackerReminderInfo, isArray: true })
+  @ApiProperty({
+    type: PeriodTrackerReminderInfo,
+    isArray: true,
+    items: {
+      type: 'object',
+      $ref: '#/components/schemas/PeriodTrackerReminderInfo',
+    },
+  })
   reminders: PeriodTrackerReminderInfo[];
 
   @ApiProperty({ type: PeriodTrackerLastPeriodInfo })

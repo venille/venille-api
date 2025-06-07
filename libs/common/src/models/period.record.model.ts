@@ -148,5 +148,5 @@ export class PeriodTrackerInfo {
   reminders: PeriodTrackerReminderInfo[];
 
   @ApiProperty({ type: PeriodTrackerLastPeriodInfo })
-  lastPeriod: PeriodTrackerLastPeriodInfo | null;
+  lastPeriod: PeriodTrackerLastPeriodInfo;
 }

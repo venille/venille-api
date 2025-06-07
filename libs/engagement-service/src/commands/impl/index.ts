@@ -1,4 +1,8 @@
-import { CreateForumCommentDto, CreateForumDto } from '../../interface';
+import {
+  CreateForumCommentDto,
+  CreateForumDto,
+  TranslateTextEngineType,
+} from '../../interface';
 import { SecureUserPayload } from '@app/common/src/interface';
 
 export class CreateForumCommand {
@@ -34,5 +38,14 @@ export class LikeUnlikeForumPostCommand {
   constructor(
     public readonly forumId: number,
     public readonly secureUser: SecureUserPayload,
+  ) {}
+}
+
+export class TranslateTextQuery {
+  constructor(
+    public readonly text: string,
+    public readonly sourceLanguage: string,
+    public readonly targetLanguage: string,
+    public readonly engine: TranslateTextEngineType = 'aws',
   ) {}
 }

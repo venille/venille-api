@@ -3,6 +3,8 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsNotEmpty } from 'class-validator';
 import { ForumCategory } from '@app/common/src/constants/enums';
 
+export type TranslateTextEngineType = 'google' | 'aws';
+
 export class CreateForumDto {
   @ApiProperty({
     example: 'My first forum',

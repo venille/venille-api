@@ -14,7 +14,9 @@ import { EngagementServiceQueryHandlers } from './queries/handlers';
 import { EngagementServiceCommandHandlers } from './commands/handlers';
 import { GetSystemJWTModule } from '@app/common/src/middlewares/config';
 import { Forum, ForumComment } from '@app/common/src/models/forum.model';
+import { TranslationController } from './controllers/translation.controller';
 import { HelperServiceModule } from '@app/helper-service/src/helper-service.module';
+import { TextTranslationService } from '@app/helper-service/src/services/text-translation.service';
 
 @Module({
   imports: [
@@ -29,12 +31,13 @@ import { HelperServiceModule } from '@app/helper-service/src/helper-service.modu
       provide: 'Logger',
       useClass: AppLogger,
     },
+      TextTranslationService,
     ...EngagementServiceQueryHandlers,
     ...EngagementServiceEventHandlers,
     ...EngagementServiceCommandHandlers,
   ],
   exports: [],
-  controllers: [CourseController, ForumController],
+  controllers: [TranslationController, CourseController, ForumController],
 })
 export class EngagementServiceModule {
   constructor(private configService: ConfigService) {

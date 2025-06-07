@@ -11,13 +11,10 @@ import { EmailSenderService } from './services/email-sender.service';
 import { GoogleLocationService } from './services/google-location.service';
 import { AddressHelperService } from './services/address.helper.service';
 import { AddressHelperController } from './controllers/address.helper.controller';
+import { TextTranslationService } from './services/text-translation.service';
 
 @Module({
-  imports: [
-    CqrsModule,
-    ConfigModule,
-    TypeOrmModule.forFeature([]),
-  ],
+  imports: [CqrsModule, ConfigModule, TypeOrmModule.forFeature([])],
   exports: [
     AddressHelperService,
     ImageUploadService,
@@ -25,6 +22,7 @@ import { AddressHelperController } from './controllers/address.helper.controller
     GoogleLocationService,
     EmailSenderService,
     SeederService,
+    TextTranslationService,
   ],
   providers: [
     {
@@ -37,6 +35,7 @@ import { AddressHelperController } from './controllers/address.helper.controller
     GoogleLocationService,
     EmailSenderService,
     SeederService,
+    TextTranslationService,
     ...HelperServiceQueryHandlers,
   ],
   controllers: [AddressHelperController],

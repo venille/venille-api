@@ -71,7 +71,7 @@ export class PeriodSymptomLog {
   })
   account: Account;
 
-  @Column({ type: 'date' })
+  @Column({ type: 'date', nullable: true })
   date: Date;
 
   @Column({ default: '[ ]', nullable: true })
@@ -90,9 +90,6 @@ export class PeriodTrackerCalendarInfo {
 
   @ApiProperty({ example: 2025 })
   currentYear: number;
-
-  @ApiProperty({ example: ['2025-06-23', '2025-06-24'] })
-  periodDays: string[]; // e.g. ["2025-06-23", "2025-06-24", ...]
 
   @ApiProperty({ example: ['2025-06-25', '2025-06-26'] })
   predictedPeriodDays: string[]; // for next cycle

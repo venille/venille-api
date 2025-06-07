@@ -91,7 +91,7 @@ export class PeriodTrackerCalendarInfo {
   @ApiProperty({ example: 2025 })
   currentYear: number;
 
-  @ApiProperty({ example: ['2025-06-25', '2025-06-26'], isArray: true })
+  @ApiProperty({ type: ['2025-06-25', '2025-06-26'], isArray: true })
   predictedPeriodDays: string[]; // for next cycle
 
   @ApiProperty({ example: '2025-06-18' })
@@ -116,7 +116,7 @@ export class PeriodTrackerReminderInfo {
   @ApiProperty({ example: true })
   isRecurring: boolean;
 
-  @ApiProperty({ example: ['Monday', 'Wednesday'], isArray: true })
+  @ApiProperty({ type: ['Monday', 'Wednesday'], isArray: true })
   daysOfWeek: string[]; // optional if recurring
 }
 

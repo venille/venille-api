@@ -3,17 +3,18 @@ import { Cache } from 'cache-manager';
 import { Inject } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
-  PeriodOvulationPrediction,
   PeriodSymptomLog,
   PeriodTrackerInfo,
   PeriodTrackerRecord,
+  DailyInsightsSummary,
+  PeriodOvulationPrediction,
   PeriodTrackerReminderInfo,
 } from '@app/common/src/models/period.record.model';
-import { PeriodTracker } from '@app/common/src/models/period.tracker.model';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { FetchPeriodTrackerHistoryQuery } from '../impl';
 import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
 import { AppLogger } from 'libs/common/src/logger/logger.service';
+import { PeriodTracker } from '@app/common/src/models/period.tracker.model';
 
 @QueryHandler(FetchPeriodTrackerHistoryQuery)
 export class FetchPeriodTrackerHistoryQueryHandler
@@ -24,12 +25,12 @@ export class FetchPeriodTrackerHistoryQueryHandler
     @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
     @InjectRepository(PeriodSymptomLog)
     private readonly symptomLogRepository: Repository<PeriodSymptomLog>,
+    @InjectRepository(PeriodTracker)
+    private readonly periodTrackerRepository: Repository<PeriodTracker>,
     @InjectRepository(PeriodTrackerRecord)
     private readonly periodRecordRepository: Repository<PeriodTrackerRecord>,
     @InjectRepository(PeriodOvulationPrediction)
     private readonly ovulationPredictionRepository: Repository<PeriodOvulationPrediction>,
-    @InjectRepository(PeriodTracker)
-    private readonly periodTrackerRepository: Repository<PeriodTracker>,
   ) {}
 
   async execute(
@@ -368,6 +369,65 @@ export class FetchPeriodTrackerHistoryQueryHandler
                 }
               : null;
 
+          // Generate daily insights for current month
+          const generateDailyInsights = () => {
+            if (monthIndex !== today.getMonth()) {
+              return [];
+            }
+
+            const insights: DailyInsightsSummary[] = [];
+            const daysInMonth = new Date(
+              currentYear,
+              monthIndex + 1,
+              0,
+            ).getDate();
+
+            for (let day = 1; day <= daysInMonth; day++) {
+              const currentDate = new Date(currentYear, monthIndex, day);
+              const dateString = currentDate.toISOString().split('T')[0];
+
+              const isPredictedPeriodDay =
+                monthPredictedPeriods.includes(dateString);
+              const isPredictedOvulationDay = monthOvulationDate === dateString;
+
+              // Calculate days to ovulation for this specific date
+              let daysToOvulation = 0;
+              if (effectiveOvulationDate) {
+                const ovulationTime = effectiveOvulationDate.getTime();
+                const currentTime = currentDate.getTime();
+                daysToOvulation = Math.ceil(
+                  (ovulationTime - currentTime) / (1000 * 60 * 60 * 24),
+                );
+              }
+
+              let dayInsights = '';
+              if (isPredictedPeriodDay) {
+                dayInsights = 'Predicted period day';
+              } else if (isPredictedOvulationDay) {
+                dayInsights = 'Predicted ovulation day - peak fertility window';
+              } else if (daysToOvulation <= 7 && daysToOvulation > 0) {
+                dayInsights = `Ovulation in ${daysToOvulation} days - fertility window`;
+              } else if (daysToOvulation < 0 && daysToOvulation >= -7) {
+                dayInsights = 'Post-ovulation phase - lower fertility';
+              } else if (daysToOvulation <= -8) {
+                dayInsights = 'Late luteal phase - period approaching';
+              } else {
+                dayInsights = 'Regular cycle day';
+              }
+
+              insights.push({
+                date: currentDate,
+                isPredictedPeriodDay,
+                isPredictedOvulationDay,
+                todayInsights: dayInsights,
+              });
+            }
+
+            return insights;
+          };
+
+          const dailyInsights = generateDailyInsights();
+
           return {
             today:
               monthIndex === today.getMonth()
@@ -376,9 +436,9 @@ export class FetchPeriodTrackerHistoryQueryHandler
             calendar: {
               currentMonth: monthString,
               currentYear: currentYear,
-              periodDays: monthPredictedPeriods.slice(0, periodLengthDays),
               predictedPeriodDays: monthPredictedPeriods,
               ovulationDate: monthOvulationDate,
+              dailyInsights: dailyInsights,
             },
             ovulationCountdown: {
               ovulationInDays,

@@ -84,6 +84,20 @@ export class PeriodSymptomLog {
   updatedAt: Date;
 }
 
+export class DailyInsightsSummary {
+  @ApiProperty({ example: '2025-06-05', type: Date })
+  date: Date;
+
+  @ApiProperty({ example: false })
+  isPredictedPeriodDay: boolean;
+
+  @ApiProperty({ example: false })
+  isPredictedOvulationDay: boolean;
+
+  @ApiProperty({ example: 'You are not on your predicted period day' })
+  todayInsights: string;
+}
+
 export class PeriodTrackerCalendarInfo {
   @ApiProperty({ example: 'June' })
   currentMonth: string; // e.g. "June"
@@ -98,6 +112,12 @@ export class PeriodTrackerCalendarInfo {
     items: { type: 'string' },
   })
   predictedPeriodDays: string[]; // for next cycle
+
+  @ApiProperty({
+    type: DailyInsightsSummary,
+    isArray: true,
+  })
+  dailyInsights: DailyInsightsSummary[]; // for next cycle
 
   @ApiProperty({ example: '2025-06-18' })
   ovulationDate: string; // e.g. "2025-06-18"

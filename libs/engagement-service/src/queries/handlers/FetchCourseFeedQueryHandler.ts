@@ -13,6 +13,7 @@ import {
 } from '@app/common/src/models/course.model';
 import { CourseCategory } from '@app/common/src/constants/enums';
 import { FormatCourseInfo } from '@app/common/src/middlewares/models.formatter';
+import { shuffle } from 'lodash';
 
 @QueryHandler(FetchCourseFeedQuery)
 export class FetchCourseFeedQueryHandler
@@ -37,7 +38,10 @@ export class FetchCourseFeedQueryHandler
         this.logger.log(
           `[FETCH-COURSE-FEED-QUERY-HANDLER-CACHE-HIT]: ${cacheKey}`,
         );
-        return cachedResult;
+        return cachedResult.map((category) => ({
+          ...category,
+          courses: shuffle(category.courses),
+        }));
       }
 
       this.logger.log(
@@ -72,9 +76,11 @@ export class FetchCourseFeedQueryHandler
       // Group courses by category
       const groupedCourses = categoriesToFetch.map((category) => {
         const categoryTitle = this.getCategoryTitle(category);
-        const categoryCourses = courses
-          .filter((course) => course.category === category)
-          .map((course) => FormatCourseInfo(course));
+        const categoryCourses = shuffle(
+          courses
+            .filter((course) => course.category === category)
+            .map((course) => FormatCourseInfo(course)),
+        );
 
         return {
           title: categoryTitle,

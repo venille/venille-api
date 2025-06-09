@@ -191,4 +191,7 @@ export class PeriodTrackerInfo {
 
   @ApiProperty({ type: PeriodTrackerLastPeriodInfo })
   lastPeriod: PeriodTrackerLastPeriodInfo;
+
+  @ApiProperty({ example: false })
+  isCurrentMonth: boolean;
 }

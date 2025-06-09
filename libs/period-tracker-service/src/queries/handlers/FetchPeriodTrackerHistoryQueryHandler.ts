@@ -371,7 +371,7 @@ export class FetchPeriodTrackerHistoryQueryHandler
                   startDate: '',
                   endDate: '',
                   isPredicted: false,
-              };
+                };
 
           // Generate daily insights for current month
           const generateDailyInsights = () => {
@@ -451,6 +451,7 @@ export class FetchPeriodTrackerHistoryQueryHandler
             symptomsLoggedToday,
             reminders: monthReminders,
             lastPeriod: lastPeriodInfo,
+            isCurrentMonth: monthIndex === today.getMonth(),
           };
         },
       );

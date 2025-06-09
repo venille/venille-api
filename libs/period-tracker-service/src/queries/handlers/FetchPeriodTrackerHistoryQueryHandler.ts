@@ -367,7 +367,11 @@ export class FetchPeriodTrackerHistoryQueryHandler
                         .split('T')[0],
                   isPredicted: lastPeriod.isPredicted,
                 }
-              : null;
+              : {
+                  startDate: '',
+                  endDate: '',
+                  isPredicted: false,
+              };
 
           // Generate daily insights for current month
           const generateDailyInsights = () => {

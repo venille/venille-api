@@ -10,6 +10,8 @@ import {
   UpdateAccountPhoneDTO,
   UpdateAccountLocationDTO,
   RegisterPeriodTrackerDTO,
+  OrderSanitaryPadDTO,
+  RegisterMonthlySurveyDTO,
 } from '../../interface';
 
 export class UpdateAccountFCMTokenCommand {
@@ -89,5 +91,19 @@ export class RegisterPeriodTrackerCommand {
     public readonly origin: string,
     public readonly secureUser: SecureUserPayload,
     public readonly payload: RegisterPeriodTrackerDTO,
+  ) {}
+}
+
+export class OrderSanitaryPadCommand {
+  constructor(
+    public readonly payload: OrderSanitaryPadDTO,
+    public readonly secureUser: SecureUserPayload,
+  ) {}
+}
+
+export class RegisterMonthlySurveyCommand {
+  constructor(
+    public readonly payload: RegisterMonthlySurveyDTO,
+    public readonly secureUser: SecureUserPayload,
   ) {}
 }

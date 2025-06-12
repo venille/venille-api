@@ -19,6 +19,7 @@ export interface FCMNotificationPayload {
   title: string;
   body: string;
   data: any;
+  iconUrl?: string | null;
   notificationImage?: string | null;
 }
 

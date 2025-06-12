@@ -24,6 +24,7 @@ import {
   BirthControlMethod,
   CycleGoal,
   HealthCondition,
+  MonthlySurveyPeriodDuration,
   PeriodSymptom,
   ReminderType,
 } from '@app/common/src/constants/enums';
@@ -236,4 +237,46 @@ export class RegisterPeriodTrackerDTO {
   @IsString()
   @IsNotEmpty()
   cycleGoal: CycleGoal;
+}
+
+export class OrderSanitaryPadDTO {
+  @ApiProperty({
+    example: 1,
+    description: 'Quantity',
+  })
+  @IsNumber()
+  @IsNotEmpty()
+  quantity: number;
+
+  @ApiProperty({
+    example: 'delivery',
+    description: 'Delivery method.',
+  })
+  @IsString()
+  @IsNotEmpty()
+  deliveryMethod: string;
+}
+
+export class RegisterMonthlySurveyDTO {
+  @ApiProperty({
+    example: false,
+  })
+  @IsBoolean()
+  @IsNotEmpty()
+  hasAccessToPad: boolean;
+
+  @ApiProperty({
+    enum: MonthlySurveyPeriodDuration,
+    example: MonthlySurveyPeriodDuration.None,
+  })
+  @IsEnum(MonthlySurveyPeriodDuration)
+  @IsNotEmpty()
+  daysManagingMenstruation: MonthlySurveyPeriodDuration;
+
+  @ApiProperty({
+    example: '',
+  })
+  @IsString()
+  @IsNotEmpty()
+  challengesFaced: string;
 }

@@ -5,6 +5,7 @@ import {
   Get,
   Patch,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -13,10 +14,12 @@ import {
   ApiOkResponse,
   ApiBearerAuth,
   ApiInternalServerErrorResponse,
+  ApiQuery,
 } from '@nestjs/swagger';
-import { CommandBus } from '@nestjs/cqrs';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import {
   DeleteAccountDTO,
+  RegisterMonthlySurveyDTO,
   UpdateAccountEmailDTO,
   UpdateAccountLocationDTO,
   UpdateAccountNameDTO,
@@ -32,6 +35,7 @@ import { SecureUserPayload } from '@app/common/src/interface';
 import { AccountInfo } from '@app/common/src/models/account.model';
 import {
   DeleteAccountCommand,
+  RegisterMonthlySurveyCommand,
   UpdateAccountEmailCommand,
   UpdateAccountFCMTokenCommand,
   UpdateAccountLocationCommand,
@@ -41,15 +45,18 @@ import {
   UpdateProfileImageCommand,
   VerifyNewAccountEmailCommand,
 } from '../commands/impl';
+import { FetchMonthlySurveyHistoryQuery } from '../queries/impl';
 import { JwtAuthGuard } from '@app/common/src/auth/jwt-auth.guard';
 import { SecureUser } from '@app/common/src/decorator/user.decorator';
+import { MonthlySurveyHistoryResponse, MonthlySurveyInfo } from '@app/common/src/models/monthly.survey.model';
 
 @Controller({ path: 'me' })
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 export class AccountController {
   constructor(
-    public command: CommandBus,
+    public queryBus: QueryBus,
+    public commandBus: CommandBus,
     public readonly accountService: AccountService,
   ) {}
 
@@ -73,7 +80,7 @@ export class AccountController {
     @Body() body: UpdateFCMTokenDTO,
     @SecureUser() secureUser: SecureUserPayload,
   ) {
-    return await this.command.execute(
+    return await this.commandBus.execute(
       new UpdateAccountFCMTokenCommand(
         authUtils.getOriginHeader(req),
         body,
@@ -91,7 +98,7 @@ export class AccountController {
     @Body() body: UpdateProfileImageDTO,
     @SecureUser() secureUser: SecureUserPayload,
   ): Promise<AccountInfo> {
-    return await this.command.execute(
+    return await this.commandBus.execute(
       new UpdateProfileImageCommand(
         authUtils.getOriginHeader(req),
         secureUser,
@@ -109,7 +116,7 @@ export class AccountController {
     @Body() body: UpdateAccountPasswordDTO,
     @SecureUser() secureUser: SecureUserPayload,
   ) {
-    return await this.command.execute(
+    return await this.commandBus.execute(
       new UpdateAccountPasswordCommand(
         authUtils.getOriginHeader(req),
         secureUser,
@@ -127,7 +134,7 @@ export class AccountController {
     @Body() body: DeleteAccountDTO,
     @SecureUser() secureUser: SecureUserPayload,
   ) {
-    return await this.command.execute(
+    return await this.commandBus.execute(
       new DeleteAccountCommand(
         authUtils.getOriginHeader(req),
         secureUser,
@@ -145,7 +152,7 @@ export class AccountController {
     @Body() body: UpdateAccountNameDTO,
     @SecureUser() secureUser: SecureUserPayload,
   ): Promise<AccountInfo> {
-    return await this.command.execute(
+    return await this.commandBus.execute(
       new UpdateAccountNameCommand(
         authUtils.getOriginHeader(req),
         secureUser,
@@ -163,7 +170,7 @@ export class AccountController {
     @Body() body: UpdateAccountEmailDTO,
     @SecureUser() secureUser: SecureUserPayload,
   ) {
-    return await this.command.execute(
+    return await this.commandBus.execute(
       new UpdateAccountEmailCommand(
         authUtils.getOriginHeader(req),
         secureUser,
@@ -181,7 +188,7 @@ export class AccountController {
     @Body() body: VerifyNewAccountEmailDTO,
     @SecureUser() secureUser: SecureUserPayload,
   ): Promise<AccountInfo> {
-    return await this.command.execute(
+    return await this.commandBus.execute(
       new VerifyNewAccountEmailCommand(
         authUtils.getOriginHeader(req),
         secureUser,
@@ -199,7 +206,7 @@ export class AccountController {
     @Body() body: UpdateAccountPhoneDTO,
     @SecureUser() secureUser: SecureUserPayload,
   ): Promise<AccountInfo> {
-    return await this.command.execute(
+    return await this.commandBus.execute(
       new UpdateAccountPhoneCommand(
         authUtils.getOriginHeader(req),
         secureUser,
@@ -217,12 +224,55 @@ export class AccountController {
     @Body() body: UpdateAccountLocationDTO,
     @SecureUser() secureUser: SecureUserPayload,
   ): Promise<AccountInfo> {
-    return await this.command.execute(
+    return await this.commandBus.execute(
       new UpdateAccountLocationCommand(
         authUtils.getOriginHeader(req),
         secureUser,
         body,
       ),
+    );
+  }
+
+  @ApiTags('monthly-survey')
+  @Get('history')
+  @ApiOkResponse({ type: MonthlySurveyHistoryResponse })
+  @ApiQuery({
+    type: Number,
+    required: true,
+    name: 'page',
+    example: 1,
+    description: 'Page',
+  })
+  @ApiQuery({
+    type: Number,
+    required: true,
+    name: 'pageSize',
+    example: 20,
+    description: 'Page size',
+  })
+  @ApiInternalServerErrorResponse()
+  async fetchMonthlySurveyHistory(
+    @Req() req: Request,
+    @Query('page') page: number,
+    @Query('pageSize') pageSize: number,
+    @SecureUser() secureUser: SecureUserPayload,
+  ): Promise<MonthlySurveyHistoryResponse> {
+    return await this.queryBus.execute(
+      new FetchMonthlySurveyHistoryQuery(page, pageSize, secureUser),
+    );
+  }
+
+  @ApiTags('monthly-survey')
+  @Post('new')
+  @ApiOkResponse({ type: MonthlySurveyInfo })
+  @ApiInternalServerErrorResponse()
+  async registerMonthlySurvey(
+    @Req() req: Request,
+    @Body() payload: RegisterMonthlySurveyDTO,
+    @SecureUser() secureUser: SecureUserPayload,
+  ): Promise<MonthlySurveyInfo> {
+    return await this.commandBus.execute(
+      new RegisterMonthlySurveyCommand(payload, secureUser),
     );
   }
 }

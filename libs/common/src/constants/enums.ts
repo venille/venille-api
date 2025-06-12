@@ -138,4 +138,14 @@ export enum QuestionEnumType {
   General = 'General',
 }
 
+export enum OrderDeliveryMethod {
+  Delivery = 'Delivery',
+  Pickup = 'Pickup',
+}
 
+export enum MonthlySurveyPeriodDuration {
+  None = 'None',
+  OneToThreeDays = 'OneToThreeDays',
+  FourToFiveDays = 'FourToFiveDays',
+  MoreThanFiveDays = 'MoreThanFiveDays',
+}

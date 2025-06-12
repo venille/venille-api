@@ -1,10 +1,16 @@
+import {
+  MonthlySurvey,
+  MonthlySurveyInfo,
+} from '../models/monthly.survey.model';
 import { ForumInfo } from '../models/forum.model';
+import { Order, OrderInfo } from '../models/order.model';
 import { Course, CourseInfo } from '../models/course.model';
 import { AccountInfo, Account } from '../models/account.model';
-import { Forum, ForumComment, ForumCommentInfo } from '../models/forum.model';
-import { Notification, NotificationInfo } from '../models/notification.model';
 import { OnboardingQuestion } from '../models/onboarding.question.model';
 import { OnboardingQuestionInfo } from '../models/onboarding.question.model';
+import { Forum, ForumComment, ForumCommentInfo } from '../models/forum.model';
+import { Notification, NotificationInfo } from '../models/notification.model';
+import { FormatMonthlySurveyPeriodDurationEnum } from '../helpers/enum.helper';
 
 export function FormatAccountInfo(account: Account): AccountInfo {
   delete account.password;
@@ -96,10 +102,34 @@ export function FormatOnboardingQuestionInfo(
   } as OnboardingQuestionInfo;
 }
 
+export function FormatMonthlySurveyInfo(
+  monthlySurvey: MonthlySurvey,
+): MonthlySurveyInfo {
+  return {
+    id: monthlySurvey.id.toString(),
+    hasAccessToPad: monthlySurvey.hasAccessToPad,
+    daysManagingPeriod: FormatMonthlySurveyPeriodDurationEnum(
+      monthlySurvey.daysManagingPeriod,
+    ),
+    challengesFaced: JSON.parse(monthlySurvey.challengesFaced),
+  } as MonthlySurveyInfo;
+}
+
+export function FormatOrderInfo(order: Order): OrderInfo {
+  return {
+    id: order.id.toString(),
+    quantity: order.quantity,
+    isCompleted: order.isCompleted,
+    deliveryMethod: order.deliveryMethod,
+  } as OrderInfo;
+}
+
 export default {
   FormatForumInfo,
+  FormatOrderInfo,
+  FormatCourseInfo,
   FormatAccountInfo,
   FormatNotification,
   FormatForumCommentInfo,
-  FormatCourseInfo,
+  FormatMonthlySurveyInfo,
 };

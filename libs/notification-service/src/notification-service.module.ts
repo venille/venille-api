@@ -13,6 +13,7 @@ import { AccountNotificationService } from './services/account.notification.serv
 import { EmailSenderService } from 'libs/helper-service/src/services/email-sender.service';
 import { AccountNotificationController } from './controllers/account.notification.controller';
 import { AuthEmailNotificationService } from './services/email/auth.email.notification.service';
+import { OrderEmailNotificationService } from './services/email/order.email.notification.service';
 
 @Module({
   imports: [
@@ -31,14 +32,15 @@ import { AuthEmailNotificationService } from './services/email/auth.email.notifi
     },
     SupportService,
     EmailSenderService,
-    AuthEmailNotificationService,
     AccountNotificationService,
+    AuthEmailNotificationService,
+    OrderEmailNotificationService,
     ...NotificationServiceCronHandlers,
   ],
   exports: [
     SupportService,
     AuthEmailNotificationService,
-    // AccountNotificationController,
+    OrderEmailNotificationService,
   ],
   controllers: [SupportController, AccountNotificationController],
 })

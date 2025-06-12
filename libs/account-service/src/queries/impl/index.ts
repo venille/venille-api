@@ -11,3 +11,19 @@ export class FetchUserCommunityRecordsQuery {
 export class FetchOnboardingQuestionsQuery {
   constructor(public readonly secureUser: SecureUserPayload) {}
 }
+
+export class FetchMonthlySurveyHistoryQuery {
+  constructor(
+    public readonly page: number,
+    public readonly pageSize: number,
+    public readonly secureUser: SecureUserPayload,
+  ) {}
+}
+
+export class FetchSanitaryPadOrderHistoryQuery {
+  constructor(
+    public readonly page: number,
+    public readonly pageSize: number,
+    public readonly secureUser: SecureUserPayload,
+  ) {}
+}

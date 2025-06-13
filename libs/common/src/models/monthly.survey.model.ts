@@ -75,8 +75,10 @@ export class MonthlySurveyInfo {
   daysManagingPeriod: string;
 
   @ApiProperty({
-    isArray: true,
-    type: ['11', '12'],
+    type: 'array',
+    items: {
+      type: 'string',
+    },
     description: 'Monthly survey challengesFaced.',
   })
   challengesFaced: string[];

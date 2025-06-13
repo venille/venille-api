@@ -1,27 +1,7 @@
-type TransactionReferenceTypes =
-  | 'post_prod'
-  | 'premium_subscription'
-  | 'promotion';
-
-function makeTransactionReference(source: TransactionReferenceTypes): string {
-  const POST_AD_PREFIX = 'LVX_POSTPROD';
-  const PREMIUM_PREFIX = 'LVX_PREM';
-  const PROMOTION_PREFIX = 'LVX_PROMO';
+function makeOrderReference(): string {
+  const ORDER_PREFIX = 'VNL-ORD';
   const timestamp = getTimeStampID();
-
-  if (source === 'post_prod') {
-    return `${POST_AD_PREFIX}-${timestamp}`;
-  }
-
-  if (source === 'premium_subscription') {
-    return `${PREMIUM_PREFIX}-${timestamp}`;
-  }
-
-  if (source === 'promotion') {
-    return `${PROMOTION_PREFIX}-${timestamp}`;
-  }
-
-  return `${POST_AD_PREFIX}-${timestamp}`; // default fallback
+  return `${ORDER_PREFIX}-${timestamp}`;
 }
 
 function getTimeStampID(): string {
@@ -35,33 +15,12 @@ function getTimeStampID(): string {
     .toString(36)
     .toUpperCase()
     .replace(/[^A-Z0-9]/g, '')
-    .slice(0, 4);
+    .slice(0, 6);
 
   return `${yy}${mm}${dd}${randomChars}`;
 }
 
-function parseTransactionReferenceType(
-  reference: string,
-): TransactionReferenceTypes {
-  if (reference.includes('LVX_POSTPROD')) {
-    return 'post_prod';
-  }
-  if (reference.includes('LVX_PREM')) {
-    return 'premium_subscription';
-  }
-  if (reference.includes('LVX_PROMO')) {
-    return 'promotion';
-  }
-  return 'post_prod'; // default fallback
-}
-
-function getKeyFromTransactionReference(reference: string) {
-  return reference.split('-')[1];
-}
-
-export const TransactionRefHelpers = {
-  makeTransactionReference,
-  parseTransactionReferenceType,
-  getKeyFromTransactionReference,
+export const ReferenceHelpers = {
   getTimeStampID,
+  makeOrderReference,
 };

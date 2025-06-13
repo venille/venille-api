@@ -10,6 +10,7 @@ import { OrderDeliveryMethod } from '@app/common/src/constants/enums';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { UserNotFoundException } from 'libs/common/src/constants/exceptions';
 import { FormatOrderInfo } from '@app/common/src/middlewares/models.formatter';
+import { ReferenceHelpers } from '@app/common/src/helpers/reference';
 
 @CommandHandler(OrderSanitaryPadCommand)
 export class OrderSanitaryPadHandler
@@ -42,11 +43,16 @@ export class OrderSanitaryPadHandler
 
       const order = this.orderRepository.create({
         account,
+        phone: payload.phone,
+        address: payload.address,
         quantity: payload.quantity,
+        buildingNumber: payload.buildingNumber,
+        nearestLandmark: payload.nearestLandmark,
         deliveryMethod:
           payload.deliveryMethod === 'PickUp'
             ? OrderDeliveryMethod.Pickup
             : OrderDeliveryMethod.Delivery,
+        orderId: ReferenceHelpers.makeOrderReference(),
       });
 
       await this.orderRepository.save(order);

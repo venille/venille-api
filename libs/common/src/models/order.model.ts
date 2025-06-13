@@ -26,6 +26,15 @@ export class Order {
     nullable: true,
   })
   @ApiPropertyOptional({
+    description: 'Order ID (Custom generated).',
+  })
+  orderId: string;
+
+  @Column({
+    default: 0,
+    nullable: true,
+  })
+  @ApiPropertyOptional({
     description: 'Order quantity e.g 1',
   })
   quantity: number;
@@ -49,6 +58,38 @@ export class Order {
   })
   isCompleted: boolean;
 
+  @Column({
+    nullable: true,
+  })
+  @ApiPropertyOptional({
+    description: 'Order building number e.g 123.',
+  })
+  buildingNumber: string;
+
+  @Column({
+    nullable: true,
+  })
+  @ApiPropertyOptional({
+    description: 'Order address e.g 123 Main St, Anytown, USA.',
+  })
+  address: string;
+
+  @Column({
+    nullable: true,
+  })
+  @ApiPropertyOptional({
+    description: 'Order nearest landmark e.g 123 Main St, Anytown, USA.',
+  })
+  nearestLandmark: string;
+
+  @Column({
+    nullable: true,
+  })
+  @ApiPropertyOptional({
+    description: 'Order phone number e.g +1234567890.',
+  })
+  phone: string;
+
   @ManyToOne(() => Account, {
     onDelete: 'CASCADE',
     eager: true,
@@ -69,6 +110,12 @@ export class OrderInfo {
     description: 'Order ID (Auto generated).',
   })
   id: string;
+  
+  @ApiProperty({
+    type: String,
+    description: 'Order ID (Custom generated).',
+  })
+  orderId: string;
 
   @ApiProperty({
     type: Number,
@@ -87,6 +134,30 @@ export class OrderInfo {
     description: 'Order completed status e.g false.',
   })
   isCompleted: boolean;
+
+  @ApiProperty({
+    type: String,
+    description: 'Order building number e.g 123.',
+  })
+  buildingNumber: string;
+
+  @ApiProperty({
+    type: String,
+    description: 'Order address e.g 123 Main St, Anytown, USA.',
+  })
+  address: string;
+
+  @ApiProperty({
+    type: String,
+    description: 'Order nearest landmark e.g 123 Main St, Anytown, USA.',
+  })
+  nearestLandmark: string;
+
+  @ApiProperty({
+    type: String,
+    description: 'Order phone number e.g +1234567890.',
+  })
+  phone: string;
 }
 
 export class OrderHistoryResponse {

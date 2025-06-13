@@ -255,6 +255,38 @@ export class OrderSanitaryPadDTO {
   @IsString()
   @IsNotEmpty()
   deliveryMethod: string;
+
+  @ApiProperty({
+    example: '123',
+    description: 'Building number.',
+  })
+  @IsString()
+  @IsNotEmpty()
+  buildingNumber: string;
+
+  @ApiProperty({
+    example: '123 Main St, Anytown, USA',
+    description: 'Address.',
+  })
+  @IsString()
+  @IsNotEmpty()
+  address: string;
+
+  @ApiProperty({
+    example: '123 Main St, Anytown, USA',
+    description: 'Nearest landmark.',
+  })
+  @IsString()
+  @IsNotEmpty()
+  nearestLandmark: string;
+
+  @ApiProperty({
+    example: '+1234567890',
+    description: 'Phone number.',
+  })
+  @IsString()
+  @IsNotEmpty()
+  phone: string;
 }
 
 export class RegisterMonthlySurveyDTO {

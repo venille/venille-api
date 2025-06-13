@@ -64,24 +64,24 @@ export class MonthlySurvey {
 }
 
 export class MonthlySurveyInfo {
-  @ApiPropertyOptional({
+  @ApiProperty({
     description: 'Monthly survey ID (Auto generated).',
   })
   id: string;
 
-  @ApiPropertyOptional({
+  @ApiProperty({
     description: 'Monthly survey days managing period.',
   })
   daysManagingPeriod: string;
 
-  @ApiPropertyOptional({
+  @ApiProperty({
     isArray: true,
     type: ['11', '12'],
     description: 'Monthly survey challengesFaced.',
   })
   challengesFaced: string[];
 
-  @ApiPropertyOptional({
+  @ApiProperty({
     type: Boolean,
     description: 'Monthly survey hasAccessToPad.',
   })

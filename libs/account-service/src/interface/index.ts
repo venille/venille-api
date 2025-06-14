@@ -280,13 +280,13 @@ export class OrderSanitaryPadDTO {
   @IsNotEmpty()
   nearestLandmark: string;
 
-  @ApiProperty({
-    example: '+1234567890',
-    description: 'Phone number.',
-  })
-  @IsString()
-  @IsNotEmpty()
-  phone: string;
+  // @ApiProperty({
+  //   example: '+1234567890',
+  //   description: 'Phone number.',
+  // })
+  // @IsString()
+  // @IsNotEmpty()
+  // phone: string;
 }
 
 export class RegisterMonthlySurveyDTO {

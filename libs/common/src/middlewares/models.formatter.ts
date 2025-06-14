@@ -18,6 +18,8 @@ export function FormatAccountInfo(account: Account): AccountInfo {
   delete account.newPhone;
   delete account.createdAt;
   delete account.updatedAt;
+  delete account.lastLogin;
+  delete account.referredBy;
   delete account.activationCode;
   delete account.passwordResetCode;
   delete account.passwordResetToken;

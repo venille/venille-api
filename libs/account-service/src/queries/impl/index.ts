@@ -27,3 +27,7 @@ export class FetchSanitaryPadOrderHistoryQuery {
     public readonly secureUser: SecureUserPayload,
   ) {}
 }
+
+export class FetchDetailedAccountInfoQuery {
+  constructor(public readonly secureUser: SecureUserPayload) {}
+}

@@ -29,26 +29,32 @@ import {
   UpdateProfileImageDTO,
   VerifyNewAccountEmailDTO,
 } from '../interface';
+import {
+  FetchDetailedAccountInfoQuery,
+  FetchMonthlySurveyHistoryQuery,
+} from '../queries/impl';
+import {
+  DeleteAccountCommand,
+  UpdateAccountNameCommand,
+  UpdateAccountPhoneCommand,
+  UpdateAccountEmailCommand,
+  UpdateProfileImageCommand,
+  RegisterMonthlySurveyCommand,
+  UpdateAccountFCMTokenCommand,
+  UpdateAccountLocationCommand,
+  UpdateAccountPasswordCommand,
+  VerifyNewAccountEmailCommand,
+} from '../commands/impl';
+import {
+  MonthlySurveyInfo,
+  MonthlySurveyHistoryResponse,
+} from '@app/common/src/models/monthly.survey.model';
 import authUtils from 'libs/common/src/security/auth.utils';
 import { AccountService } from '../services/account.service';
 import { SecureUserPayload } from '@app/common/src/interface';
 import { AccountInfo } from '@app/common/src/models/account.model';
-import {
-  DeleteAccountCommand,
-  RegisterMonthlySurveyCommand,
-  UpdateAccountEmailCommand,
-  UpdateAccountFCMTokenCommand,
-  UpdateAccountLocationCommand,
-  UpdateAccountNameCommand,
-  UpdateAccountPasswordCommand,
-  UpdateAccountPhoneCommand,
-  UpdateProfileImageCommand,
-  VerifyNewAccountEmailCommand,
-} from '../commands/impl';
-import { FetchMonthlySurveyHistoryQuery } from '../queries/impl';
 import { JwtAuthGuard } from '@app/common/src/auth/jwt-auth.guard';
 import { SecureUser } from '@app/common/src/decorator/user.decorator';
-import { MonthlySurveyHistoryResponse, MonthlySurveyInfo } from '@app/common/src/models/monthly.survey.model';
 
 @Controller({ path: 'me' })
 @ApiBearerAuth()
@@ -68,7 +74,9 @@ export class AccountController {
     @Req() req: Request,
     @SecureUser() secureUser: SecureUserPayload,
   ): Promise<AccountInfo> {
-    return await this.accountService.getDetailedProfile(secureUser);
+    return await this.queryBus.execute(
+      new FetchDetailedAccountInfoQuery(secureUser),
+    );
   }
 
   @ApiTags('me')

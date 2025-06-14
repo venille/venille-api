@@ -104,24 +104,6 @@ export class Account {
 
   @Column({
     nullable: true,
-    default: '',
-  })
-  @ApiPropertyOptional({
-    description: 'Latitude e.g 9.2928839',
-  })
-  latitude: string;
-
-  @Column({
-    nullable: true,
-    default: '',
-  })
-  @ApiPropertyOptional({
-    description: 'Longitude e.g 9.481991',
-  })
-  longitude: string;
-
-  @Column({
-    nullable: true,
     default: 'https://medexer.s3.amazonaws.com/avatars/avatar.png',
   })
   @ApiPropertyOptional({

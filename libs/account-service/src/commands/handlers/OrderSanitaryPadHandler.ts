@@ -43,7 +43,7 @@ export class OrderSanitaryPadHandler
 
       const order = this.orderRepository.create({
         account,
-        phone: payload.phone,
+        phone: account.phone,
         address: payload.address,
         quantity: payload.quantity,
         buildingNumber: payload.buildingNumber,

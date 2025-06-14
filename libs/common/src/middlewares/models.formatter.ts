@@ -119,7 +119,6 @@ export function FormatMonthlySurveyInfo(
 
 export function FormatOrderInfo(order: Order): OrderInfo {
   return {
-    phone: order.phone,
     address: order.address,
     orderId: order.orderId,
     id: order.id.toString(),

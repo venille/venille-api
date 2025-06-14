@@ -82,14 +82,6 @@ export class Order {
   })
   nearestLandmark: string;
 
-  @Column({
-    nullable: true,
-  })
-  @ApiPropertyOptional({
-    description: 'Order phone number e.g +1234567890.',
-  })
-  phone: string;
-
   @ManyToOne(() => Account, {
     onDelete: 'CASCADE',
     eager: true,
@@ -152,12 +144,6 @@ export class OrderInfo {
     description: 'Order nearest landmark e.g 123 Main St, Anytown, USA.',
   })
   nearestLandmark: string;
-
-  @ApiProperty({
-    type: String,
-    description: 'Order phone number e.g +1234567890.',
-  })
-  phone: string;
 }
 
 export class OrderHistoryResponse {

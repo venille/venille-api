@@ -209,6 +209,9 @@ export class PeriodTrackerDayInfo {
   @ApiProperty({ example: 1, type: Number })
   periodDayCount: number;
 
+  @ApiProperty({ example: 1, type: Number })
+  cycleDayCount: number;
+
   @ApiProperty({ example: false, type: Boolean })
   isPredictedPeriodDay: boolean;
 

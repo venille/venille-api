@@ -1,7 +1,7 @@
+import { addDays } from 'date-fns';
 import { Repository } from 'typeorm';
 import { Cache } from 'cache-manager';
 import { Inject } from '@nestjs/common';
-import { addDays, format, differenceInDays } from 'date-fns';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   PeriodSymptomLog,
@@ -10,9 +10,13 @@ import {
   PeriodTrackerWeekInfo,
   PeriodOvulationPrediction,
 } from '@app/common/src/models/period.record.model';
+import {
+  predictOvulationDate,
+  calculateCycleDayCount,
+} from '@app/common/src/calculator/period.calculator';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
 import { FetchWeeklyPeriodHistoryQuery } from '../impl';
+import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
 import { AppLogger } from 'libs/common/src/logger/logger.service';
 import { PeriodTracker } from '@app/common/src/models/period.tracker.model';
 import { formatMonthTitle, isSameDay } from '@app/common/src/utils/date.utils';
@@ -24,8 +28,6 @@ export class FetchWeeklyPeriodHistoryQueryHandler
   constructor(
     @Inject('Logger') private readonly logger: AppLogger,
     @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
-    @InjectRepository(PeriodSymptomLog)
-    private readonly symptomLogRepository: Repository<PeriodSymptomLog>,
     @InjectRepository(PeriodTracker)
     private readonly periodTrackerRepository: Repository<PeriodTracker>,
     @InjectRepository(PeriodTrackerRecord)
@@ -119,33 +121,7 @@ export class FetchWeeklyPeriodHistoryQueryHandler
 
             isFertileDay =
               currentDate >= fertileStartDate && currentDate <= fertileEndDate;
-
-            // Debug logging for fertile window
-            if (i === 0) {
-              // Only log once per week
-              console.log('Fertile window debug:');
-              console.log('Effective ovulation date:', effectiveOvulationDate);
-              console.log('Fertile start date:', fertileStartDate);
-              console.log('Fertile end date:', fertileEndDate);
-              console.log('Current week start date:', startDate);
-              console.log('Current week end date:', addDays(startDate, 6));
-            }
-
-            // Debug logging for each day
-            console.log('Current date:', currentDate);
-            console.log(
-              'Is current date >= fertile start?',
-              currentDate >= fertileStartDate,
-            );
-            console.log(
-              'Is current date <= fertile end?',
-              currentDate <= fertileEndDate,
-            );
           }
-
-          console.log('{IS PREDICTED PERIOD DAY}', isPredictedPeriodDay);
-          console.log('{IS PREDICTED OVULATION DAY}', isPredictedOvulationDay);
-          console.log('{IS FERTILE DAY}', isFertileDay);
 
           if (isPredictedPeriodDay) {
             periodDayCount =
@@ -153,11 +129,12 @@ export class FetchWeeklyPeriodHistoryQueryHandler
                 (currentDate.getTime() - periodStartDate.getTime()) /
                   (1000 * 60 * 60 * 24),
               ) + 1;
-            insights = `Predicted period day ${periodDayCount}`;
+            insights = `Period in\n${periodDayCount} days\nLow chances of getting pregnant`;
           } else if (isPredictedOvulationDay) {
-            insights = 'Ovulation day\nPeak fertility';
+            insights =
+              'Prediction: Day of\nOvulation\nHigh chance of getting pregnant';
           } else if (isFertileDay) {
-            insights = 'Fertile window\nHigh chance of conception';
+            insights = 'Fertile window\nHigh chance of getting pregnant';
           } else {
             const daysToOvulation = Math.ceil(
               (ovulationEstimate.getTime() - currentDate.getTime()) /
@@ -165,18 +142,26 @@ export class FetchWeeklyPeriodHistoryQueryHandler
             );
 
             if (daysToOvulation > 0 && daysToOvulation <= 7) {
-              insights = `Ovulation in\n ${daysToOvulation} day(s)`;
+              insights = `Ovulation in\n${daysToOvulation} days\nHigh chance of getting pregnant`;
             } else if (daysToOvulation < 0 && daysToOvulation >= -7) {
-              insights = 'Post-ovulation phase';
+              insights =
+                'Post-ovulation phase\nLow chances of getting pregnant';
             } else if (daysToOvulation <= -8) {
               insights = 'Late luteal phase\nPeriod approaching';
             }
           }
         }
 
+        const cycleDayCount = calculateCycleDayCount(
+          currentDate,
+          baseDate,
+          cycleLengthDays,
+        );
+
         weekDays.push({
           insights,
           periodDayCount,
+          cycleDayCount,
           date: currentDate,
           isPredictedPeriodDay,
           isPredictedOvulationDay,
@@ -197,24 +182,4 @@ export class FetchWeeklyPeriodHistoryQueryHandler
       throw error;
     }
   }
-}
-
-function predictOvulationDate(periods: { startDate: Date }[]): Date | null {
-  if (!periods || periods.length < 2) return null;
-
-  // Sort by startDate descending
-  const sorted = periods
-    .filter((p) => p.startDate)
-    .sort(
-      (a, b) =>
-        new Date(b.startDate).getTime() - new Date(a.startDate).getTime(),
-    );
-
-  const lastPeriodStart = new Date(sorted[0].startDate);
-  const previousPeriodStart = new Date(sorted[1].startDate);
-
-  const cycleLength = differenceInDays(lastPeriodStart, previousPeriodStart);
-  const ovulationOffset = cycleLength - 14;
-
-  return addDays(lastPeriodStart, ovulationOffset);
 }

@@ -15,6 +15,7 @@ import { FetchPeriodTrackerHistoryQuery } from '../impl';
 import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
 import { AppLogger } from 'libs/common/src/logger/logger.service';
 import { PeriodTracker } from '@app/common/src/models/period.tracker.model';
+import { addDays } from 'date-fns';
 
 @QueryHandler(FetchPeriodTrackerHistoryQuery)
 export class FetchPeriodTrackerHistoryQueryHandler
@@ -394,6 +395,17 @@ export class FetchPeriodTrackerHistoryQueryHandler
                 monthPredictedPeriods.includes(dateString);
               const isPredictedOvulationDay = monthOvulationDate === dateString;
 
+              // Calculate fertile window: 2 days before and 2 days after ovulation
+              let isFertileDay = false;
+              if (effectiveOvulationDate) {
+                const fertileStartDate = addDays(effectiveOvulationDate, -2);
+                const fertileEndDate = addDays(effectiveOvulationDate, 2);
+
+                isFertileDay =
+                  currentDate >= fertileStartDate &&
+                  currentDate <= fertileEndDate;
+              }
+
               // Calculate days to ovulation for this specific date
               let daysToOvulation = 0;
               if (effectiveOvulationDate) {
@@ -409,6 +421,8 @@ export class FetchPeriodTrackerHistoryQueryHandler
                 dayInsights = 'Predicted period day';
               } else if (isPredictedOvulationDay) {
                 dayInsights = 'Predicted ovulation day - peak fertility window';
+              } else if (isFertileDay) {
+                dayInsights = 'Fertile window - high chance of conception';
               } else if (daysToOvulation <= 7 && daysToOvulation > 0) {
                 dayInsights = `Ovulation in ${daysToOvulation} days - fertility window`;
               } else if (daysToOvulation < 0 && daysToOvulation >= -7) {
@@ -423,6 +437,7 @@ export class FetchPeriodTrackerHistoryQueryHandler
                 date: currentDate,
                 isPredictedPeriodDay,
                 isPredictedOvulationDay,
+                isFertileDay,
                 todayInsights: dayInsights,
               });
             }

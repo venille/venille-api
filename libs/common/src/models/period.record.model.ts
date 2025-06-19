@@ -94,6 +94,9 @@ export class DailyInsightsSummary {
   @ApiProperty({ example: false })
   isPredictedOvulationDay: boolean;
 
+  @ApiProperty({ example: false })
+  isFertileDay: boolean;
+
   @ApiProperty({ example: 'You are not on your predicted period day' })
   todayInsights: string;
 }
@@ -208,6 +211,9 @@ export class PeriodTrackerDayInfo {
 
   @ApiProperty({ example: false, type: Boolean })
   isPredictedPeriodDay: boolean;
+
+  @ApiProperty({ example: false, type: Boolean })
+  isFertileDay: boolean;
 
   @ApiProperty({ example: false, type: Boolean })
   isPredictedOvulationDay: boolean;

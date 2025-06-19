@@ -1,7 +1,7 @@
 import { Repository } from 'typeorm';
 import { Cache } from 'cache-manager';
 import { Inject } from '@nestjs/common';
-import { addDays, format } from 'date-fns';
+import { addDays, format, differenceInDays } from 'date-fns';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   PeriodSymptomLog,
@@ -59,9 +59,7 @@ export class FetchWeeklyPeriodHistoryQueryHandler
         }),
       ]);
 
-      const ovulationDate = ovulationPrediction?.ovulationDate
-        ? new Date(ovulationPrediction.ovulationDate)
-        : null;
+      const ovulationDate = predictOvulationDate(periodData);
 
       const lastPeriod =
         periodData.find((p) => !p.isPredicted) || periodData[0];
@@ -81,6 +79,7 @@ export class FetchWeeklyPeriodHistoryQueryHandler
 
         let isPredictedPeriodDay = false;
         let isPredictedOvulationDay = false;
+        let isFertileDay = false;
         let periodDayCount = 0;
         let insights = 'Regular cycle day';
 
@@ -112,6 +111,42 @@ export class FetchWeeklyPeriodHistoryQueryHandler
             ovulationDate || ovulationEstimate,
           );
 
+          // Calculate fertile window: 2 days before and 2 days after ovulation
+          const effectiveOvulationDate = ovulationDate || ovulationEstimate;
+          if (effectiveOvulationDate) {
+            const fertileStartDate = addDays(effectiveOvulationDate, -2);
+            const fertileEndDate = addDays(effectiveOvulationDate, 2);
+
+            isFertileDay =
+              currentDate >= fertileStartDate && currentDate <= fertileEndDate;
+
+            // Debug logging for fertile window
+            if (i === 0) {
+              // Only log once per week
+              console.log('Fertile window debug:');
+              console.log('Effective ovulation date:', effectiveOvulationDate);
+              console.log('Fertile start date:', fertileStartDate);
+              console.log('Fertile end date:', fertileEndDate);
+              console.log('Current week start date:', startDate);
+              console.log('Current week end date:', addDays(startDate, 6));
+            }
+
+            // Debug logging for each day
+            console.log('Current date:', currentDate);
+            console.log(
+              'Is current date >= fertile start?',
+              currentDate >= fertileStartDate,
+            );
+            console.log(
+              'Is current date <= fertile end?',
+              currentDate <= fertileEndDate,
+            );
+          }
+
+          console.log('{IS PREDICTED PERIOD DAY}', isPredictedPeriodDay);
+          console.log('{IS PREDICTED OVULATION DAY}', isPredictedOvulationDay);
+          console.log('{IS FERTILE DAY}', isFertileDay);
+
           if (isPredictedPeriodDay) {
             periodDayCount =
               Math.floor(
@@ -120,7 +155,9 @@ export class FetchWeeklyPeriodHistoryQueryHandler
               ) + 1;
             insights = `Predicted period day ${periodDayCount}`;
           } else if (isPredictedOvulationDay) {
-            insights = 'Ovulation day - peak fertility';
+            insights = 'Ovulation day\nPeak fertility';
+          } else if (isFertileDay) {
+            insights = 'Fertile window\nHigh chance of conception';
           } else {
             const daysToOvulation = Math.ceil(
               (ovulationEstimate.getTime() - currentDate.getTime()) /
@@ -128,32 +165,29 @@ export class FetchWeeklyPeriodHistoryQueryHandler
             );
 
             if (daysToOvulation > 0 && daysToOvulation <= 7) {
-              insights = `Ovulation in ${daysToOvulation} day(s)`;
+              insights = `Ovulation in\n ${daysToOvulation} day(s)`;
             } else if (daysToOvulation < 0 && daysToOvulation >= -7) {
               insights = 'Post-ovulation phase';
             } else if (daysToOvulation <= -8) {
-              insights = 'Late luteal phase - period approaching';
+              insights = 'Late luteal phase\nPeriod approaching';
             }
           }
         }
 
         weekDays.push({
-          date: currentDate,
-          isToday: isSameDay(currentDate, today),
+          insights,
           periodDayCount,
+          date: currentDate,
           isPredictedPeriodDay,
           isPredictedOvulationDay,
-          insights,
+          isFertileDay,
+          isToday: isSameDay(currentDate, today),
         });
-
-        console.log('{CURRENT DATE}', currentDate);
       }
 
-      console.log('{TODAY}', today);
-
       return {
-        monthTitle: formatMonthTitle(startDate),
         days: weekDays,
+        monthTitle: formatMonthTitle(startDate),
       };
     } catch (error) {
       this.logger.log(
@@ -163,4 +197,24 @@ export class FetchWeeklyPeriodHistoryQueryHandler
       throw error;
     }
   }
+}
+
+function predictOvulationDate(periods: { startDate: Date }[]): Date | null {
+  if (!periods || periods.length < 2) return null;
+
+  // Sort by startDate descending
+  const sorted = periods
+    .filter((p) => p.startDate)
+    .sort(
+      (a, b) =>
+        new Date(b.startDate).getTime() - new Date(a.startDate).getTime(),
+    );
+
+  const lastPeriodStart = new Date(sorted[0].startDate);
+  const previousPeriodStart = new Date(sorted[1].startDate);
+
+  const cycleLength = differenceInDays(lastPeriodStart, previousPeriodStart);
+  const ovulationOffset = cycleLength - 14;
+
+  return addDays(lastPeriodStart, ovulationOffset);
 }

@@ -195,3 +195,45 @@ export class PeriodTrackerInfo {
   @ApiProperty({ example: false })
   isCurrentMonth: boolean;
 }
+
+export class PeriodTrackerDayInfo {
+  @ApiProperty({ example: '2025-06-05', type: Date })
+  date: Date;
+
+  @ApiProperty({ example: false, type: Boolean })
+  isToday: boolean;
+
+  @ApiProperty({ example: 1, type: Number })
+  periodDayCount: number;
+
+  @ApiProperty({ example: false, type: Boolean })
+  isPredictedPeriodDay: boolean;
+
+  @ApiProperty({ example: false, type: Boolean })
+  isPredictedOvulationDay: boolean;
+
+  @ApiProperty({
+    type: String,
+    example: 'You are not on your predicted period day',
+  })
+  insights: string;
+}
+
+export class PeriodTrackerWeekInfo {
+  @ApiProperty({ example: 'April 2025', type: String })
+  monthTitle: string;
+
+  @ApiProperty({ type: PeriodTrackerDayInfo, isArray: true })
+  days: PeriodTrackerDayInfo[];
+}
+
+export class DashboardTrackerInfo {
+  @ApiProperty({ type: PeriodTrackerWeekInfo })
+  previousWeek: PeriodTrackerWeekInfo;
+
+  @ApiProperty({ type: PeriodTrackerWeekInfo })
+  currentWeek: PeriodTrackerWeekInfo;
+
+  @ApiProperty({ type: PeriodTrackerWeekInfo })
+  nextWeek: PeriodTrackerWeekInfo;
+}

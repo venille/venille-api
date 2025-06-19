@@ -33,7 +33,7 @@ export class PeriodTrackerController {
   @Get('history')
   @ApiOkResponse({ type: PeriodTrackerInfo, isArray: true })
   @ApiInternalServerErrorResponse()
-  async getDetailedAccountInfo(
+  async getPeriodTrackerHistory(
     @Req() req: Request,
     @SecureUser() secureUser: SecureUserPayload,
   ): Promise<PeriodTrackerInfo[]> {

@@ -4,7 +4,6 @@ import { Cache } from 'cache-manager';
 import { Inject } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
-  PeriodSymptomLog,
   PeriodTrackerRecord,
   PeriodTrackerDayInfo,
   PeriodTrackerWeekInfo,

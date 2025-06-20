@@ -246,3 +246,14 @@ export class DashboardTrackerInfo {
   @ApiProperty({ type: PeriodTrackerWeekInfo })
   nextWeek: PeriodTrackerWeekInfo;
 }
+
+export class PeriodLogInfo {
+  @ApiProperty({ example: '2025-06-05', type: Date })
+  startDate: Date;
+
+  @ApiProperty({ example: '2025-06-06', type: Date })
+  endDate: Date;
+
+  @ApiProperty({ example: false, type: Boolean })
+  isPredicted: boolean;
+}

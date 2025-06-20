@@ -7,6 +7,7 @@ import {
 import {
   FetchPeriodTrackerHistoryQuery,
   FetchDashboardPeriodTrackerHistoryQuery,
+  FetchPeriodLogHistoryQuery,
 } from '../queries/impl';
 import {
   PeriodTrackerInfo,
@@ -39,6 +40,19 @@ export class PeriodTrackerController {
   ): Promise<PeriodTrackerInfo[]> {
     return this.queryBus.execute(
       new FetchPeriodTrackerHistoryQuery(secureUser),
+    );
+  }
+
+  @ApiTags('period-tracker')
+  @Get('log/history')
+  @ApiOkResponse({ type: PeriodTrackerInfo, isArray: true })
+  @ApiInternalServerErrorResponse()
+  async fetchPeriodLogHistory(
+    @Req() req: Request,
+    @SecureUser() secureUser: SecureUserPayload,
+  ): Promise<PeriodTrackerInfo[]> {
+    return this.queryBus.execute(
+      new FetchPeriodLogHistoryQuery(secureUser),
     );
   }
 

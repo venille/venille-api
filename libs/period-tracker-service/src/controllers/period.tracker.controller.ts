@@ -12,6 +12,7 @@ import {
 import {
   PeriodTrackerInfo,
   DashboardTrackerInfo,
+  PeriodLogInfo,
 } from '@app/common/src/models/period.record.model';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { SecureUserPayload } from '@app/common/src/interface';
@@ -45,15 +46,13 @@ export class PeriodTrackerController {
 
   @ApiTags('period-tracker')
   @Get('log/history')
-  @ApiOkResponse({ type: PeriodTrackerInfo, isArray: true })
+  @ApiOkResponse({ type: PeriodLogInfo, isArray: true })
   @ApiInternalServerErrorResponse()
-  async fetchPeriodLogHistory(
+  async getPeriodLogHistory(
     @Req() req: Request,
     @SecureUser() secureUser: SecureUserPayload,
-  ): Promise<PeriodTrackerInfo[]> {
-    return this.queryBus.execute(
-      new FetchPeriodLogHistoryQuery(secureUser),
-    );
+  ): Promise<PeriodLogInfo[]> {
+    return this.queryBus.execute(new FetchPeriodLogHistoryQuery(secureUser));
   }
 
   @ApiTags('period-tracker')

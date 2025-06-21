@@ -45,13 +45,13 @@ export class PeriodTrackerController {
 
   @ApiTags('period-tracker')
   @Patch('predicted-log')
-  @ApiOkResponse({ type: Boolean })
+  @ApiOkResponse()
   @ApiInternalServerErrorResponse()
   async logPeriodTrackerHistory(
     @Req() req: Request,
     @SecureUser() secureUser: SecureUserPayload,
     @Body() periodHistory: PeriodTrackerHistoryDto,
-  ): Promise<boolean> {
+  ): Promise<void> {
     return this.command.execute(
       new LogPeriodHistoryCommand(periodHistory, secureUser),
     );

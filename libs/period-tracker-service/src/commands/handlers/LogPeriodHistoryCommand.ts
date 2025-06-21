@@ -11,7 +11,7 @@ import { startOfMonth, isSameMonth } from 'date-fns';
 
 @CommandHandler(LogPeriodHistoryCommand)
 export class LogPeriodHistoryCommandHandler
-  implements ICommandHandler<LogPeriodHistoryCommand, boolean>
+  implements ICommandHandler<LogPeriodHistoryCommand>
 {
   constructor(
     @Inject('Logger') private readonly logger: AppLogger,
@@ -85,8 +85,6 @@ export class LogPeriodHistoryCommandHandler
       }
 
       this.logger.log(`[LOG-PERIOD-HISTORY-COMMAND-HANDLER-SUCCESS]`);
-
-      return true;
     } catch (error) {
       this.logger.log(`[LOG-PERIOD-HISTORY-COMMAND-HANDLER-ERROR] :: ${error}`);
       console.log(error);

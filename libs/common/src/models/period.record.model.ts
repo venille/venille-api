@@ -228,32 +228,42 @@ export class PeriodTrackerDayInfo {
   insights: string;
 }
 
-export class PeriodTrackerWeekInfo {
-  @ApiProperty({ example: 'April 2025', type: String })
-  monthTitle: string;
 
-  @ApiProperty({ type: PeriodTrackerDayInfo, isArray: true })
-  days: PeriodTrackerDayInfo[];
-}
-
-export class DashboardTrackerInfo {
-  @ApiProperty({ type: PeriodTrackerWeekInfo })
-  previousWeek: PeriodTrackerWeekInfo;
-
-  @ApiProperty({ type: PeriodTrackerWeekInfo })
-  currentWeek: PeriodTrackerWeekInfo;
-
-  @ApiProperty({ type: PeriodTrackerWeekInfo })
-  nextWeek: PeriodTrackerWeekInfo;
-}
-
-export class PeriodLogInfo {
+export class PeriodDayInfo {
   @ApiProperty({ example: '2025-06-05', type: Date })
-  startDate: Date;
-
-  @ApiProperty({ example: '2025-06-06', type: Date })
-  endDate: Date;
+  date: Date;
 
   @ApiProperty({ example: false, type: Boolean })
-  isPredicted: boolean;
+  isToday: boolean;
+
+  @ApiProperty({ example: false, type: Boolean })
+  isPredictedPeriodDay: boolean;
+
+  @ApiProperty({ example: false, type: Boolean })
+  isPredictedOvulationDay: boolean;
+
+  @ApiProperty({ example: 1, type: Number })
+  cycleDayCount: number;
+
+  @ApiProperty({ example: 'You are not on your predicted period day', type: String })
+  insights: string;
+}
+
+export class MonthlyPeriodInfo {
+  @ApiProperty({ example: 0, type: Number })
+  month: number;
+
+  @ApiProperty({ example: 'January', type: String })
+  monthName: string;
+
+  @ApiProperty({ type: PeriodDayInfo, isArray: true })
+  days: PeriodDayInfo[];
+}
+
+export class PredictedYearTrackerInfo {
+  @ApiProperty({ example: 2025, type: Number })
+  currentYear: number;
+
+  @ApiProperty({ type: MonthlyPeriodInfo, isArray: true })
+  months: MonthlyPeriodInfo[];
 }

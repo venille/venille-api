@@ -1,11 +1,5 @@
-import { FetchPeriodLogHistoryQueryHandler } from './FetchPeriodLogHistoryQueryHandler';
-import { FetchWeeklyPeriodHistoryQueryHandler } from './FetchWeeklyPeriodHistoryQueryHandler';
-import { FetchPeriodTrackerHistoryQueryHandler } from './FetchPeriodTrackerHistoryQueryHandler';
-import { FetchDashboardPeriodTrackerHistoryQueryHandler } from './FetchDashboardPeriodTrackerHistoryQueryHandler';
+import { FetchPredictedPeriodTrackerHistoryQueryHandler } from './FetchPredictedPeriodTrackerHistoryQueryHandler';
 
 export const PeriodTrackerServiceQueryHandlers = [
-  FetchPeriodLogHistoryQueryHandler,
-  FetchWeeklyPeriodHistoryQueryHandler,
-  FetchPeriodTrackerHistoryQueryHandler,
-  FetchDashboardPeriodTrackerHistoryQueryHandler,
+  FetchPredictedPeriodTrackerHistoryQueryHandler,
 ];

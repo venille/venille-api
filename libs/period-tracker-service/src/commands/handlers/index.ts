@@ -1,1 +1,5 @@
-export const PeriodTrackerServiceCommandHandlers = [];
+import { LogPeriodHistoryCommandHandler } from './LogPeriodHistoryCommand';
+
+export const PeriodTrackerServiceCommandHandlers = [
+  LogPeriodHistoryCommandHandler,
+];

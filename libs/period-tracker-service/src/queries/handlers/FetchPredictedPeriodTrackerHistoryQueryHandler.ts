@@ -79,7 +79,7 @@ export class FetchPredictedPeriodTrackerHistoryQueryHandler
       const lastPeriodStartDate = new Date(lastPeriod.startDate);
       const cycleLengthDays = periodTracker.cycleLengthDays;
       const periodLengthDays = predictPeriodLength(
-        periodRecords.map((record) => ({
+        periodRecords.slice(0, 2).map((record) => ({
           start: new Date(record.startDate),
           end: new Date(record.endDate),
         })),
@@ -95,7 +95,7 @@ export class FetchPredictedPeriodTrackerHistoryQueryHandler
       // Generate monthly information from the beginning of last period start year to current year
       for (let year = lastPeriodYear; year <= currentYear; year++) {
         const startMonth = year === lastPeriodYear ? 0 : 0; // Always start from January (month 0)
-        const endMonth = year === currentYear ? new Date().getMonth() : 11;
+        const endMonth = 11; // Always end at December (month 11)
         const months: MonthlyPeriodInfo[] = [];
 
         for (

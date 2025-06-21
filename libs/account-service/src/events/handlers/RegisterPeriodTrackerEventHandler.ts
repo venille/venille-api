@@ -1,7 +1,7 @@
 import { Repository } from 'typeorm';
 import { Inject } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {        
+import {
   PeriodSymptomLog,
   PeriodTrackerRecord,
   PeriodOvulationPrediction,

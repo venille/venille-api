@@ -66,7 +66,7 @@ export class FetchPredictedPeriodTrackerHistoryQueryHandler
         }),
         this.periodRecordRepository.find({
           where: { account: { id: secureUser.id } },
-          order: { startDate: 'DESC' },
+          order: { startDate: 'ASC' },
         }),
       ]);
 

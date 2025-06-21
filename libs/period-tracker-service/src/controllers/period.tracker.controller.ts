@@ -8,8 +8,7 @@ import {
   FetchPredictedPeriodTrackerHistoryQuery,
 } from '../queries/impl';
 import {
-  PeriodTrackerInfo,
-  PredictedYearTrackerInfo,
+  PeriodTrackerHistory,
 } from '@app/common/src/models/period.record.model';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { SecureUserPayload } from '@app/common/src/interface';
@@ -32,12 +31,12 @@ export class PeriodTrackerController {
 
   @ApiTags('period-tracker')
   @Get('predicted-log')
-  @ApiOkResponse({ type: PredictedYearTrackerInfo })
+  @ApiOkResponse({ type: PeriodTrackerHistory })
   @ApiInternalServerErrorResponse()
   async getPeriodTrackerHistory(
     @Req() req: Request,
     @SecureUser() secureUser: SecureUserPayload,
-  ): Promise<PredictedYearTrackerInfo> {
+  ): Promise<PeriodTrackerHistory> {
     return this.queryBus.execute(
       new FetchPredictedPeriodTrackerHistoryQuery(secureUser),
     );

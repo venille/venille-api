@@ -267,3 +267,8 @@ export class PredictedYearTrackerInfo {
   @ApiProperty({ type: MonthlyPeriodInfo, isArray: true })
   months: MonthlyPeriodInfo[];
 }
+
+export class PeriodTrackerHistory {
+  @ApiProperty({ type: PredictedYearTrackerInfo, isArray: true })
+  years: PredictedYearTrackerInfo[];
+}

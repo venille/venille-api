@@ -64,7 +64,7 @@ export class FetchDashboardInfoQueryHandler
       return {
         previousCycleInfo: {
           startDate: `Started ${getDay(startDate)} ${getMonthName(startDate)} ${getYear(startDate)}`,
-          daysAgo: `${differenceInDays(new Date(), startDate)} days ago`,
+          daysAgo: `${differenceInDays(startDate, new Date())} days ago`,
           duration: `Period Length: ${differenceInDays(
             endDate,
             startDate,

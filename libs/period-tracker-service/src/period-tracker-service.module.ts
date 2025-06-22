@@ -19,6 +19,7 @@ import { PeriodTrackerServiceCommandHandlers } from './commands/handlers';
 import { PeriodTrackerServiceEventHandlers } from './events/handlers';
 import { PeriodTrackerServiceQueryHandlers } from './queries/handlers';
 import { PeriodTrackerService } from './services/period.tracker.service';
+import { MenstrualPhase, MenstrualPhaseDescription } from '@app/common/src/models/menstrual.phase.model';
 
 @Module({
   imports: [
@@ -30,9 +31,11 @@ import { PeriodTrackerService } from './services/period.tracker.service';
       Account,
       Notification,
       PeriodTracker,
+      MenstrualPhase,
       PeriodSymptomLog,
       OnboardingQuestion,
       PeriodTrackerRecord,
+      MenstrualPhaseDescription,
       PeriodOvulationPrediction,
     ]),
   ],

@@ -22,9 +22,10 @@ import { SecureUserPayload } from '@app/common/src/interface';
 import { JwtAuthGuard } from '@app/common/src/auth/jwt-auth.guard';
 import { SecureUser } from '@app/common/src/decorator/user.decorator';
 import { PeriodTrackerService } from '../services/period.tracker.service';
-import { FetchPredictedPeriodTrackerHistoryQuery } from '../queries/impl';
+import { FetchDashboardInfoQuery, FetchPredictedPeriodTrackerHistoryQuery } from '../queries/impl';
 import { LogPeriodSymptomDto, PeriodTrackerHistoryDto } from '../interface';
 import { PeriodTrackerHistory } from '@app/common/src/models/period.record.model';
+import { DashboardInfo } from '../interface/schema';
 
 @Controller({ path: 'tracker' })
 @ApiBearerAuth()
@@ -35,6 +36,19 @@ export class PeriodTrackerController {
     public readonly command: CommandBus,
     public readonly periodTrackerService: PeriodTrackerService,
   ) {}
+
+  @ApiTags('period-tracker')
+  @Get('dashboard-info')
+  @ApiOkResponse({ type: DashboardInfo })
+  @ApiInternalServerErrorResponse()
+  async getDashboardInfo(
+    @Req() req: Request,
+    @SecureUser() secureUser: SecureUserPayload,
+  ): Promise<DashboardInfo> {
+    return this.queryBus.execute(
+      new FetchDashboardInfoQuery(secureUser),
+    );
+  }
 
   @ApiTags('period-tracker')
   @Post('log-symptoms')

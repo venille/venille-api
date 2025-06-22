@@ -11,6 +11,7 @@ import { OnboardingQuestionInfo } from '../models/onboarding.question.model';
 import { Forum, ForumComment, ForumCommentInfo } from '../models/forum.model';
 import { Notification, NotificationInfo } from '../models/notification.model';
 import { FormatMonthlySurveyPeriodDurationEnum } from '../helpers/enum.helper';
+import { MenstrualPhase, MenstrualPhaseDescription, MenstrualPhaseDescriptionInfo, MenstrualPhaseInfo } from '../models/menstrual.phase.model';
 
 export function FormatAccountInfo(account: Account): AccountInfo {
   delete account.password;
@@ -130,6 +131,25 @@ export function FormatOrderInfo(order: Order): OrderInfo {
   } as OrderInfo;
 }
 
+export function FormatMenstrualPhaseInfo(
+  phase: MenstrualPhase,
+  phaseDescriptions: MenstrualPhaseDescription[],
+): MenstrualPhaseInfo {
+  return {
+    id: phase.id.toString(),
+    title: phase.title,
+    coverPhoto: phase.coverPhoto,
+    descriptions: phaseDescriptions.map(
+      (description) =>
+        ({
+          title: description.title,
+          id: description.id.toString(),
+          description: description.description,
+        }) as MenstrualPhaseDescriptionInfo,
+    ),
+  } as MenstrualPhaseInfo;
+}
+
 export default {
   FormatForumInfo,
   FormatOrderInfo,
@@ -138,4 +158,5 @@ export default {
   FormatNotification,
   FormatForumCommentInfo,
   FormatMonthlySurveyInfo,
+  FormatMenstrualPhaseInfo,
 };

@@ -83,7 +83,7 @@ export function calculateCycleDayCount(
   targetDate: Date,
   lastPeriodStart: Date,
   cycleLength: number,
-): { cycleDay: number; cycleStartDate: Date } {
+): { cycleDay: number; cycleStartDate: Date; cycleLength: number } {
   const daysSinceStart = differenceInDays(
     startOfDay(targetDate),
     startOfDay(lastPeriodStart),
@@ -96,7 +96,7 @@ export function calculateCycleDayCount(
   // Calculate the day within that cycle
   const cycleDay = daysSinceStart % cycleLength;
 
-  return { cycleDay, cycleStartDate };
+  return { cycleDay, cycleStartDate, cycleLength };
 }
 
 export interface PredictedPeriodInfo {

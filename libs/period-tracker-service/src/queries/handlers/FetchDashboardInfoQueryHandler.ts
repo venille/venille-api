@@ -71,8 +71,8 @@ export class FetchDashboardInfoQueryHandler
           )} days`,
           durationStatus:
             differenceInDays(endDate, startDate) > 7 ? 'Abnormal' : 'Normal',
-          cycleLength: `Cycle Length: ${cycleLength} days`,
-          cycleLengthStatus: cycleLength > 30 ? 'Abnormal' : 'Normal',
+          cycleLength: `Cycle Length: 30 days`,
+          cycleLengthStatus: 30 > 30 ? 'Abnormal' : 'Normal',
         },
         menstrualPhases: menstrualPhases as MenstrualPhaseInfo[],
       };

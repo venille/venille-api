@@ -51,7 +51,7 @@ export enum CourseCategory {
   PREGNANCY_AND_POSTPARTUM_CARE = 'pregnancy-and-postpartum-care',
 }
 
-export enum PeriodSymptom {
+export enum PeriodSymptomEnum {
   CRAMPS = 'cramps',
   BLOATING = 'bloating',
   MOOD_SWINGS = 'mood_swings',
@@ -60,6 +60,18 @@ export enum PeriodSymptom {
   FATIGUE = 'fatigue',
   TENDER_BREASTS = 'tender_breasts',
   NAUSEA = 'nausea',
+  OTHER = 'other',
+}
+
+export enum LogPeriodSymptomEnum {
+  SYMPTOMS = 'symptoms',
+  MOOD = 'mood',
+  VAGINAL_DISCHARGE = 'vaginal_discharge',
+  SEX_DRIVE = 'sex_drive',
+  DIGESTION_STOOL = 'digestion_stool',
+  PREGNANCY_TEST = 'pregnancy_test',
+  OVULATION_TEST = 'ovulation_test',
+  PHYSICAL_ACTIVITY = 'physical_activity',
   OTHER = 'other',
 }
 

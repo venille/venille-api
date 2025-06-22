@@ -25,7 +25,7 @@ export class LogPeriodHistoryCommandHandler
     try {
       this.logger.log(`[LOG-PERIOD-HISTORY-COMMAND-HANDLER-PROCESSING]`);
 
-      const { periodHistory, secureUser } = command;
+      const { payload, secureUser } = command;
 
       const account = await this.accountRepository.findOneBy({
         id: secureUser.id,
@@ -41,7 +41,7 @@ export class LogPeriodHistoryCommandHandler
       });
 
       // Process each year in the period history
-      for (const yearInfo of periodHistory.years) {
+      for (const yearInfo of payload.years) {
         for (const monthInfo of yearInfo.months) {
           const historyStartDate = new Date(monthInfo.startDate);
           const historyEndDate = new Date(monthInfo.endDate);

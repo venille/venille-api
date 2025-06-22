@@ -9,10 +9,8 @@ import {
 } from 'typeorm';
 import {
   CycleGoal,
-  ReminderType,
-  PeriodSymptom,
   HealthCondition,
-  AdditionalTracking,
+  PeriodSymptomEnum,
   BirthControlMethod,
 } from '../constants/enums';
 import { Account } from './account.model';
@@ -34,8 +32,12 @@ export class PeriodTracker {
   @Column({ nullable: true, default: false })
   irregularPeriods: boolean;
 
-  @Column({ enum: PeriodSymptom, default: PeriodSymptom.ACNE, nullable: true })
-  periodSymptoms: PeriodSymptom;
+  @Column({
+    enum: PeriodSymptomEnum,
+    default: PeriodSymptomEnum.CRAMPS,
+    nullable: true,
+  })
+  periodSymptoms: PeriodSymptomEnum;
 
   @Column({ nullable: true, default: false })
   trackingOvulation: boolean;

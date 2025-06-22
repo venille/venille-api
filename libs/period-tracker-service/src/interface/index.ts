@@ -1,3 +1,4 @@
+import { PeriodSymptomEnum } from '@app/common/src/constants/enums';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
@@ -6,6 +7,8 @@ import {
   IsDateString,
   IsNotEmpty,
   IsNumber,
+  IsString,
+  IsEnum,
   ValidateNested,
 } from 'class-validator';
 
@@ -40,4 +43,30 @@ export class PeriodTrackerHistoryDto {
   @ValidateNested({ each: true })
   @Type(() => PeriodYearDto)
   years: PeriodYearDto[];
+}
+
+export class PeriodSymptomDto {
+  @ApiProperty({ example: 'CRAMPS', type: String })
+  @IsString()
+  @IsNotEmpty()
+  symptomType: string;
+
+  @ApiProperty({ example: 'cramps', type: String })
+  @IsString()
+  @IsNotEmpty()
+  symptoms: string;
+}
+
+export class LogPeriodSymptomDto {
+  @ApiProperty({ example: '2025-05-22T00:00:00.000Z', type: String })
+  @IsDateString()
+  @IsNotEmpty()
+  date: string;
+
+  @ApiProperty({ type: PeriodSymptomDto, isArray: true })
+  @IsArray()
+  @IsNotEmpty()
+  @ValidateNested({ each: true })
+  @Type(() => PeriodSymptomDto)
+  symptoms: PeriodSymptomDto[];
 }

@@ -25,7 +25,7 @@ import {
   CycleGoal,
   HealthCondition,
   MonthlySurveyPeriodDuration,
-  PeriodSymptom,
+  PeriodSymptomEnum,
   ReminderType,
 } from '@app/common/src/constants/enums';
 
@@ -188,12 +188,12 @@ export class RegisterPeriodTrackerDTO {
 
   @ApiProperty({
     example: 'cramps',
-    enum: PeriodSymptom,
+    enum: PeriodSymptomEnum,
     description: 'Period symptoms.',
   })
   @IsString()
   @IsNotEmpty()
-  periodSymptoms: PeriodSymptom;
+  periodSymptoms: PeriodSymptomEnum;
 
   @ApiProperty({
     example: true,

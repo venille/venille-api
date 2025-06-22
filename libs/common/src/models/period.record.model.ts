@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { Account } from './account.model';
 import { ApiProperty } from '@nestjs/swagger';
+import { LogPeriodSymptomEnum } from '../constants/enums';
 
 @Entity()
 export class PeriodTrackerRecord {
@@ -65,18 +66,24 @@ export class PeriodSymptomLog {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({ type: 'date', nullable: true })
+  date: Date;
+
+  @Column({
+    nullable: true,
+    enum: LogPeriodSymptomEnum,
+    default: LogPeriodSymptomEnum.OTHER,
+  })
+  symptomType: LogPeriodSymptomEnum;
+
+  @Column({ default: '[ ]', nullable: true })
+  symptoms: string;
+
   @ManyToOne(() => Account, {
     eager: true,
     onDelete: 'CASCADE',
   })
   account: Account;
-
-  @Column({ type: 'date', nullable: true })
-  date: Date;
-
-  @Column({ default: '[ ]', nullable: true })
-  symptoms: string;
-
   @CreateDateColumn()
   createdAt: Date;
 
@@ -228,7 +235,6 @@ export class PeriodTrackerDayInfo {
   insights: string;
 }
 
-
 export class PeriodDayInfo {
   @ApiProperty({ example: '2025-06-05', type: Date })
   date: Date;
@@ -245,7 +251,10 @@ export class PeriodDayInfo {
   @ApiProperty({ example: 1, type: Number })
   cycleDayCount: number;
 
-  @ApiProperty({ example: 'You are not on your predicted period day', type: String })
+  @ApiProperty({
+    example: 'You are not on your predicted period day',
+    type: String,
+  })
   insights: string;
 }
 

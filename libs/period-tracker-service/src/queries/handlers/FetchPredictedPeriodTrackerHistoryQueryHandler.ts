@@ -79,11 +79,11 @@ export class FetchPredictedPeriodTrackerHistoryQueryHandler
       const lastPeriodStartDate = new Date(lastPeriod.startDate);
       const cycleLengthDays = periodTracker.cycleLengthDays;
       const periodLengthDays = predictPeriodLength(
-        periodRecords.slice(0, 2).map((record) => ({
+        periodRecords.map((record) => ({
           start: new Date(record.startDate),
           end: new Date(record.endDate),
         })),
-        5,
+        periodTracker.cycleLengthDays,
       );
 
       console.log('[PERIOD-LENGTH-DAYS] :: ', lastPeriodStartDate);
@@ -175,10 +175,10 @@ export class FetchPredictedPeriodTrackerHistoryQueryHandler
             if (isPredictedPeriodDay) {
               const periodDayCount =
                 differenceInDays(currentDate, periodStartDate) + 1;
-              insights = `Period day ${periodDayCount}\n\nLow chances of getting pregnant`;
+              insights = `Period day ${periodDayCount}\nLow chances of getting pregnant`;
             } else if (isPredictedOvulationDay) {
               insights =
-                'Prediction: Day of\n\nOvulation\nHigh chance of getting pregnant';
+                'Prediction: Day of\nOvulation\nHigh chance of getting pregnant';
             } else {
               const daysToNextPeriod = differenceInDays(
                 addDays(cycleStartDate, cycleLengthDays),

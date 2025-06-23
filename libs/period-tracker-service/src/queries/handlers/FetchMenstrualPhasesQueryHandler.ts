@@ -47,9 +47,11 @@ export class FetchMenstrualPhasesQueryHandler
 
       const phases = await this.menstrualPhaseRepository.find({
         order: {
-          position: 'DESC',
+          position: 'ASC',
         },
       });
+
+      console.log('[PHASES] :: ', phases);
 
       await Promise.all(
         phases.map(async (phase) => {
@@ -65,7 +67,7 @@ export class FetchMenstrualPhasesQueryHandler
                   },
                 },
                 order: {
-                  position: 'DESC',
+                  position: 'ASC',
                 },
               });
 

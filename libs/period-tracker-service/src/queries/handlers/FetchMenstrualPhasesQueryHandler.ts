@@ -47,7 +47,7 @@ export class FetchMenstrualPhasesQueryHandler
 
       const phases = await this.menstrualPhaseRepository.find({
         order: {
-          position: 'ASC',
+          position: 'DESC',
         },
       });
 
@@ -65,7 +65,7 @@ export class FetchMenstrualPhasesQueryHandler
                   },
                 },
                 order: {
-                  position: 'ASC',
+                  position: 'DESC',
                 },
               });
 

@@ -31,7 +31,6 @@ export class AccountNotificationService {
           email: secureUser.email,
         },
       },
-      relations: ['product', 'user'],
       skip: (page - 1) * pageSize,
       take: pageSize,
       order: {

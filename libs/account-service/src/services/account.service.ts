@@ -19,28 +19,4 @@ export class AccountService {
     @InjectRepository(Account)
     private readonly accountRepository: Repository<Account>,
   ) {}
-
-  async getDetailedProfile(
-    secureUser: SecureUserPayload,
-  ): Promise<AccountInfo> {
-    try {
-      this.logger.log('[GET-DETAILED-ACCOUNT-PROCESSING]');
-
-      const account = await this.accountRepository.findOneBy({
-        id: secureUser.id,
-      });
-
-      if (!account) {
-        throw new Error(`Account with id ${secureUser.id} not found`);
-      }
-
-      this.logger.log('[GET-DETAILED-ACCOUNT-SUCCESS]');
-
-      return modelsFormatter.FormatAccountInfo(account);
-    } catch (error) {
-      this.logger.log(`[GET-DETAILED-ACCOUNT-ERROR] : ${error}`);
-
-      throw error;
-    }
-  }
 }

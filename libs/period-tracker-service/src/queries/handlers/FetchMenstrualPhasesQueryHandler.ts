@@ -51,7 +51,7 @@ export class FetchMenstrualPhasesQueryHandler
         },
       });
 
-      console.log('[PHASES] :: ', phases);
+      // console.log('[PHASES] :: ', phases);
 
       await Promise.all(
         phases.map(async (phase) => {
@@ -86,12 +86,14 @@ export class FetchMenstrualPhasesQueryHandler
         }),
       );
 
+      const result = menstrualPhases.sort((a, b) => a.position - b.position);
+
       const CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutes
-      await this.cacheManager.set(cacheKey, menstrualPhases, CACHE_TTL_MS);
+      await this.cacheManager.set(cacheKey, result, CACHE_TTL_MS);
 
       this.logger.log(`[FETCH-MENSTRUAL-PHASES-QUERY-HANDLER-SUCCESS]`);
 
-      return menstrualPhases;
+      return result;
     } catch (error) {
       this.logger.log(`[FETCH-MENSTRUAL-PHASES-QUERY-HANDLER-ERROR]: ${error}`);
 

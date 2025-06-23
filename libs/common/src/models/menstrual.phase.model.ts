@@ -146,4 +146,9 @@ export class MenstrualPhaseInfo {
       'Menstrual phase info descriptions e.g Menstrual phase info 1.',
   })
   descriptions: MenstrualPhaseDescriptionInfo[];
+
+  @ApiProperty({
+    description: 'Menstrual phase info position e.g 1.',
+  })
+  position: number;
 }

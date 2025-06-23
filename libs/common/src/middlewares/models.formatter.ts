@@ -139,6 +139,7 @@ export function FormatMenstrualPhaseInfo(
     id: phase.id.toString(),
     title: phase.title,
     coverPhoto: phase.coverPhoto,
+    position: phase.position,
     descriptions: phaseDescriptions.map(
       (description) =>
         ({

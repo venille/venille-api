@@ -40,7 +40,7 @@ export class FetchMenstrualPhasesQueryHandler
         this.logger.log(
           `[FETCH-MENSTRUAL-PHASES-QUERY-HANDLER-CACHE-HIT]: ${cacheKey}`,
         );
-        return cachedResult;
+        // return cachedResult;
       }
 
       const menstrualPhases: MenstrualPhaseInfo[] = [];

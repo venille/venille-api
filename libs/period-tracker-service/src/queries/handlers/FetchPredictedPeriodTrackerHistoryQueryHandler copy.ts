@@ -78,17 +78,13 @@ export class FetchPredictedPeriodTrackerHistoryQueryHandler
       const lastPeriod = periodRecords[0]; // Get the earliest record instead of latest
       const lastPeriodStartDate = new Date(lastPeriod.startDate);
       const cycleLengthDays = periodTracker.cycleLengthDays;
-      const periodLengthDays = differenceInDays(
-        lastPeriod.endDate,
-        lastPeriod.startDate,
+      const periodLengthDays = predictPeriodLength(
+        periodRecords.map((record) => ({
+          start: new Date(record.startDate),
+          end: new Date(record.endDate),
+        })),
+        periodTracker.cycleLengthDays,
       );
-      // const periodLengthDays = predictPeriodLength(
-      //   periodRecords.map((record) => ({
-      //     start: new Date(record.startDate),
-      //     end: new Date(record.endDate),
-      //   })),
-      //   periodTracker.cycleLengthDays,
-      // );
 
       console.log('[PERIOD-LENGTH-DAYS] :: ', lastPeriodStartDate);
 

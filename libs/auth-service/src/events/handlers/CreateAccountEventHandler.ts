@@ -34,11 +34,7 @@ export class CreateAccountEventHandler
 
       const { account, payload } = event;
 
-      const newUser = await this.userRepository.findOne({
-        where: {
-          id: account.id,
-        },
-      });
+    
 
       if (payload?.referralCode?.length > 0) {
         const referringUser = await this.userRepository.findOneBy({
@@ -47,14 +43,14 @@ export class CreateAccountEventHandler
 
         await this.referralRepository.save({
           user: referringUser,
-          referredUser: newUser,
+          referredUser: account,
         });
       }
 
       await this.notificationRepository.save({
         title: '👋 Welcome to Venille',
-        message: `We’re thrilled to have you on board Venille. Lets help you track your period and get you started on your journey to a healthier period.`,
-        user: newUser,
+        message: `We’re thrilled to have you on board Venille. Lets help you track your period and get you started on your journey to a healthier reproductive health.`,
+        user: account,
       });
 
       this.authEmailNotificationService.newAccountNotifications(account);

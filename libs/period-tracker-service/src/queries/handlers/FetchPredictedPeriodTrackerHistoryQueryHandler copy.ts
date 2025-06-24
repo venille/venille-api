@@ -18,7 +18,7 @@ import {
 } from '@app/common/src/models/period.record.model';
 import {
   predictPeriodLength,
-  estimateOvulationDate,
+  // estimateOvulationDate,
   calculateCycleDayCount,
 } from '@app/common/src/calculator/period.calculator';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
@@ -144,11 +144,11 @@ export class FetchPredictedPeriodTrackerHistoryQueryHandler
               -cycleLengthDays,
             );
 
-            const ovulationDate = estimateOvulationDate(
-              cycleStartDate, // Current cycle's start date
-              previousPeriodStartForThisCycle, // Previous period start for this cycle
-              cycleLengthDays, // Fallback cycle length
-            );
+            // const ovulationDate = estimateOvulationDate(
+            //   cycleStartDate, // Current cycle's start date
+            //   previousPeriodStartForThisCycle, // Previous period start for this cycle
+            //   cycleLengthDays, // Fallback cycle length
+            // );
 
             // Check if current date is within predicted period
             const isPredictedPeriodDay =
@@ -165,10 +165,10 @@ export class FetchPredictedPeriodTrackerHistoryQueryHandler
               );
 
             // Check if current date is the ovulation day for this cycle
-            const isPredictedOvulationDay = isSameDay(
-              currentDate,
-              ovulationDate,
-            );
+            // const isPredictedOvulationDay = isSameDay(
+            //   currentDate,
+            //   ovulationDate,
+            // );
 
             // Generate insights based on cycle phase
             // let insights = 'Regular cycle day';
@@ -193,7 +193,7 @@ export class FetchPredictedPeriodTrackerHistoryQueryHandler
               insights: '',
               date: currentDate,
               isPredictedPeriodDay,
-              isPredictedOvulationDay,
+              isPredictedOvulationDay: false,
               cycleDayCount: cycleDay,
               isToday: isSameDay(currentDate, new Date()),
             });

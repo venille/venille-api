@@ -18,8 +18,9 @@ import {
 } from '@app/common/src/models/period.record.model';
 import {
   predictPeriodLength,
-  estimateOvulationDate,
+  // estimateOvulationDate,
   calculateCycleDayCount,
+  calculateFollicularPhaseLength,
 } from '@app/common/src/calculator/period.calculator';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { FetchPredictedPeriodTrackerHistoryQuery } from '../impl';
@@ -82,15 +83,6 @@ export class FetchPredictedPeriodTrackerHistoryQueryHandler
         lastPeriod.endDate,
         lastPeriod.startDate,
       );
-      // const periodLengthDays = predictPeriodLength(
-      //   periodRecords.map((record) => ({
-      //     start: new Date(record.startDate),
-      //     end: new Date(record.endDate),
-      //   })),
-      //   periodTracker.cycleLengthDays,
-      // );
-
-      console.log('[PERIOD-LENGTH-DAYS] :: ', lastPeriodStartDate);
 
       // Get the year of the last period start date
       const lastPeriodYear = lastPeriodStartDate.getFullYear();
@@ -140,18 +132,15 @@ export class FetchPredictedPeriodTrackerHistoryQueryHandler
             const periodStartDate = cycleStartDate;
             const periodEndDate = addDays(periodStartDate, periodLengthDays);
 
-            // Calculate ovulation date for this specific cycle using estimateOvulationDate
-            // For each cycle, we need to calculate what the "previous period start" would be
-            // The previous period start for this cycle would be one cycle length before
-            const previousPeriodStartForThisCycle = addDays(
+            const follicularPhaseLength =
+              calculateFollicularPhaseLength(cycleLengthDays);
+            const ovulationDate = addDays(
               cycleStartDate,
-              -cycleLengthDays,
+              follicularPhaseLength,
             );
-
-            const ovulationDate = estimateOvulationDate(
-              cycleStartDate, // Current cycle's start date
-              previousPeriodStartForThisCycle, // Previous period start for this cycle
-              cycleLengthDays, // Fallback cycle length
+            const isPredictedOvulationDay = isSameDay(
+              currentDate,
+              ovulationDate,
             );
 
             // Check if current date is within predicted period
@@ -167,31 +156,6 @@ export class FetchPredictedPeriodTrackerHistoryQueryHandler
                   end: new Date(record.endDate),
                 }),
               );
-
-            // Check if current date is the ovulation day for this cycle
-            const isPredictedOvulationDay = isSameDay(
-              currentDate,
-              ovulationDate,
-            );
-
-            // Generate insights based on cycle phase
-            // let insights = 'Regular cycle day';
-            // if (isPredictedPeriodDay) {
-            //   const periodDayCount =
-            //     differenceInDays(currentDate, periodStartDate) + 1;
-            //   insights = `Period day ${periodDayCount}\nLow chances of getting pregnant`;
-            // } else if (isPredictedOvulationDay) {
-            //   insights =
-            //     'Prediction: Day of\nOvulation\nHigh chance of getting pregnant';
-            // } else {
-            //   const daysToNextPeriod = differenceInDays(
-            //     addDays(cycleStartDate, cycleLengthDays),
-            //     currentDate,
-            //   );
-            //   if (daysToNextPeriod > 0) {
-            //     insights = `Period in\n${daysToNextPeriod} days\nLow chances of getting pregnant`;
-            //   }
-            // }
 
             days.push({
               insights: '',

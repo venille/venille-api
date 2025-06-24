@@ -17,10 +17,9 @@ import {
   PeriodTrackerHistory,
 } from '@app/common/src/models/period.record.model';
 import {
-  predictPeriodLength,
-  // estimateOvulationDate,
   calculateCycleDayCount,
   calculateFollicularPhaseLength,
+  generateDailyInsight,
 } from '@app/common/src/calculator/period.calculator';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { FetchPredictedPeriodTrackerHistoryQuery } from '../impl';
@@ -143,6 +142,13 @@ export class FetchPredictedPeriodTrackerHistoryQueryHandler
               ovulationDate,
             );
 
+            const fertileWindowStart = addDays(ovulationDate, -3);
+            const fertileWindowEnd = addDays(ovulationDate, 2);
+            const isFertileWindow = isWithinInterval(currentDate, {
+              start: fertileWindowStart,
+              end: fertileWindowEnd,
+            });
+
             // Check if current date is within predicted period
             const isPredictedPeriodDay =
               isWithinInterval(currentDate, {
@@ -157,13 +163,23 @@ export class FetchPredictedPeriodTrackerHistoryQueryHandler
                 }),
               );
 
+            const insights = generateDailyInsight({
+              currentDate,
+              periodStartDate,
+              periodEndDate,
+              ovulationDate,
+              cycleStartDate,
+              cycleLengthDays,
+            });
+
             days.push({
-              insights: '',
               date: currentDate,
-              isPredictedPeriodDay,
-              isPredictedOvulationDay,
               cycleDayCount: cycleDay,
               isToday: isSameDay(currentDate, new Date()),
+              isPredictedPeriodDay,
+              isFertileWindow,
+              isPredictedOvulationDay,
+              insights,
             });
 
             currentDate = addDays(currentDate, 1);

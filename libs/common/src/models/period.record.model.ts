@@ -248,6 +248,9 @@ export class PeriodDayInfo {
   @ApiProperty({ example: false, type: Boolean })
   isPredictedOvulationDay: boolean;
 
+  @ApiProperty({ example: false, type: Boolean })
+  isFertileWindow: boolean;
+
   @ApiProperty({ example: 1, type: Number })
   cycleDayCount: number;
 

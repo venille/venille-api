@@ -17,7 +17,6 @@ import {
   PeriodTrackerHistory,
 } from '@app/common/src/models/period.record.model';
 import {
-  predictPeriodLength,
   // estimateOvulationDate,
   calculateCycleDayCount,
 } from '@app/common/src/calculator/period.calculator';
@@ -78,13 +77,7 @@ export class FetchPredictedPeriodTrackerHistoryQueryHandler
       const lastPeriod = periodRecords[0]; // Get the earliest record instead of latest
       const lastPeriodStartDate = new Date(lastPeriod.startDate);
       const cycleLengthDays = periodTracker.cycleLengthDays;
-      const periodLengthDays = predictPeriodLength(
-        periodRecords.map((record) => ({
-          start: new Date(record.startDate),
-          end: new Date(record.endDate),
-        })),
-        periodTracker.cycleLengthDays,
-      );
+      const periodLengthDays = periodTracker.periodLengthDays;
 
       console.log('[PERIOD-LENGTH-DAYS] :: ', lastPeriodStartDate);
 
@@ -192,6 +185,7 @@ export class FetchPredictedPeriodTrackerHistoryQueryHandler
             days.push({
               insights: '',
               date: currentDate,
+              isFertileWindow: false,
               isPredictedPeriodDay,
               isPredictedOvulationDay: false,
               cycleDayCount: cycleDay,

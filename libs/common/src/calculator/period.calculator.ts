@@ -5,6 +5,7 @@ import {
   startOfDay,
   addMonths,
   isBefore,
+  isSameDay,
 } from 'date-fns';
 
 export interface PeriodRecord {
@@ -18,28 +19,6 @@ export function calculateFollicularPhaseLength(cycleLength: number): number {
   // Using coefficients from research: follicular = 0.501 * cycleLength - 0.088
   return Math.round(0.501 * cycleLength - 0.088);
 }
-
-/**
- * Predicts period length:
- * - If fewer than 2 period records, returns a default.
- * - Else calculates average length from history.
- */
-export function predictPeriodLength(
-  pastPeriods: PeriodRecord[],
-  defaultLength: number = 5,
-): number {
-  if (!pastPeriods || pastPeriods.length < 2) {
-    return defaultLength;
-  }
-
-  const total = pastPeriods.reduce((sum, p) => {
-    const length = differenceInDays(p.end, p.start) + 1;
-    return sum + Math.max(1, length); // at least 1 day
-  }, 0);
-
-  return Math.round(total / pastPeriods.length);
-}
-
 
 // Calculates which day of the cycle a given date is
 export function calculateCycleDayCount(
@@ -62,8 +41,65 @@ export function calculateCycleDayCount(
   return { cycleDay, cycleStartDate, cycleLength };
 }
 
-export interface PredictedPeriodInfo {
-  startDate: Date;
-  endDate: Date;
+
+export function generateDailyInsight({
+  currentDate,
+  periodStartDate,
+  periodEndDate,
+  ovulationDate,
+  cycleStartDate,
+  cycleLengthDays,
+}: {
+  currentDate: Date;
+  periodStartDate: Date;
+  periodEndDate: Date;
   ovulationDate: Date;
+  cycleStartDate: Date;
+  cycleLengthDays: number;
+}): string {
+  const fertileWindowStart = addDays(ovulationDate, -3);
+  const fertileWindowEnd = addDays(ovulationDate, 2);
+  const nextPeriodStart = addDays(cycleStartDate, cycleLengthDays);
+
+  if (
+    isWithinInterval(currentDate, {
+      start: periodStartDate,
+      end: periodEndDate,
+    })
+  ) {
+    const day = differenceInDays(currentDate, periodStartDate) + 1;
+    return `Menstrual Phase - Day ${day}\nLow chance of pregnancy`;
+  }
+
+  if (
+    isWithinInterval(currentDate, {
+      start: addDays(periodEndDate, 1),
+      end: addDays(fertileWindowStart, -1),
+    })
+  ) {
+    return `Follicular Phase\nHormones rising, egg maturing\nModerate chance of pregnancy`;
+  }
+
+  if (
+    isWithinInterval(currentDate, {
+      start: fertileWindowStart,
+      end: fertileWindowEnd,
+    })
+  ) {
+    if (isSameDay(currentDate, ovulationDate)) {
+      return `Ovulation Day\nEgg released\nHighest chance of pregnancy`;
+    }
+    return `Ovulation Phase\nFertile window\nHigh chance of pregnancy`;
+  }
+
+  if (
+    isWithinInterval(currentDate, {
+      start: addDays(fertileWindowEnd, 0),
+      end: addDays(nextPeriodStart, 0),
+    })
+  ) {
+    return `Luteal Phase\nBody preparing for next cycle\nLow chance of pregnancy`;
+  }
+
+  return `Regular cycle day`;
 }

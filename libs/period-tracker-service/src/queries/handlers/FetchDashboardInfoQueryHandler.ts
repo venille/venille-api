@@ -14,6 +14,7 @@ import { QueryHandler, IQueryHandler, QueryBus } from '@nestjs/cqrs';
 import { FetchDashboardInfoQuery, FetchMenstrualPhasesQuery } from '../impl';
 import { PeriodTrackerRecord } from '@app/common/src/models/period.record.model';
 import { calculateCycleDayCount } from '@app/common/src/calculator/period.calculator';
+import { PeriodTracker } from '@app/common/src/models/period.tracker.model';
 
 @QueryHandler(FetchDashboardInfoQuery)
 export class FetchDashboardInfoQueryHandler
@@ -22,6 +23,8 @@ export class FetchDashboardInfoQueryHandler
   constructor(
     private readonly queryBus: QueryBus,
     @Inject('Logger') private readonly logger: AppLogger,
+    @InjectRepository(PeriodTracker)
+    private readonly periodTrackerRepository: Repository<PeriodTracker>,
     @InjectRepository(PeriodTrackerRecord)
     private readonly periodRecordRepository: Repository<PeriodTrackerRecord>,
   ) {}
@@ -32,7 +35,15 @@ export class FetchDashboardInfoQueryHandler
 
       this.logger.log(`[FETCH-DASHBOARD-INFO-QUERY-HANDLER-PROCESSING]`);
 
-      const periodRecords = await this.periodRecordRepository.find({
+      const periodTracker = await this.periodTrackerRepository.findOne({
+        where: {
+          account: {
+            id: secureUser.id,
+          },
+        },
+      });
+
+      const periodRecord = await this.periodRecordRepository.findOne({
         where: {
           account: {
             id: secureUser.id,
@@ -41,7 +52,6 @@ export class FetchDashboardInfoQueryHandler
         order: {
           createdAt: 'DESC',
         },
-        take: 2,
       });
 
       const menstrualPhases: MenstrualPhaseInfo[] = await this.queryBus.execute(
@@ -50,29 +60,22 @@ export class FetchDashboardInfoQueryHandler
 
       this.logger.log(`[FETCH-DASHBOARD-INFO-QUERY-HANDLER-SUCCESS]`);
 
-      const endDate = periodRecords[0].endDate;
-      const startDate = periodRecords[0].startDate;
-      const previousStartDate =
-        periodRecords.length > 1 ? periodRecords[1].startDate : new Date();
-
-      const { cycleLength } = calculateCycleDayCount(
-        previousStartDate,
-        startDate,
-        differenceInDays(endDate, startDate),
-      );
+      const endDate = periodRecord.endDate;
+      const startDate = periodRecord.startDate;
 
       return {
         previousCycleInfo: {
           startDate: `Started ${getDay(startDate)} ${getMonthName(startDate)} ${getYear(startDate)}`,
-          daysAgo: `${differenceInDays(new Date(), previousStartDate)} days ago`,
+          daysAgo: `${differenceInDays(new Date(), startDate)} days ago`,
           duration: `Period Length: ${differenceInDays(
             endDate,
             startDate,
           )} days`,
           durationStatus:
             differenceInDays(endDate, startDate) > 7 ? 'Abnormal' : 'Normal',
-          cycleLength: `Cycle Length: 30 days`,
-          cycleLengthStatus: 30 > 30 ? 'Abnormal' : 'Normal',
+          cycleLength: `Cycle Length: ${periodTracker.cycleLengthDays} days`,
+          cycleLengthStatus:
+            periodTracker.cycleLengthDays > 32 ? 'Abnormal' : 'Normal',
         },
         menstrualPhases: menstrualPhases as MenstrualPhaseInfo[],
       };

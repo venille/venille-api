@@ -60,12 +60,15 @@ export class FetchDashboardInfoQueryHandler
 
       this.logger.log(`[FETCH-DASHBOARD-INFO-QUERY-HANDLER-SUCCESS]`);
 
-      const endDate = periodRecord.endDate;
-      const startDate = periodRecord.startDate;
+      const endDate = new Date(periodRecord.endDate);
+      const startDate = new Date(periodRecord.startDate);
+
+      console.log('[PERIOD-RECORD]', startDate);
+      console.log('[PERIOD-RECORD]', periodRecord.startDate);
 
       return {
         previousCycleInfo: {
-          startDate: `Started ${getDay(startDate)} ${getMonthName(startDate)} ${getYear(startDate)}`,
+          startDate: `Started ${startDate.getDate()} ${getMonthName(startDate)} ${getYear(startDate)}`,
           daysAgo: `${differenceInDays(new Date(), startDate)} days ago`,
           duration: `Period Length: ${differenceInDays(
             endDate,

@@ -59,12 +59,6 @@ export class PeriodTracker {
   @Column({ nullable: true, default: false })
   wantReminders: boolean;
 
-  @Column({
-    default: '',
-    nullable: true,
-  })
-  cycleGoal: string;
-
   @OneToOne(() => Account, {
     onDelete: 'CASCADE',
     eager: true,

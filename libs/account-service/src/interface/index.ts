@@ -225,14 +225,6 @@ export class RegisterPeriodTrackerDTO {
   @IsString()
   @IsNotEmpty()
   healthConditions: string;
-
-  @ApiProperty({
-    example: 'just_tracking',
-    description: 'Cycle goal.',
-  })
-  @IsString()
-  @IsNotEmpty()
-  cycleGoal: string;
 }
 
 export class OrderSanitaryPadDTO {

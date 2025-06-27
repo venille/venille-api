@@ -33,11 +33,10 @@ export class PeriodTracker {
   irregularPeriods: boolean;
 
   @Column({
-    enum: PeriodSymptomEnum,
-    default: PeriodSymptomEnum.CRAMPS,
+    default: '',
     nullable: true,
   })
-  periodSymptoms: PeriodSymptomEnum;
+  periodSymptoms: string;
 
   @Column({ nullable: true, default: false })
   trackingOvulation: boolean;
@@ -46,28 +45,25 @@ export class PeriodTracker {
   age: number;
 
   @Column({
-    enum: BirthControlMethod,
-    default: BirthControlMethod.NONE,
+    default: '',
     nullable: true,
   })
-  birthControlMethods: BirthControlMethod;
+  birthControlMethods: string;
 
   @Column({
-    enum: HealthCondition,
-    default: HealthCondition.OTHER,
+    default: '',
     nullable: true,
   })
-  healthConditions: HealthCondition;
+  healthConditions: string;
 
   @Column({ nullable: true, default: false })
   wantReminders: boolean;
 
   @Column({
-    enum: CycleGoal,
-    default: CycleGoal.JUST_TRACKING,
+    default: '',
     nullable: true,
   })
-  cycleGoal: CycleGoal;
+  cycleGoal: string;
 
   @OneToOne(() => Account, {
     onDelete: 'CASCADE',

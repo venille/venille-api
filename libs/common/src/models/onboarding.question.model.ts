@@ -44,20 +44,21 @@ export class OnboardingQuestion {
   @Column({
     nullable: true,
     default: '',
-    enum: OnboardingQuestionType,
   })
   @ApiPropertyOptional({
     description:
       'Type of question options e.g multiple-choice, numeric-range, date-range',
   })
-  questionType: OnboardingQuestionType;
+  questionType: string;
 
   @Column({
     nullable: true,
-    enum: OnboardingQuestionOptionType,
-    default: OnboardingQuestionOptionType.TEXT,
+    default: '',
   })
-  optionType: OnboardingQuestionOptionType;
+  @ApiPropertyOptional({
+    description: 'Type of question options e.g multiple-choice, numeric-range, date-range',
+  })
+  optionType: string;
 
   @Column({
     nullable: true,
@@ -103,10 +104,10 @@ export class OnboardingQuestionInfo {
   question: string;
 
   @ApiProperty({ example: 'multiple-choice' })
-  questionType: OnboardingQuestionType;
+  questionType: string;
 
   @ApiProperty({ example: 'text' })
-  optionType: OnboardingQuestionOptionType;
+  optionType: string;
 
   @ApiProperty({ example: 'PeriodSymptom' })
   enumType: QuestionEnumType;

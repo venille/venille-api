@@ -110,7 +110,6 @@ export class FetchPredictedPeriodTrackerHistoryQueryHandler
             month: 'long',
           });
           const days: PeriodDayInfo[] = [];
-
           // Calculate base date for cycle counting
           let currentDate = monthStart;
           while (currentDate <= monthEnd) {

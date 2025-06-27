@@ -187,13 +187,12 @@ export class RegisterPeriodTrackerDTO {
   irregularPeriods: boolean;
 
   @ApiProperty({
-    example: 'cramps',
-    enum: PeriodSymptomEnum,
+    example: '["cramps"]',
     description: 'Period symptoms.',
   })
   @IsString()
   @IsNotEmpty()
-  periodSymptoms: PeriodSymptomEnum;
+  periodSymptoms: string;
 
   @ApiProperty({
     example: true,
@@ -213,30 +212,27 @@ export class RegisterPeriodTrackerDTO {
 
   @ApiProperty({
     example: 'pill',
-    enum: BirthControlMethod,
     description: 'Birth control method.',
   })
   @IsString()
   @IsNotEmpty()
-  birthControlMethods: BirthControlMethod;
+  birthControlMethods: string;
 
   @ApiProperty({
     example: 'pcos',
-    enum: HealthCondition,
     description: 'Health condition.',
   })
   @IsString()
   @IsNotEmpty()
-  healthConditions: HealthCondition;
+  healthConditions: string;
 
   @ApiProperty({
     example: 'just_tracking',
-    enum: CycleGoal,
     description: 'Cycle goal.',
   })
   @IsString()
   @IsNotEmpty()
-  cycleGoal: CycleGoal;
+  cycleGoal: string;
 }
 
 export class OrderSanitaryPadDTO {

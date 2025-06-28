@@ -38,7 +38,7 @@ export class RegisterPeriodTrackerEventHandler
         startDate: periodTracker.lastPeriodStartDate,
         endDate: new Date(
           periodTracker.lastPeriodStartDate.getTime() +
-            periodTracker.cycleLengthDays * 24 * 60 * 60 * 1000,
+            periodTracker.periodLengthDays * 24 * 60 * 60 * 1000,
         ),
       });
 

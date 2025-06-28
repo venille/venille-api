@@ -4,6 +4,7 @@ import {
   isSameDay,
   endOfMonth,
   startOfMonth,
+  startOfDay,
   differenceInDays,
   isWithinInterval,
 } from 'date-fns';
@@ -17,9 +18,9 @@ import {
   PeriodTrackerHistory,
 } from '@app/common/src/models/period.record.model';
 import {
+  generateDailyInsight,
   calculateCycleDayCount,
   calculateFollicularPhaseLength,
-  generateDailyInsight,
 } from '@app/common/src/calculator/period.calculator';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { FetchPredictedPeriodTrackerHistoryQuery } from '../impl';
@@ -65,6 +66,7 @@ export class FetchPredictedPeriodTrackerHistoryQueryHandler
         this.periodRecordRepository.find({
           where: { account: { id: secureUser.id } },
           order: { startDate: 'ASC' },
+          // take: 1,
         }),
       ]);
 
@@ -82,6 +84,8 @@ export class FetchPredictedPeriodTrackerHistoryQueryHandler
         lastPeriod.endDate,
         lastPeriod.startDate,
       );
+
+      console.log('[LAST-PERIOD-START-DATE]', lastPeriod);
 
       // Get the year of the last period start date
       const lastPeriodYear = lastPeriodStartDate.getFullYear();
@@ -112,18 +116,181 @@ export class FetchPredictedPeriodTrackerHistoryQueryHandler
           const days: PeriodDayInfo[] = [];
           // Calculate base date for cycle counting
           let currentDate = monthStart;
-          while (currentDate <= monthEnd) {
-            // Calculate cycle information for this date
-            const { cycleDay, cycleStartDate } = calculateCycleDayCount(
-              currentDate,
-              lastPeriodStartDate,
-              cycleLengthDays,
-            );
+          let previousCycleDayCount = 0; // Track previous day's cycle count
 
+          while (currentDate <= monthEnd) {
             // Skip days before last period start date
             if (isBefore(currentDate, lastPeriodStartDate)) {
               currentDate = addDays(currentDate, 1);
               continue;
+            }
+
+            // First determine if this is a period day (actual or predicted)
+            // Check if current date falls within any actual period record
+            const isWithinActualPeriod = periodRecords.some((record) => {
+              const currentDateStr = currentDate.toISOString().split('T')[0];
+              const recordStartStr = new Date(record.startDate)
+                .toISOString()
+                .split('T')[0];
+              const recordEndStr = new Date(record.endDate)
+                .toISOString()
+                .split('T')[0];
+
+              return (
+                currentDateStr >= recordStartStr &&
+                currentDateStr <= recordEndStr
+              );
+            });
+
+            // Check if there's a period record that starts in this month
+            const monthHasActualPeriod = periodRecords.some((record) => {
+              const recordStart = new Date(record.startDate);
+              return (
+                recordStart.getMonth() === currentDate.getMonth() &&
+                recordStart.getFullYear() === currentDate.getFullYear()
+              );
+            });
+
+            // Calculate base cycle information for predictions
+            const { cycleStartDate: predictedCycleStart } =
+              calculateCycleDayCount(
+                currentDate,
+                lastPeriodStartDate,
+                cycleLengthDays,
+              );
+            const predictedPeriodStart = predictedCycleStart;
+            const predictedPeriodEnd = addDays(
+              predictedPeriodStart,
+              periodLengthDays,
+            );
+
+            let isPredictedPeriodDay: boolean;
+            if (monthHasActualPeriod) {
+              // For months with actual period records, only mark days as period days if they're within an actual record
+              isPredictedPeriodDay = isWithinActualPeriod;
+            } else {
+              // For months without records, use predicted dates based on cycle
+              isPredictedPeriodDay = isWithinInterval(currentDate, {
+                start: predictedPeriodStart,
+                end: predictedPeriodEnd,
+              });
+            }
+
+            // Calculate cycle day
+            let cycleDay: number;
+            let cycleStartDate: Date;
+
+            // Find the most recent actual period that started at or before this date
+            const mostRecentActualPeriod = periodRecords
+              .filter((record) => {
+                const recordStartStr = new Date(record.startDate)
+                  .toISOString()
+                  .split('T')[0];
+                const currentDateStr = currentDate.toISOString().split('T')[0];
+                return recordStartStr <= currentDateStr;
+              })
+              .sort((a, b) => {
+                const dateA = new Date(a.startDate).getTime();
+                const dateB = new Date(b.startDate).getTime();
+                return dateB - dateA;
+              })[0];
+
+            const baselineStartDate = mostRecentActualPeriod
+              ? new Date(mostRecentActualPeriod.startDate)
+              : lastPeriodStartDate;
+
+            // Calculate days since the baseline period
+            const currentDateStr = currentDate.toISOString().split('T')[0];
+            const baselineStartStr = baselineStartDate
+              .toISOString()
+              .split('T')[0];
+
+            const currentDateMidnight = new Date(
+              currentDateStr + 'T00:00:00.000Z',
+            );
+            const baselineStartMidnight = new Date(
+              baselineStartStr + 'T00:00:00.000Z',
+            );
+
+            const daysSinceBaseline = differenceInDays(
+              currentDateMidnight,
+              baselineStartMidnight,
+            );
+
+            // Check if this is the first day of an actual period
+            const isFirstDayOfActualPeriod = periodRecords.some((record) => {
+              const recordStartStr = new Date(record.startDate)
+                .toISOString()
+                .split('T')[0];
+              return recordStartStr === currentDateStr;
+            });
+
+            if (isFirstDayOfActualPeriod) {
+              // Always reset to day 1 for actual period starts
+              cycleDay = 1;
+              cycleStartDate = currentDate;
+            } else if (isPredictedPeriodDay) {
+              // This is a period day (actual or predicted)
+              const actualPeriod = periodRecords.find((record) => {
+                const recordStartStr = new Date(record.startDate)
+                  .toISOString()
+                  .split('T')[0];
+                const recordEndStr = new Date(record.endDate)
+                  .toISOString()
+                  .split('T')[0];
+                return (
+                  currentDateStr >= recordStartStr &&
+                  currentDateStr <= recordEndStr
+                );
+              });
+
+              if (actualPeriod) {
+                // Within an actual period, calculate day from its start
+                const periodStart = new Date(actualPeriod.startDate);
+                const periodStartStr = periodStart.toISOString().split('T')[0];
+                const periodStartMidnight = new Date(
+                  periodStartStr + 'T00:00:00.000Z',
+                );
+                cycleDay =
+                  differenceInDays(currentDateMidnight, periodStartMidnight) +
+                  1;
+                cycleStartDate = periodStart;
+              } else {
+                // This is a predicted period day
+                // Calculate which cycle we're in
+                const cycleNumber = Math.floor(
+                  daysSinceBaseline / cycleLengthDays,
+                );
+                const dayInCycle = daysSinceBaseline % cycleLengthDays;
+
+                // If this is day 0 of a cycle and it's a period day, it's the start
+                if (dayInCycle === 0) {
+                  cycleDay = 1;
+                  cycleStartDate = currentDate;
+                } else {
+                  cycleDay = dayInCycle + 1;
+                  cycleStartDate = addDays(
+                    baselineStartDate,
+                    cycleNumber * cycleLengthDays,
+                  );
+                }
+              }
+            } else {
+              // Not a period day - just continue counting from the baseline
+              cycleDay = daysSinceBaseline + 1;
+
+              // Find which cycle we're in
+              const cycleNumber = Math.floor(
+                daysSinceBaseline / cycleLengthDays,
+              );
+              cycleStartDate = addDays(
+                baselineStartDate,
+                cycleNumber * cycleLengthDays,
+              );
+
+              // Adjust cycle day to be within the current cycle
+              const dayInCycle = daysSinceBaseline % cycleLengthDays;
+              cycleDay = dayInCycle + 1;
             }
 
             // For each date, calculate period and ovulation based on its cycle
@@ -148,24 +315,25 @@ export class FetchPredictedPeriodTrackerHistoryQueryHandler
               end: fertileWindowEnd,
             });
 
-            // Check if current date is within predicted period
-            const isPredictedPeriodDay =
-              isWithinInterval(currentDate, {
-                start: periodStartDate,
-                end: periodEndDate,
-              }) ||
-              // Also check if it's within any actual period record
-              periodRecords.some((record) =>
-                isWithinInterval(currentDate, {
-                  start: new Date(record.startDate),
-                  end: new Date(record.endDate),
-                }),
-              );
+            // Check if cycleDayCount is 1 but it's not a period day
+            if (
+              cycleDay === 1 &&
+              !isPredictedPeriodDay &&
+              previousCycleDayCount > 0
+            ) {
+              // This is likely an error, continue from previous count
+              cycleDay = previousCycleDayCount + 1;
 
+              // Recalculate cycle start date based on the corrected cycle day
+              const daysSinceStart = cycleDay - 1;
+              cycleStartDate = addDays(currentDate, -daysSinceStart);
+            }
+
+            // Generate insights with potentially updated cycle information
             const insights = generateDailyInsight({
               currentDate,
-              periodStartDate,
-              periodEndDate,
+              periodStartDate: cycleStartDate,
+              periodEndDate: addDays(cycleStartDate, periodLengthDays),
               ovulationDate,
               cycleStartDate,
               cycleLengthDays,
@@ -173,7 +341,22 @@ export class FetchPredictedPeriodTrackerHistoryQueryHandler
 
             days.push({
               date: currentDate,
-              cycleDayCount: cycleDay,
+              isLoggedPeriodDay: periodRecords.some((record) => {
+                // Use the date string directly for comparison to avoid timezone issues
+                const currentDateStr = currentDate.toISOString().split('T')[0];
+                const recordStartStr = new Date(record.startDate)
+                  .toISOString()
+                  .split('T')[0];
+                const recordEndStr = new Date(record.endDate)
+                  .toISOString()
+                  .split('T')[0];
+
+                return (
+                  currentDateStr >= recordStartStr &&
+                  currentDateStr <= recordEndStr
+                );
+              }),
+              cycleDayCount: cycleDay > 0 ? cycleDay : 1,
               isToday: isSameDay(currentDate, new Date()),
               isPredictedPeriodDay,
               isFertileWindow,
@@ -181,6 +364,8 @@ export class FetchPredictedPeriodTrackerHistoryQueryHandler
               insights,
             });
 
+            // Update previous cycle day count for next iteration
+            previousCycleDayCount = cycleDay;
             currentDate = addDays(currentDate, 1);
           }
 

@@ -243,6 +243,9 @@ export class PeriodDayInfo {
   isToday: boolean;
 
   @ApiProperty({ example: false, type: Boolean })
+  isLoggedPeriodDay: boolean;
+
+  @ApiProperty({ example: false, type: Boolean })
   isPredictedPeriodDay: boolean;
 
   @ApiProperty({ example: false, type: Boolean })

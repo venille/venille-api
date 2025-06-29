@@ -22,7 +22,7 @@ export class CreateAccountHandler
     private readonly authService: AuthService,
     @Inject('Logger') private readonly logger: AppLogger,
     @InjectRepository(Account)
-    private readonly userRepository: Repository<Account>,
+    private readonly accountRepository: Repository<Account>,
     private readonly authEmailNotificationService: AuthEmailNotificationService,
   ) {}
 
@@ -54,7 +54,7 @@ export class CreateAccountHandler
       const activationCode = authUtils.generateRandomPin();
       const activationCodeExpiration = authUtils.generateFutureDate(1, 'hours');
 
-      const existingUser = await this.userRepository.findOne({
+      const existingUser = await this.accountRepository.findOne({
         where:  {
           email: payload.email,
         },
@@ -64,7 +64,7 @@ export class CreateAccountHandler
         throw EmailAlreadyUsedException();
       }
 
-      const existingHash = await this.userRepository.findOne({
+      const existingHash = await this.accountRepository.findOne({
         where: {
           signupVerificationHash: hash,
         },
@@ -79,7 +79,7 @@ export class CreateAccountHandler
           ...existingHash,
           firstName: payload.firstName,
           lastName: payload.lastName,
-          phoneNumber: payload.phone,
+          phone: payload.phone,
           email: payload.email,
           referralCode: referralCode,
           password,
@@ -89,7 +89,7 @@ export class CreateAccountHandler
           activationCodeExpires: activationCodeExpiration,
         });
 
-        await this.userRepository.save(existingHash);
+        await this.accountRepository.save(existingHash);
 
         this.authEmailNotificationService.newAccountNotifications(existingHash);
 
@@ -103,10 +103,10 @@ export class CreateAccountHandler
 
         const referralCode = await this.authService.generateReferralCode();
 
-        const newAccount = await this.userRepository.save({
+        const newAccount = await this.accountRepository.save({
           firstName: payload.firstName,
           lastName: payload.lastName,
-          phoneNumber: payload.phone,
+          phone: payload.phone,
           email: payload.email,
           referralCode,
           password,

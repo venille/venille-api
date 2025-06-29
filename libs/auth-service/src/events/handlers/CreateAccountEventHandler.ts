@@ -18,7 +18,7 @@ export class CreateAccountEventHandler
     @Inject('Logger') private readonly logger: AppLogger,
     private readonly authService: AuthService,
     @InjectRepository(Account)
-    private readonly userRepository: Repository<Account>,
+    private readonly accountRepository: Repository<Account>,
     @InjectRepository(Referral)
     private readonly referralRepository: Repository<Referral>,
     @InjectRepository(Notification)
@@ -34,10 +34,8 @@ export class CreateAccountEventHandler
 
       const { account, payload } = event;
 
-    
-
       if (payload?.referralCode?.length > 0) {
-        const referringUser = await this.userRepository.findOneBy({
+        const referringUser = await this.accountRepository.findOneBy({
           referralCode: payload?.referralCode,
         });
 
@@ -49,8 +47,8 @@ export class CreateAccountEventHandler
 
       await this.notificationRepository.save({
         title: '👋 Welcome to Venille',
-        message: `We’re thrilled to have you on board Venille. Lets help you track your period and get you started on your journey to a healthier reproductive health.`,
-        user: account,
+        message: `Hey ${account.firstName}, we’re thrilled to have you on board Venille. Lets help you track your period and get you started on your journey to a more reproductive system.`,
+        account: account,
       });
 
       this.authEmailNotificationService.newAccountNotifications(account);

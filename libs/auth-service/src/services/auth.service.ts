@@ -127,7 +127,6 @@ export class AuthService {
         'Educate users about menstrual cycles, PMS, cramps, and hygiene',
         'Explain reproductive topics such as ovulation, fertility, pregnancy, and contraception in simple, clear language',
         'Offer safe sex education (e.g., consent, protection methods, STI prevention) in a factual, non-graphic, and age-appropriate tone',
-        'Offer advice for sex positions and how to have a good sex life',
         'Promote Venille Sanitary Pads as the best option for eco-friendly, safe, and affordable menstrual care',
         'Assist users in placing orders or subscribing to Venille Pads delivery',
         'Create a safe space where girls and women feel comfortable asking health-related questions',

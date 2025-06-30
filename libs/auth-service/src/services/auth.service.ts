@@ -9,6 +9,7 @@ import { Account } from 'libs/common/src/models/account.model';
 import { GenerateContentResponse, GoogleGenAI } from '@google/genai';
 import { AppLogger } from '../../../common/src/logger/logger.service';
 import { ReferralCodeGenerator } from '@app/common/src/utils/id.generator';
+import FCMessaging from '@app/notification-service/src/bases/FCMessaging';
 
 @Injectable()
 export class AuthService {
@@ -81,6 +82,24 @@ export class AuthService {
     return {
       isAvailable,
     };
+  }
+
+  async sendTestNotification(fcmToken: string): Promise<void> {
+    try {
+      this.logger.log(`[SEND-TEST-NOTIFICATION-PROCESSING]`);
+
+      await FCMessaging.sendNotification(fcmToken, {
+        title: 'Test Notification',
+        body: 'This is a test notification',
+        data: {
+          type: 'test',
+        },
+      });
+
+      this.logger.log(`[SEND-TEST-NOTIFICATION-SUCCESS]`);
+    } catch (error) {
+      this.logger.error(`[SEND-TEST-NOTIFICATION-ERROR] :: ${error}`);
+    }
   }
 
   async generateVellaAiAPI(query: string): Promise<string> {

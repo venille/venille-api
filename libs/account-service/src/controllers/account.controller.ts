@@ -20,6 +20,7 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import {
   DeleteAccountDTO,
   RegisterMonthlySurveyDTO,
+  ReportAIResponseDTO,
   UpdateAccountEmailDTO,
   UpdateAccountLocationDTO,
   UpdateAccountNameDTO,
@@ -44,6 +45,7 @@ import {
   UpdateAccountLocationCommand,
   UpdateAccountPasswordCommand,
   VerifyNewAccountEmailCommand,
+  ReportAIResponseCommand,
 } from '../commands/impl';
 import {
   MonthlySurveyInfo,
@@ -281,6 +283,20 @@ export class AccountController {
   ): Promise<MonthlySurveyInfo> {
     return await this.commandBus.execute(
       new RegisterMonthlySurveyCommand(payload, secureUser),
+    );
+  }
+
+  @ApiTags('AI-assistant')
+  @Post('report-ai-response')
+  @ApiOkResponse()
+  @ApiInternalServerErrorResponse()
+  async reportAIResponse(
+    @Req() req: Request,
+    @Body() payload: ReportAIResponseDTO,
+    @SecureUser() secureUser: SecureUserPayload,
+  ): Promise<void> {
+    return await this.commandBus.execute(
+      new ReportAIResponseCommand(secureUser, payload),
     );
   }
 }

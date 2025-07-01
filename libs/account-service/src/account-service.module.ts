@@ -5,6 +5,7 @@ import { DocumentBuilder } from '@nestjs/swagger';
 import { Order } from '@app/common/src/models/order.model';
 import { AccountService } from './services/account.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { Report } from '@app/common/src/models/report.model';
 import { Account } from 'libs/common/src/models/account.model';
 import { AccountServiceEventHandlers } from './events/handlers';
 import { setupSwaggerDocument } from '../../common/src/swagger';
@@ -40,6 +41,7 @@ import { OrderEmailNotificationService } from '@app/notification-service/src/ser
     GetSystemJWTModule(),
     TypeOrmModule.forFeature([
       Order,
+      Report,
       Account,
       Notification,
       MonthlySurvey,

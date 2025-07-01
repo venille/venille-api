@@ -300,3 +300,20 @@ export class RegisterMonthlySurveyDTO {
   @IsNotEmpty()
   challengesFaced: string;
 }
+
+export class ReportAIResponseDTO {
+  @ApiProperty({
+    example: 'What are the various types of weather forecasts',
+  })
+  @IsString()
+  @IsNotEmpty()
+  prompt: string;
+
+  @ApiProperty({
+    example: 'OFFENSIVE',
+    description: 'Report response type e.g "OFFENSIVE"',
+  })
+  @IsString()
+  @IsNotEmpty()
+  responseType: string;
+}

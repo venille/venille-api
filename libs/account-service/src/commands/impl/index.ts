@@ -12,6 +12,7 @@ import {
   RegisterPeriodTrackerDTO,
   OrderSanitaryPadDTO,
   RegisterMonthlySurveyDTO,
+  ReportAIResponseDTO,
 } from '../../interface';
 
 export class UpdateAccountFCMTokenCommand {
@@ -35,6 +36,13 @@ export class UpdateAccountPasswordCommand {
     public readonly origin: string,
     public readonly secureUser: SecureUserPayload,
     public readonly payload: UpdateAccountPasswordDTO,
+  ) {}
+}
+
+export class ReportAIResponseCommand {
+  constructor(
+    public readonly secureUser: SecureUserPayload,
+    public readonly payload: ReportAIResponseDTO,
   ) {}
 }
 

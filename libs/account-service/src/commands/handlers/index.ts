@@ -1,4 +1,5 @@
 import { DeleteAccountHandler } from './DeleteAccountHandler';
+import { ReportAIResponseHandler } from './ReportAIResponseHandler';
 import { OrderSanitaryPadHandler } from './OrderSanitaryPadHandler';
 import { UpdateAccountNameHandler } from './UpdateAccountNameHandler';
 import { UpdateAccountEmailHandler } from './UpdateAccountEmailHandler';
@@ -13,6 +14,7 @@ import { RegisterMonthlySurveyHandler } from './RegisterMonthlySurveyHandler';
 
 export const AccountServiceCommandHandlers = [
   DeleteAccountHandler,
+  ReportAIResponseHandler,
   OrderSanitaryPadHandler,
   UpdateAccountNameHandler,
   UpdateAccountEmailHandler,

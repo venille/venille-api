@@ -57,12 +57,12 @@ export class CreateAccountDTO {
   lastName: string;
 
   @Transform(({ value }) => trimTransformer(value))
-  @ApiProperty({
+  @ApiPropertyOptional({
     example: '+2348123456789',
     description: 'Phone number of the user.',
   })
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   phone: string;
 
   @Transform(({ value }) => trimTransformer(value))

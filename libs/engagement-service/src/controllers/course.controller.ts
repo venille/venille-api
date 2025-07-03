@@ -15,7 +15,6 @@ import { CourseCategoryInfo } from '@app/common/src/models/course.model';
 
 @Controller({ path: 'course' })
 @ApiBearerAuth()
-@UseGuards(JwtAuthGuard)
 export class CourseController {
   constructor(
     public queryBus: QueryBus,
@@ -32,10 +31,9 @@ export class CourseController {
     @Req() req: Request,
     @Query('page') page: number,
     @Query('pageSize') pageSize: number,
-    @SecureUser() secureUser: SecureUserPayload,
   ): Promise<CourseCategoryInfo[]> {
     return await this.queryBus.execute(
-      new FetchCourseFeedQuery(page, pageSize, secureUser),
+      new FetchCourseFeedQuery(page, pageSize),
     );
   }
 }

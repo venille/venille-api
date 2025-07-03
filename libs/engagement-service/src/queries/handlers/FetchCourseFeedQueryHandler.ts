@@ -28,7 +28,7 @@ export class FetchCourseFeedQueryHandler
 
   async execute(query: FetchCourseFeedQuery): Promise<CourseCategoryInfo[]> {
     try {
-      const { page, pageSize, secureUser } = query;
+      const { page, pageSize } = query;
 
       const cacheKey = `course_feed_${page}_${pageSize}`;
 

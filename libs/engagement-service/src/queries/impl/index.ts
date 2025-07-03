@@ -4,7 +4,6 @@ export class FetchCourseFeedQuery {
   constructor(
     public readonly page: number,
     public readonly pageSize: number,
-    public readonly secureUser: SecureUserPayload,
   ) {}
 }
 

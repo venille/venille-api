@@ -40,6 +40,16 @@ export class CreateForumDto {
   // category: ForumCategory;
 }
 
+export class TranslateLongTextDto {
+  @ApiProperty({
+    example: 'Hello',
+    description: 'The text to translate',
+  })
+  @IsString()
+  @IsNotEmpty()
+  text: string;
+}
+
 export class CreateForumCommentDto {
   @ApiProperty({
     example: 'This is a comment',

@@ -24,6 +24,7 @@ import { JwtAuthGuard } from '@app/common/src/auth/jwt-auth.guard';
 import { SecureUser } from '@app/common/src/decorator/user.decorator';
 import { PeriodTrackerService } from '../services/period.tracker.service';
 import {
+  FetchCycleAndOvulationInfoQuery,
   FetchDashboardInfoQuery,
   FetchPredictedPeriodTrackerHistoryQuery,
 } from '../queries/impl';
@@ -104,10 +105,9 @@ export class PeriodTrackerController {
   @ApiInternalServerErrorResponse()
   async fetchCycleAndOvulationSettings(
     @SecureUser() secureUser: SecureUserPayload,
-    @Body() payload: UpdateCycleAndOvulationSettingsDto,
   ): Promise<CycleOvulationInfo> {
-    return await this.command.execute(
-      new UpdateCycleAndOvulationSettingsCommand(secureUser, payload),
+    return await this.queryBus.execute(
+      new FetchCycleAndOvulationInfoQuery(secureUser),
     );
   }
 

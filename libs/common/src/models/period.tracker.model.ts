@@ -7,13 +7,8 @@ import {
   UpdateDateColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import {
-  CycleGoal,
-  HealthCondition,
-  PeriodSymptomEnum,
-  BirthControlMethod,
-} from '../constants/enums';
 import { Account } from './account.model';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Entity()
 export class PeriodTracker {
@@ -28,6 +23,9 @@ export class PeriodTracker {
 
   @Column({ nullable: true, default: 0 })
   cycleLengthDays: number;
+
+  @Column({ nullable: true, default: 0 })
+  lutealPhaseLengthDays: number;
 
   @Column({ nullable: true, default: false })
   irregularPeriods: boolean;
@@ -71,4 +69,15 @@ export class PeriodTracker {
 
   @UpdateDateColumn({ nullable: true })
   updatedAt: Date;
+}
+
+export class CycleOvulationInfo {
+  @ApiProperty({ type: Number, example: 12 })
+  cycleLength: number;
+  
+  @ApiProperty({ type: Number, example: 9 })
+  periodLength: number;
+  
+  @ApiProperty({ type: Number, example: 8 })
+  lutealPhaseLength: number;
 }

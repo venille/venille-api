@@ -70,3 +70,20 @@ export class LogPeriodSymptomDto {
   @Type(() => PeriodSymptomDto)
   symptoms: PeriodSymptomDto[];
 }
+
+export class UpdateCycleAndOvulationSettingsDto {
+  @ApiProperty({ example: 0, type: Number })
+  @IsNumber()
+  @IsNotEmpty()
+  cycleLength: number;
+
+  @ApiProperty({ example: 0, type: Number })
+  @IsNumber()
+  @IsNotEmpty()
+  periodLength: number;
+
+  @ApiProperty({ example: 0, type: Number })
+  @IsNumber()
+  @IsNotEmpty()
+  lutealPhaseLength: number;
+}

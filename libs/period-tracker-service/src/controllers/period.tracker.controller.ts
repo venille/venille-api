@@ -16,16 +16,25 @@ import {
 import {
   LogPeriodHistoryCommand,
   LogPeriodSymptomsCommand,
+  UpdateCycleAndOvulationSettingsCommand,
 } from '../commands/impl';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { SecureUserPayload } from '@app/common/src/interface';
 import { JwtAuthGuard } from '@app/common/src/auth/jwt-auth.guard';
 import { SecureUser } from '@app/common/src/decorator/user.decorator';
 import { PeriodTrackerService } from '../services/period.tracker.service';
-import { FetchDashboardInfoQuery, FetchPredictedPeriodTrackerHistoryQuery } from '../queries/impl';
-import { LogPeriodSymptomDto, PeriodTrackerHistoryDto } from '../interface';
+import {
+  FetchDashboardInfoQuery,
+  FetchPredictedPeriodTrackerHistoryQuery,
+} from '../queries/impl';
+import {
+  LogPeriodSymptomDto,
+  PeriodTrackerHistoryDto,
+  UpdateCycleAndOvulationSettingsDto,
+} from '../interface';
 import { PeriodTrackerHistory } from '@app/common/src/models/period.record.model';
 import { DashboardInfo } from '../interface/schema';
+import { CycleOvulationInfo } from '@app/common/src/models/period.tracker.model';
 
 @Controller({ path: 'tracker' })
 @ApiBearerAuth()
@@ -45,9 +54,7 @@ export class PeriodTrackerController {
     @Req() req: Request,
     @SecureUser() secureUser: SecureUserPayload,
   ): Promise<DashboardInfo> {
-    return this.queryBus.execute(
-      new FetchDashboardInfoQuery(secureUser),
-    );
+    return this.queryBus.execute(new FetchDashboardInfoQuery(secureUser));
   }
 
   @ApiTags('period-tracker')
@@ -88,6 +95,32 @@ export class PeriodTrackerController {
   ): Promise<void> {
     return this.command.execute(
       new LogPeriodHistoryCommand(periodHistory, secureUser),
+    );
+  }
+
+  @ApiTags('cycle-and-ovulation')
+  @Get('cycle-and-ovulation-info')
+  @ApiOkResponse({ type: CycleOvulationInfo })
+  @ApiInternalServerErrorResponse()
+  async fetchCycleAndOvulationSettings(
+    @SecureUser() secureUser: SecureUserPayload,
+    @Body() payload: UpdateCycleAndOvulationSettingsDto,
+  ): Promise<CycleOvulationInfo> {
+    return await this.command.execute(
+      new UpdateCycleAndOvulationSettingsCommand(secureUser, payload),
+    );
+  }
+
+  @ApiTags('cycle-and-ovulation')
+  @Patch('update-cycle-and-ovulation-info')
+  @ApiOkResponse({ type: CycleOvulationInfo })
+  @ApiInternalServerErrorResponse()
+  async patchCycleAndOvulationSettings(
+    @SecureUser() secureUser: SecureUserPayload,
+    @Body() payload: UpdateCycleAndOvulationSettingsDto,
+  ): Promise<CycleOvulationInfo> {
+    return await this.command.execute(
+      new UpdateCycleAndOvulationSettingsCommand(secureUser, payload),
     );
   }
 }

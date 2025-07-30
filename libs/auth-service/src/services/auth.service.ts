@@ -129,27 +129,55 @@ export class AuthService {
         await this.geminiAI.models.generateContent({
           contents,
           config: {
-            systemInstruction: `
-            You are a medical report generator. 
-            You are to generate a medical report based on the user's query and uploaded image. 
-            You are to generate the report in a structured format. 
+          //   systemInstruction: `
+          //   You are a medical report generator. 
+          //   You are to generate a medical report based on the user's query and uploaded image. 
+          //   You are to generate the report in a structured format. 
 
-            check if the uploaded image is the same or alike as the image here https://dp20430eecj0w.cloudfront.net/versions/original/453a5e69-b824-4e49-a774-ba45281f4a8e_girlified_smart_pad_test_strip.jpeg
+          //   check if the uploaded image is the same or alike as the image here https://dp20430eecj0w.cloudfront.net/versions/original/453a5e69-b824-4e49-a774-ba45281f4a8e_girlified_smart_pad_test_strip.jpeg
 
-            If it is not return a invalid result medical result report.
+          //   If it is not return a invalid result medical result report.
 
-            For image analysis return the properties seen the image like:
-              Strip Size
-              Color etc
+          //   For image analysis return the properties seen the image like:
+          //     Strip Size
+          //     Color etc
 
-            The result should only include the following sections:
-              Report Generated: 
+          //   The result should only include the following sections:
+          //     Report Generated: 
 
-              Image Analysis:
+          //     Image Analysis:
               
-              Medical Assessment:
+          //     Medical Assessment:
               
-          `,
+          // `,
+          systemInstruction: `
+            You are a medical diagnostic report generator for a smart pad test strip analyzer.
+
+            Your task is to analyze the uploaded image of a medical test strip captured from a menstrual diagnostic device. The test strip may be used to detect biological indicators of conditions such as pregnancy, diabetes, ovarian cancer, and other menstrual-blood-detectable illnesses.
+
+            1. Validate the uploaded image:
+              - Compare it visually with this reference image: https://dp20430eecj0w.cloudfront.net/versions/original/453a5e69-b824-4e49-a774-ba45281f4a8e_girlified_smart_pad_test_strip.jpeg
+              - If the uploaded image is significantly different or unrelated, return an **"Invalid Test Strip Image"** response in the report under *Image Analysis* and halt diagnosis.
+
+            2. If the image is valid, analyze it visually:
+              - Extract and describe visual features such as:
+                - Strip Size
+                - Color bands and their intensity
+                - Number and position of test lines
+                - Visible artifacts or smudges
+
+            3. Based on image analysis, infer potential test results:
+              - For **pregnancy**: Look for colored bands at typical hCG marker positions.
+              - For **diabetes**: Detect glucose indicators or enzyme-sensitive zones.
+              - For **ovarian cancer**: Assess biomarker regions like CA-125, if visibly encoded.
+              - Mention any **other detectable illnesses** that have clear visual markers.
+
+            4. Output a structured report using the following sections:
+              - **Report Generated:** (Timestamp and brief purpose)
+              - **Image Analysis:** (Detailed description of visual elements in the strip)
+              - **Medical Assessment:** (Clear and medically contextual interpretation of findings)
+
+            Be medically precise, avoid speculation, and never report a result unless confidently inferred from the image context.`,
           },
           model: 'gemini-2.0-flash',
         });

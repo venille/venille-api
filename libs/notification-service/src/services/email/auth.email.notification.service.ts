@@ -37,7 +37,7 @@ export class AuthEmailNotificationService {
     const htmlContent =
       await girlified_smart_pad_medical_report_email_html_content(htmlBody);
 
-    return this.emailSenderService.sendEmail({
+    return this.emailSenderService.sendGirlifiedEmail({
       to_email: email,
       html: htmlContent,
       sub: 'Girlified Smart Pad - Medical Report',

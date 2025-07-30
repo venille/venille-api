@@ -16,7 +16,9 @@ import {
 } from '../interface';
 import {
   ApiBadRequestResponse,
+  ApiBody,
   ApiConflictResponse,
+  ApiConsumes,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiQuery,
@@ -35,7 +37,16 @@ import {
 import { AuthService } from '../services/auth.service';
 import { GenerateContentResponse } from '@google/genai';
 import authUtils from 'libs/common/src/security/auth.utils';
-import { Body, Controller, Post, Query, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  Query,
+  Req,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller({ path: '' })
 export class AuthController {
@@ -53,10 +64,7 @@ export class AuthController {
     @Req() req: Request,
   ): Promise<SignupResponsePayload> {
     return await this.command.execute(
-      new CreateAccountCommand(
-        authUtils.getOriginHeader(req),
-        body,
-      ),
+      new CreateAccountCommand(authUtils.getOriginHeader(req), body),
     );
   }
 
@@ -140,7 +148,7 @@ export class AuthController {
 
   @ApiTags('ai')
   @Post('test-gemini')
-  @ApiOkResponse({type: String})
+  @ApiOkResponse({ type: String })
   @ApiQuery({
     type: String,
     name: 'query',
@@ -151,8 +159,42 @@ export class AuthController {
   @ApiConflictResponse()
   async generateVellaAiPrompt(
     @Req() req: Request,
-    @Query('query') query: string
+    @Query('query') query: string,
   ): Promise<string> {
     return await this.authService.generateVellaAiAPI(query);
+  }
+
+  @ApiTags('ai')
+  @Post('test-openai-sdk')
+  @ApiOkResponse({ type: String })
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiQuery({
+    type: String,
+    name: 'email',
+    required: true,
+    example: 'tisanyada@gmail.com',
+    description: 'Email of the test recipient.',
+  })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'Upload an image file of your test strip.',
+    required: true,
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  @ApiConflictResponse()
+  async testOpenAISdk(
+    @Req() req: Request,
+    @Query('email') email: string,
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<string> {
+    return await this.authService.testOpenAISdk(email, file);
   }
 }

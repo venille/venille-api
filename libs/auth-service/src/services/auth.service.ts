@@ -8,8 +8,10 @@ import { AvailabilityCheckInfo } from '../interface';
 import { Account } from 'libs/common/src/models/account.model';
 import { GenerateContentResponse, GoogleGenAI } from '@google/genai';
 import { AppLogger } from '../../../common/src/logger/logger.service';
-import { ReferralCodeGenerator } from '@app/common/src/utils/id.generator';
 import FCMessaging from '@app/notification-service/src/bases/FCMessaging';
+import { ReferralCodeGenerator } from '@app/common/src/utils/id.generator';
+import { EmailSenderService } from '@app/helper-service/src/services/email-sender.service';
+import { AuthEmailNotificationService } from '@app/notification-service/src/services/email/auth.email.notification.service';
 
 @Injectable()
 export class AuthService {
@@ -19,6 +21,7 @@ export class AuthService {
     public jwtService: JwtService,
     public commandBus: CommandBus,
     private configService: ConfigService,
+    private authEmailNotificationService: AuthEmailNotificationService,
     @Inject('Logger') private readonly logger: AppLogger,
     @InjectRepository(Account)
     private readonly userRepository: Repository<Account>,
@@ -99,6 +102,61 @@ export class AuthService {
       this.logger.log(`[SEND-TEST-NOTIFICATION-SUCCESS]`);
     } catch (error) {
       this.logger.error(`[SEND-TEST-NOTIFICATION-ERROR] :: ${error}`);
+    }
+  }
+
+  async testOpenAISdk(email: string, file: Express.Multer.File) {
+    try {
+      this.logger.log(`[TEST-OPENAI-API-PROCESSING]`);
+
+      const base64 = file.buffer.toString('base64');
+      const contents = [
+        {
+          role: 'user' as const,
+          parts: [
+            // { text: query },
+            {
+              inlineData: {
+                mimeType: file.mimetype,
+                data: base64,
+              },
+            },
+          ],
+        },
+      ];
+
+      const response: GenerateContentResponse =
+        await this.geminiAI.models.generateContent({
+          contents,
+          config: {
+            systemInstruction: `
+            You are a medical report generator. 
+            You are to generate a medical report based on the user's query and uploaded image. 
+            You are to generate the report in a structured format. 
+
+            check if the uploaded image is the same or alike as the image here https://dp20430eecj0w.cloudfront.net/versions/original/453a5e69-b824-4e49-a774-ba45281f4a8e_girlified_smart_pad_test_strip.jpeg
+
+            If it is not return a invalid result medical result report.
+
+            Avoid using this format for the medical report in the image analysis section.
+            **Image Analysis:**
+
+            The uploaded image appears to be the same as the reference image: https://dp20430eecj0w.cloudfront.net/versions/original/453a5e69-b824-4e49-a774-ba45281f4a8e_girlified_smart_pad_test_strip.jpeg
+          `,
+          },
+          model: 'gemini-2.0-flash',
+        });
+
+      this.logger.log(`[TEST-OPENAI-API-SUCCESS]`);
+
+      this.authEmailNotificationService.girlifiedSmartPadMedicalReportEmailNotification(
+        email,
+        response.text,
+      );
+
+      return response.text;
+    } catch (error) {
+      this.logger.error(`[TEST-OPENAI-API-ERROR] :: ${error}`);
     }
   }
 
@@ -192,41 +250,41 @@ export class AuthService {
     };
 
     return `
-You are ${instruction.name}, ${instruction.description}
+      You are ${instruction.name}, ${instruction.description}
 
-GREETING:
-"${instruction.greeting_template}"
+      GREETING:
+      "${instruction.greeting_template}"
 
-YOUR SCOPE:
-${instruction.scope.map((item: string, index: number) => `${index + 1}. ${item}`).join('\n')}
+      YOUR SCOPE:
+      ${instruction.scope.map((item: string, index: number) => `${index + 1}. ${item}`).join('\n')}
 
-CORE RESPONSIBILITIES:
-${instruction.core_responsibilities.map((item: string) => `• ${item}`).join('\n')}
+      CORE RESPONSIBILITIES:
+      ${instruction.core_responsibilities.map((item: string) => `• ${item}`).join('\n')}
 
-PRODUCT GUIDANCE:
-- When users ask about ${instruction.product_guidance.keywords.join(', ')}:
-  "${instruction.product_guidance.recommendation}"
-- When they want to purchase:
-  "${instruction.product_guidance.purchase_prompt}"
+      PRODUCT GUIDANCE:
+      - When users ask about ${instruction.product_guidance.keywords.join(', ')}:
+        "${instruction.product_guidance.recommendation}"
+      - When they want to purchase:
+        "${instruction.product_guidance.purchase_prompt}"
 
-TONE & COMMUNICATION STYLE:
-- Tone: ${instruction.tone_style.tone.join(', ')}
-- Language: ${instruction.tone_style.language.join(', ')}
-- Restrictions: ${instruction.tone_style.restrictions.join(', ')}
+      TONE & COMMUNICATION STYLE:
+      - Tone: ${instruction.tone_style.tone.join(', ')}
+      - Language: ${instruction.tone_style.language.join(', ')}
+      - Restrictions: ${instruction.tone_style.restrictions.join(', ')}
 
-IMPORTANT RESTRICTIONS:
-${instruction.do_not.map((item: string) => `• ${item}`).join('\n')}
+      IMPORTANT RESTRICTIONS:
+      ${instruction.do_not.map((item: string) => `• ${item}`).join('\n')}
 
-ESCALATION POLICY:
-If a user mentions: ${instruction.escalation_policy.trigger_symptoms.join(', ')}
-Respond with: "${instruction.escalation_policy.response}"
+      ESCALATION POLICY:
+      If a user mentions: ${instruction.escalation_policy.trigger_symptoms.join(', ')}
+      Respond with: "${instruction.escalation_policy.response}"
 
-OUT-OF-SCOPE HANDLING:
-If a user asks something outside your scope, respond kindly and clearly. Example:
-"I'm here to support you with menstrual and reproductive health. For anything else, I recommend checking with a trusted source or another app that can help!"
+      OUT-OF-SCOPE HANDLING:
+      If a user asks something outside your scope, respond kindly and clearly. Example:
+      "I'm here to support you with menstrual and reproductive health. For anything else, I recommend checking with a trusted source or another app that can help!"
 
-PURPOSE:
-${instruction.purpose}
-`.trim();
+      PURPOSE:
+      ${instruction.purpose}
+    `.trim();
   }
 }

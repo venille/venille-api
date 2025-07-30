@@ -1,3 +1,4 @@
+import * as MarkdownIt from 'markdown-it';
 import { CommandBus } from '@nestjs/cqrs';
 import { ConfigService } from '@nestjs/config';
 import { Inject, Injectable } from '@nestjs/common';
@@ -10,15 +11,38 @@ import { forgot_password_html_content } from '../../templates/emails/auth/forgot
 import { email_verification_html_content } from '../../templates/emails/auth/email_verification_email_template';
 import { welcome_customer_email_html_content } from '../../templates/emails/auth/welcome_customer_email_template';
 import { update_account_email_html_content } from '../../templates/emails/auth/update_account_email_template';
+import { girlified_smart_pad_medical_report_email_html_content } from '../../templates/emails/auth/girlified_smart_pad_medical_report_email_template';
 
 @Injectable()
 export class AuthEmailNotificationService {
+  private markdownIt;
+
   constructor(
     public commandBus: CommandBus,
     private configService: ConfigService,
     private emailSenderService: EmailSenderService,
     @Inject('Logger') private readonly logger: AppLogger,
-  ) {}
+  ) {
+    this.markdownIt = new MarkdownIt({
+      html: true,
+    });
+  }
+
+  async girlifiedSmartPadMedicalReportEmailNotification(
+    email: string,
+    markdownContent: string,
+  ) {
+    const htmlBody = this.markdownIt.render(markdownContent);
+
+    const htmlContent =
+      await girlified_smart_pad_medical_report_email_html_content(htmlBody);
+
+    return this.emailSenderService.sendEmail({
+      to_email: email,
+      html: htmlContent,
+      sub: 'Girlified Smart Pad - Medical Report',
+    });
+  }
 
   async verifyNewAccountEmailNotification(account: Account) {
     const htmlContent = await update_account_email_html_content(

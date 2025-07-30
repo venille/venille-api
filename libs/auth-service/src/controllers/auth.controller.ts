@@ -165,7 +165,7 @@ export class AuthController {
   }
 
   @ApiTags('ai')
-  @Post('test-openai-sdk')
+  @Post('generate-girlified-smart-pad-report')
   @ApiOkResponse({ type: String })
   @UseInterceptors(FileInterceptor('file'))
   @ApiQuery({

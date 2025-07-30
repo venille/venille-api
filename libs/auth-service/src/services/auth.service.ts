@@ -138,8 +138,13 @@ export class AuthService {
 
             If it is not return a invalid result medical result report.
 
-            Avoid using this format for the medical report in the image analysis section.
-              Image Analysis: The uploaded image appears to be the same as the reference image: https://dp20430eecj0w.cloudfront.net/versions/original/453a5e69-b824-4e49-a774-ba45281f4a8e_girlified_smart_pad_test_strip.jpeg
+            The result should only include the following sections:
+              Report Generated: 
+
+              Image Analysis:
+              
+              Medical Assessment:
+              
           `,
           },
           model: 'gemini-2.0-flash',

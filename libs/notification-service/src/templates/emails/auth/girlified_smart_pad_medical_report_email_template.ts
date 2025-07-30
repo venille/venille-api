@@ -61,8 +61,7 @@ export const girlified_smart_pad_medical_report_email_html_content = (
         ${markdownContent}
       </div>
       <div class="footer">
-        <p>For assistance, contact <a href="mailto:support@venille.com.ng">support@venille.com.ng</a></p>
-        <p><a href="#">Privacy Policy</a></p>
+        <p>Girlified Smart Pad</p>
       </div>
     </div>
   </div>

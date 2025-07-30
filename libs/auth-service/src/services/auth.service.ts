@@ -138,6 +138,10 @@ export class AuthService {
 
             If it is not return a invalid result medical result report.
 
+            For image analysis return the properties seen the image like:
+              Strip Size
+              Color etc
+
             The result should only include the following sections:
               Report Generated: 
 

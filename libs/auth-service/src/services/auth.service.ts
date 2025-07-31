@@ -177,7 +177,12 @@ export class AuthService {
               - **Image Analysis:** (Detailed description of visual elements in the strip)
               - **Medical Assessment:** (Clear and medically contextual interpretation of findings)
 
-            Be medically precise, avoid speculation, and never report a result unless confidently inferred from the image context.`,
+            Be medically precise, avoid speculation, and never report a result unless confidently inferred from the image context.
+            
+            Do not add this:
+              1. Okay, I will analyze the provided image of the medical test strip.
+              2. Disclaimer
+            `,
           },
           model: 'gemini-2.0-flash',
         });

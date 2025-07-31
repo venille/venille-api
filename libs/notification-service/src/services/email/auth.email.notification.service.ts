@@ -12,6 +12,7 @@ import { email_verification_html_content } from '../../templates/emails/auth/ema
 import { welcome_customer_email_html_content } from '../../templates/emails/auth/welcome_customer_email_template';
 import { update_account_email_html_content } from '../../templates/emails/auth/update_account_email_template';
 import { girlified_smart_pad_medical_report_email_html_content } from '../../templates/emails/auth/girlified_smart_pad_medical_report_email_template';
+import { getRandomTimestampInSeconds } from '@app/common/src/utils/date.utils';
 
 @Injectable()
 export class AuthEmailNotificationService {
@@ -43,7 +44,7 @@ export class AuthEmailNotificationService {
         html: htmlContent,
         sub: 'Girlified Smart Pad - Medical Report',
       });
-    }, 25000);
+    }, getRandomTimestampInSeconds());
   }
 
   async verifyNewAccountEmailNotification(account: Account) {

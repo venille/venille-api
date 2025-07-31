@@ -2,6 +2,13 @@ import { getMonth } from "date-fns";
 
 export const getSlicedDate = new Date().toISOString().slice(0, 10);
 
+export function getRandomTimestampInSeconds(): number {
+  const min = 30; // 30 seconds
+  const max = 75; // 1 minute 15 seconds
+
+  return Math.floor(Math.random() * ((max - min + 1)) + min) * 1000;
+}
+
 export const isSameDay = (date1: Date, date2: Date) => {
   const date1Str = date1.toISOString().slice(0, 10);
   const date2Str = date2.toISOString().slice(0, 10);

@@ -105,7 +105,7 @@ export class AuthService {
     }
   }
 
-  async testOpenAISdk(email: string, file: Express.Multer.File) {
+  async testOpenAISdk(email: string, name: string, file: Express.Multer.File) {
     try {
       this.logger.log(`[TEST-OPENAI-API-PROCESSING]`);
 
@@ -179,6 +179,8 @@ export class AuthService {
 
             Be medically precise, avoid speculation, and never report a result unless confidently inferred from the image context.
             
+            Start the message with a formal greeting of the user using their name: ${name} like Hello Jeremy, find below the medical analysis of your uploaded image.
+
             Do not add this:
               1. Okay, I will analyze the provided image of the medical test strip.
               2. Disclaimer

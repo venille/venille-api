@@ -175,6 +175,13 @@ export class AuthController {
     example: 'tisanyada@gmail.com',
     description: 'Email of the test recipient.',
   })
+  @ApiQuery({
+    type: String,
+    name: 'name',
+    required: true,
+    example: 'Jeremy Grant',
+    description: 'Name of the test recipient.',
+  })
   @ApiConsumes('multipart/form-data')
   @ApiBody({
     description: 'Upload an image file of your test strip.',
@@ -193,8 +200,9 @@ export class AuthController {
   async testOpenAISdk(
     @Req() req: Request,
     @Query('email') email: string,
+    @Query('name') name: string,
     @UploadedFile() file: Express.Multer.File,
   ): Promise<string> {
-    return await this.authService.testOpenAISdk(email, file);
+    return await this.authService.testOpenAISdk(email, name, file);
   }
 }

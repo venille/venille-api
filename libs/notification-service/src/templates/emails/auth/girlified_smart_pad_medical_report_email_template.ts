@@ -28,6 +28,11 @@ export const girlified_smart_pad_medical_report_email_html_content = (
       background-color: #ffffff;
       border-radius: 15px;
     }
+    .logo{
+      padding: 20px 0;
+      display: flex;
+      margin: 0 auto;
+    }
     .content {
       padding: 20px;
       background-color: #fdfdfe;
@@ -57,6 +62,7 @@ export const girlified_smart_pad_medical_report_email_html_content = (
 <body>
   <div class="wrapper">
     <div class="container">
+      <img class="logo" src="https://dp20430eecj0w.cloudfront.net/versions/original/ca848a9f-480b-40be-97ad-4804fb0a50a3_girlified_logo.png" width="80" alt="Girlified Logo"/>
       <div class="content">
         ${markdownContent}
       </div>

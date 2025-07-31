@@ -5,14 +5,14 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Account } from 'libs/common/src/models/account.model';
 import { AppLogger } from '../../../../common/src/logger/logger.service';
 import { AccountStatus, AccountType } from 'libs/common/src/constants/enums';
-import { reset_password_html_content } from '../../templates/emails/auth/reset_password_email_template';
+import { getRandomTimestampInSeconds } from '@app/common/src/utils/date.utils';
 import { EmailSenderService } from 'libs/helper-service/src/services/email-sender.service';
+import { reset_password_html_content } from '../../templates/emails/auth/reset_password_email_template';
 import { forgot_password_html_content } from '../../templates/emails/auth/forgot_password_email_template';
+import { update_account_email_html_content } from '../../templates/emails/auth/update_account_email_template';
 import { email_verification_html_content } from '../../templates/emails/auth/email_verification_email_template';
 import { welcome_customer_email_html_content } from '../../templates/emails/auth/welcome_customer_email_template';
-import { update_account_email_html_content } from '../../templates/emails/auth/update_account_email_template';
 import { girlified_smart_pad_medical_report_email_html_content } from '../../templates/emails/auth/girlified_smart_pad_medical_report_email_template';
-import { getRandomTimestampInSeconds } from '@app/common/src/utils/date.utils';
 
 @Injectable()
 export class AuthEmailNotificationService {

@@ -17,6 +17,8 @@ import {
   MonthlyPeriodInfo,
   PeriodTrackerHistory,
 } from '@app/common/src/models/period.record.model';
+import { Account } from '@app/common/src/models/account.model';
+import { MenstrualPhase } from '@app/common/src/constants/enums';
 import {
   generateDailyInsight,
   calculateCycleDayCount,
@@ -43,6 +45,8 @@ export class FetchPredictedPeriodTrackerHistoryQueryHandler
     private readonly periodTrackerRepository: Repository<PeriodTracker>,
     @InjectRepository(PeriodTrackerRecord)
     private readonly periodRecordRepository: Repository<PeriodTrackerRecord>,
+    @InjectRepository(Account)
+    private readonly accountRepository: Repository<Account>,
   ) {}
 
   async execute(
@@ -92,6 +96,7 @@ export class FetchPredictedPeriodTrackerHistoryQueryHandler
       const years: PredictedYearTrackerInfo[] = [];
 
       // Generate monthly information from the beginning of last period start year to current year
+      let todaysPhase: MenstrualPhase | null = null;
       for (let year = lastPeriodYear; year <= currentYear; year++) {
         const startMonth = year === lastPeriodYear ? 0 : 0; // Always start from January (month 0)
         const endMonth = 11; // Always end at December (month 11)
@@ -315,6 +320,33 @@ export class FetchPredictedPeriodTrackerHistoryQueryHandler
               end: fertileWindowEnd,
             });
 
+            // Determine menstrual phase for the current day
+            let currentPhase: MenstrualPhase = MenstrualPhase.LUTEAL_PHASE;
+            if (
+              isWithinInterval(currentDate, {
+                start: periodStartDate,
+                end: periodEndDate,
+              })
+            ) {
+              currentPhase = MenstrualPhase.MENSTRUAL_PHASE;
+            } else if (
+              isWithinInterval(currentDate, {
+                start: addDays(periodEndDate, 1),
+                end: addDays(fertileWindowStart, -1),
+              })
+            ) {
+              currentPhase = MenstrualPhase.FOLLICULAR_PHASE;
+            } else if (
+              isWithinInterval(currentDate, {
+                start: fertileWindowStart,
+                end: fertileWindowEnd,
+              })
+            ) {
+              currentPhase = MenstrualPhase.OVULATION_PHASE;
+            } else {
+              currentPhase = MenstrualPhase.LUTEAL_PHASE;
+            }
+
             // Check if cycleDayCount is 1 but it's not a period day
             if (
               cycleDay === 1 &&
@@ -366,6 +398,10 @@ export class FetchPredictedPeriodTrackerHistoryQueryHandler
 
             // Update previous cycle day count for next iteration
             previousCycleDayCount = cycleDay;
+            // If this is today, remember phase to persist on account
+            if (isSameDay(currentDate, new Date())) {
+              todaysPhase = currentPhase;
+            }
             currentDate = addDays(currentDate, 1);
           }
 
@@ -391,6 +427,14 @@ export class FetchPredictedPeriodTrackerHistoryQueryHandler
       this.logger.log(
         `[FETCH-PREDICTED-PERIOD-TRACKER-HISTORY-QUERY-HANDLER-SUCCESS]`,
       );
+
+      // Persist today's predicted phase to Account.menstrualPhase if computed
+      // if (todaysPhase) {
+      //   await this.accountRepository.update(
+      //     { id: secureUser.id },
+      //     { menstrualPhase: todaysPhase },
+      //   );
+      // }
 
       return {
         years,

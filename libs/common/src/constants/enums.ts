@@ -161,3 +161,10 @@ export enum MonthlySurveyPeriodDuration {
   FourToFiveDays = 'FourToFiveDays',
   MoreThanFiveDays = 'MoreThanFiveDays',
 }
+
+export enum MenstrualPhase {
+  MENSTRUAL_PHASE = 'menstrual_phase',
+  FOLLICULAR_PHASE = 'follicular_phase',
+  OVULATION_PHASE = 'ovulation_phase',
+  LUTEAL_PHASE = 'luteal_phase',
+}

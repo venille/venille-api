@@ -8,6 +8,7 @@ import {
 import {
   AccountStatus,
   AccountType,
+  MenstrualPhase,
 } from '../constants/enums';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
@@ -233,6 +234,16 @@ export class Account {
     description: 'Is onboarding uploaded',
   })
   isOnboardingUploaded: boolean;
+
+  @Column({
+    type: 'enum',
+    enum: MenstrualPhase,
+    default: MenstrualPhase.MENSTRUAL_PHASE,
+  })
+  @ApiPropertyOptional({
+    description: 'Menstrual phase',
+  })
+  menstrualPhase: MenstrualPhase;
 
   @CreateDateColumn({ nullable: true })
   @ApiPropertyOptional({

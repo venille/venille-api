@@ -129,61 +129,59 @@ export class AuthService {
         await this.geminiAI.models.generateContent({
           contents,
           config: {
-          //   systemInstruction: `
-          //   You are a medical report generator. 
-          //   You are to generate a medical report based on the user's query and uploaded image. 
-          //   You are to generate the report in a structured format. 
+            //   systemInstruction: `
+            //   You are a medical report generator.
+            //   You are to generate a medical report based on the user's query and uploaded image.
+            //   You are to generate the report in a structured format.
 
-          //   check if the uploaded image is the same or alike as the image here https://dp20430eecj0w.cloudfront.net/versions/original/453a5e69-b824-4e49-a774-ba45281f4a8e_girlified_smart_pad_test_strip.jpeg
+            //   check if the uploaded image is the same or alike as the image here https://dp20430eecj0w.cloudfront.net/versions/original/453a5e69-b824-4e49-a774-ba45281f4a8e_girlified_smart_pad_test_strip.jpeg
 
-          //   If it is not return a invalid result medical result report.
+            //   If it is not return a invalid result medical result report.
 
-          //   For image analysis return the properties seen the image like:
-          //     Strip Size
-          //     Color etc
+            //   For image analysis return the properties seen the image like:
+            //     Strip Size
+            //     Color etc
 
-          //   The result should only include the following sections:
-          //     Report Generated: 
+            //   The result should only include the following sections:
+            //     Report Generated:
 
-          //     Image Analysis:
-              
-          //     Medical Assessment:
-              
-          // `,
-          systemInstruction: `
-            You are a medical diagnostic report generator for a smart pad test strip analyzer.
+            //     Image Analysis:
 
-            Your task is to analyze the uploaded image of a medical test strip captured from a menstrual diagnostic device. The test strip may be used to detect biological indicators of conditions such as pregnancy, diabetes, ovarian cancer, and other menstrual-blood-detectable illnesses.
+            //     Medical Assessment:
+
+            // `,
+            systemInstruction: `
+            You are an agronomy vision assistant.
+
+            Your task is to analyze the uploaded image of a plant and determine: (1) whether the plant appears healthy or unwell, with concise reasons; and (2) if fruits are present, whether they are ripe for harvest. If fruits are not ripe, state their current ripeness stage.
 
             1. Validate the uploaded image:
-              - Compare it visually with this reference image: https://dp20430eecj0w.cloudfront.net/versions/original/453a5e69-b824-4e49-a774-ba45281f4a8e_girlified_smart_pad_test_strip.jpeg
-              - If the uploaded image is significantly different or unrelated, return an **"Invalid Test Strip Image"** response in the report under *Image Analysis* and halt diagnosis.
+              - Confirm the image depicts a plant (leaves, stem, fruit). If not, return an **"Invalid Plant Image"** under *Image Validation* and stop.
 
-            2. If the image is valid, analyze it visually:
-              - Extract and describe visual features such as:
-                - Strip Size
-                - Color bands and their intensity
-                - Number and position of test lines
-                - Visible artifacts or smudges
+            2. If valid, analyze it visually:
+              - Describe observable features:
+                - Leaf color/texture, spots/lesions, wilting/yellowing, pest/mold presence
+                - Stem integrity and overall vigor
+                - Soil surface moisture cues (if visible)
+              - If fruits are present, assess:
+                - Fruit color, size, surface gloss, firmness cues, attachment to stem
 
-            3. Based on image analysis, infer potential test results:
-              - For **pregnancy**: Look for colored bands at typical hCG marker positions.
-              - For **diabetes**: Detect glucose indicators or enzyme-sensitive zones.
-              - For **ovarian cancer**: Assess biomarker regions like CA-125, if visibly encoded.
-              - Mention any **other detectable illnesses** that have clear visual markers.
+            3. Classify results:
+              - Plant Health: **Healthy** or **Unwell** (list top 2–4 visual indicators justifying the status)
+              - Fruit Ripeness: **Ripe for Harvest** / **Not Ripe Yet** / **Overripe** / **No Fruits Visible**
+                - If Not Ripe Yet, state current stage (e.g., immature, color-break/turning) and a qualitative readiness (e.g., "likely several days").
+                - If fruits are present, estimate and report the total number of visible fruits and the number of fruits that are ripe.
 
-            4. Output a structured report using the following sections:
-              - **Report Generated:** (Timestamp and brief purpose)
-              - **Image Analysis:** (Detailed description of visual elements in the strip)
-              - **Medical Assessment:** (Clear and medically contextual interpretation of findings)
+            4. Output a structured report with these sections:
+              - **Report Generated:** (timestamp and brief purpose)
+              - **Image Validation:** (Valid/Invalid and reason)
+              - **Image Analysis:** (bullet observations)
+              - **Plant Health Assessment:** (Healthy/Unwell + reasons)
+              - **Fruit Assessment:** (status + evidence; include counts like "ripe: X / total: Y")
 
-            Be medically precise, avoid speculation, and never report a result unless confidently inferred from the image context.
-            
-            Start the message with a formal greeting of the user using their name like Hello ${name}, find below the medical analysis of your uploaded image.
-
-            Do not add this:
-              1. Okay, I will analyze the provided image of the medical test strip.
-              2. Disclaimer
+            Constraints:
+            - Be precise and avoid speculation beyond what is visible.
+            - If the image is invalid, do not continue analysis.
             `,
           },
           model: 'gemini-2.0-flash',
@@ -199,6 +197,75 @@ export class AuthService {
       return response.text;
     } catch (error) {
       this.logger.error(`[TEST-OPENAI-API-ERROR] :: ${error}`);
+    }
+  }
+
+  async processGreenEdenGpt(file: Express.Multer.File) {
+    try {
+      this.logger.log(`[PROCESS-GREENEDEN-GPT-PROCESSING]`);
+
+      const base64 = file.buffer.toString('base64');
+      const contents = [
+        {
+          role: 'user' as const,
+          parts: [
+            // { text: query },
+            {
+              inlineData: {
+                mimeType: file.mimetype,
+                data: base64,
+              },
+            },
+          ],
+        },
+      ];
+
+      const response: GenerateContentResponse =
+        await this.geminiAI.models.generateContent({
+          contents,
+          config: {
+            systemInstruction: `
+            You are an agronomy vision assistant.
+
+            Your task is to analyze the uploaded image of a plant and determine: (1) whether the plant appears healthy or unwell, with concise reasons; and (2) if fruits are present, whether they are ripe for harvest. If fruits are not ripe, state their current ripeness stage.
+
+            1. Validate the uploaded image:
+              - Confirm the image depicts a plant (leaves, stem, fruit). If not, return an **"Invalid Plant Image"** under *Image Validation* and stop.
+
+            2. If valid, analyze it visually:
+              - Describe observable features:
+                - Leaf color/texture, spots/lesions, wilting/yellowing, pest/mold presence
+                - Stem integrity and overall vigor
+                - Soil surface moisture cues (if visible)
+              - If fruits are present, assess:
+                - Fruit color, size, surface gloss, firmness cues, attachment to stem
+
+            3. Classify results:
+              - Plant Health: **Healthy** or **Unwell** (list top 2–4 visual indicators justifying the status)
+              - Fruit Ripeness: **Ripe for Harvest** / **Not Ripe Yet** / **Overripe** / **No Fruits Visible**
+                - If Not Ripe Yet, state current stage (e.g., immature, color-break/turning) and a qualitative readiness (e.g., "likely several days").
+                - If fruits are present, estimate and report the total number of visible fruits and the number of fruits that are ripe.
+
+            4. Output a structured report with these sections:
+              - **Report Generated:** (timestamp and brief purpose)
+              - **Image Validation:** (Valid/Invalid and reason)
+              - **Image Analysis:** (bullet observations)
+              - **Plant Health Assessment:** (Healthy/Unwell + reasons)
+              - **Fruit Assessment:** (status + evidence; include counts like "ripe: X / total: Y")
+
+            Constraints:
+            - Be precise and avoid speculation beyond what is visible.
+            - If the image is invalid, do not continue analysis.
+            `,
+          },
+          model: 'gemini-2.0-flash',
+        });
+
+      this.logger.log(`[PROCESS-GREENEDEN-GPT-SUCCESS]`);
+
+      return response.text;
+    } catch (error) {
+      this.logger.error(`[PROCESS-GREENEDEN-GPT-ERROR] :: ${error}`);
     }
   }
 

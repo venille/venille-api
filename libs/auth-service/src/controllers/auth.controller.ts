@@ -205,4 +205,30 @@ export class AuthController {
   ): Promise<string> {
     return await this.authService.testOpenAISdk(email, name, file);
   }
+
+  @ApiTags('ai')
+  @Post('process-greeneden-gpt')
+  @ApiOkResponse({ type: String })
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'Upload an image file of your test strip.',
+    required: true,
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  @ApiConflictResponse()
+  async processGreenEdenGpt(
+    @Req() req: Request,
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<string> {
+    return await this.authService.processGreenEdenGpt(file);
+  }
 }

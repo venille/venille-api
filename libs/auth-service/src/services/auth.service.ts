@@ -156,7 +156,7 @@ export class AuthService {
             Your task is to analyze the uploaded image of a plant and determine: (1) whether the plant appears healthy or unwell, with concise reasons; and (2) if fruits are present, whether they are ripe for harvest. If fruits are not ripe, state their current ripeness stage.
 
             1. Validate the uploaded image:
-              - Confirm the image depicts a plant (leaves, stem, fruit). If not, return an **"Invalid Plant Image"** under *Image Validation* and stop.
+              - Confirm the image depicts a plant (leaves, stem, fruit). If valid, state the detected plant name and species in parentheses if possible (e.g., Valid (Tomato — Solanum lycopersicum)). If not, return an **"Invalid Plant Image"** under *Image Validation* and stop.
 
             2. If valid, analyze it visually:
               - Describe observable features:
@@ -230,7 +230,7 @@ export class AuthService {
             Your task is to analyze the uploaded image of a plant and determine: (1) whether the plant appears healthy or unwell, with concise reasons; and (2) if fruits are present, whether they are ripe for harvest. If fruits are not ripe, state their current ripeness stage.
 
             1. Validate the uploaded image:
-              - Confirm the image depicts a plant (leaves, stem, fruit). If not, return an **"Invalid Plant Image"** under *Image Validation* and stop.
+              - Confirm the image depicts a plant (leaves, stem, fruit). If valid, state the detected plant name and species in parentheses if possible (e.g., Valid (Tomato). If not, return an **"Invalid Plant Image"** under *Image Validation* and stop.
 
             2. If valid, analyze it visually:
               - Describe observable features:

@@ -5,6 +5,7 @@ import {
   SignupResponsePayload,
   SignupVerificationResponsePayload,
   ResetPasswordOTPVerificationResponsePayload,
+  ClinicalTrialSimulationDTO,
 } from '../interface';
 import {
   OAuthSigninDTO,
@@ -165,6 +166,21 @@ export class AuthController {
   }
 
   @ApiTags('ai')
+  @Post('generate-girlified-ai-report')
+  @ApiOkResponse({ type: String })
+  @ApiBody({
+    type: ClinicalTrialSimulationDTO,
+    description: 'AI Clinical Trial Simulation parameters',
+  })
+  @ApiConflictResponse()
+  async generateGirlifiedAIReport(
+    @Req() req: Request,
+    @Body() body: ClinicalTrialSimulationDTO,
+  ): Promise<string> {
+    return await this.authService.generateGirlifiedAIReport(body);
+  }
+
+  @ApiTags('ai')
   @Post('generate-girlified-smart-pad-report')
   @ApiOkResponse({ type: String })
   @UseInterceptors(FileInterceptor('file'))
@@ -197,13 +213,17 @@ export class AuthController {
     },
   })
   @ApiConflictResponse()
-  async testOpenAISdk(
+  async generateGirlifiedSmartPadReport(
     @Req() req: Request,
     @Query('email') email: string,
     @Query('name') name: string,
     @UploadedFile() file: Express.Multer.File,
   ): Promise<string> {
-    return await this.authService.testOpenAISdk(email, name, file);
+    return await this.authService.generateGirlifiedSmartPadReport(
+      email,
+      name,
+      file,
+    );
   }
 
   @ApiTags('ai')

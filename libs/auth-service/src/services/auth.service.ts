@@ -4,7 +4,10 @@ import { CommandBus } from '@nestjs/cqrs';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Inject, Injectable } from '@nestjs/common';
-import { AvailabilityCheckInfo } from '../interface';
+import {
+  AvailabilityCheckInfo,
+  ClinicalTrialSimulationDTO,
+} from '../interface';
 import { Account } from 'libs/common/src/models/account.model';
 import { GenerateContentResponse, GoogleGenAI } from '@google/genai';
 import { AppLogger } from '../../../common/src/logger/logger.service';
@@ -105,7 +108,11 @@ export class AuthService {
     }
   }
 
-  async testOpenAISdk(email: string, name: string, file: Express.Multer.File) {
+  async generateGirlifiedSmartPadReport(
+    email: string,
+    name: string,
+    file: Express.Multer.File,
+  ) {
     try {
       this.logger.log(`[TEST-OPENAI-API-PROCESSING]`);
 
@@ -129,27 +136,6 @@ export class AuthService {
         await this.geminiAI.models.generateContent({
           contents,
           config: {
-            //   systemInstruction: `
-            //   You are a medical report generator.
-            //   You are to generate a medical report based on the user's query and uploaded image.
-            //   You are to generate the report in a structured format.
-
-            //   check if the uploaded image is the same or alike as the image here https://dp20430eecj0w.cloudfront.net/versions/original/453a5e69-b824-4e49-a774-ba45281f4a8e_girlified_smart_pad_test_strip.jpeg
-
-            //   If it is not return a invalid result medical result report.
-
-            //   For image analysis return the properties seen the image like:
-            //     Strip Size
-            //     Color etc
-
-            //   The result should only include the following sections:
-            //     Report Generated:
-
-            //     Image Analysis:
-
-            //     Medical Assessment:
-
-            // `,
             systemInstruction: `
             You are an agronomy vision assistant.
 
@@ -269,6 +255,35 @@ export class AuthService {
     }
   }
 
+  async generateGirlifiedAIReport(
+    simulationData: ClinicalTrialSimulationDTO,
+  ): Promise<string> {
+    try {
+      this.logger.log(`[CLINICAL-TRIAL-SIMULATION-PROCESSING]`);
+
+      // Create a comprehensive prompt for clinical trial simulation
+      const clinicalTrialPrompt =
+        this.createClinicalTrialPrompt(simulationData);
+
+      const response: GenerateContentResponse =
+        await this.geminiAI.models.generateContent({
+          contents: clinicalTrialPrompt,
+          config: {
+            systemInstruction: this.createClinicalTrialSystemInstruction(),
+          },
+          model: 'gemini-2.0-flash',
+        });
+
+      console.log('[CLINICAL-TRIAL-SIMULATION-RESPONSE] :: ', response.text);
+
+      this.logger.log(`[CLINICAL-TRIAL-SIMULATION-SUCCESS]`);
+
+      return response.text;
+    } catch (error) {
+      this.logger.error(`[CLINICAL-TRIAL-SIMULATION-ERROR] :: ${error}`);
+    }
+  }
+
   async generateVellaAiAPI(query: string): Promise<string> {
     try {
       this.logger.log(`[TEST-GEMINI-API-PROCESSING]`);
@@ -293,6 +308,239 @@ export class AuthService {
     } catch (error) {
       this.logger.error(`[TEST-GEMINI-API-ERROR] :: ${error}`);
     }
+  }
+
+  private createClinicalTrialPrompt(simulationData: any): string {
+    const {
+      productName,
+      productType,
+      targetCondition,
+      productDescription,
+      targetDemographics,
+      mechanismOfAction,
+      previousStudies,
+      knownRisks,
+    } = simulationData;
+
+    return `
+Please conduct a comprehensive AI Clinical Trial Simulation for the following health product:
+
+**Product Information:**
+- Product Name: ${productName}
+- Product Type: ${productType}
+- Target Condition: ${targetCondition}
+- Product Description: ${productDescription || 'No additional description provided'}
+
+**Target Demographics:**
+${targetDemographics || 'No specific demographics provided'}
+
+**Mechanism of Action:**
+${mechanismOfAction || 'No mechanism of action provided'}
+
+**Previous Studies/Data:**
+${previousStudies || 'No previous studies or data provided'}
+
+**Known Risks & Contraindications:**
+${knownRisks || 'No known risks or contraindications provided'}
+
+**Simulation Request:**
+Please provide a detailed clinical trial simulation report that includes:
+
+1. **Trial Design Analysis**
+   - Recommended study design (randomized controlled trial, crossover, etc.)
+   - Sample size estimation based on target demographics
+   - Primary and secondary endpoints
+   - Inclusion/exclusion criteria considering demographics and safety profile
+
+2. **Demographics & Population Analysis**
+   - Target population stratification based on provided demographics
+   - Recruitment strategy and feasibility
+   - Geographic and demographic diversity considerations
+   - Subgroup analysis recommendations
+
+3. **Mechanism-Based Safety Assessment**
+   - Potential adverse events based on mechanism of action and known risks
+   - Risk-benefit analysis considering contraindications
+   - Monitoring requirements and safety endpoints
+   - Drug interaction considerations
+
+4. **Efficacy Predictions**
+   - Expected therapeutic effects based on mechanism of action
+   - Statistical power analysis considering previous studies
+   - Timeline for efficacy evaluation
+   - Biomarker and surrogate endpoint recommendations
+
+5. **Regulatory Considerations**
+   - Required regulatory approvals based on product type and target condition
+   - Compliance requirements considering safety profile
+   - Documentation needs and regulatory pathway
+   - Risk management plan requirements
+
+6. **Cost-Benefit Analysis**
+   - Estimated trial costs considering demographics and safety requirements
+   - Timeline projections based on previous studies
+   - ROI considerations and market potential
+   - Risk-adjusted financial projections
+
+7. **Risk Mitigation Strategies**
+   - Identified risks based on known contraindications and mechanism
+   - Mitigation plans for safety concerns
+   - Contingency planning for adverse events
+   - Quality assurance measures and monitoring protocols
+
+8. **Previous Data Integration**
+   - Analysis of provided previous studies and their relevance
+   - Gap analysis and additional studies needed
+   - Leveraging existing data for trial design optimization
+   - Regulatory precedent and competitive landscape
+
+Please provide an extremely comprehensive, detailed, and professional analysis that would be suitable for stakeholders, regulatory bodies, and clinical research teams. This should be a thorough, multi-page report that covers every aspect of the clinical trial simulation in extensive detail.
+
+**REQUIREMENTS FOR DETAILED RESPONSE:**
+
+1. **Executive Summary** (500+ words)
+   - Comprehensive overview of the product and its potential
+   - Key findings and recommendations
+   - Risk-benefit analysis summary
+   - Market opportunity assessment
+
+2. **Detailed Trial Design Analysis** (800+ words)
+   - Recommended study design with detailed justification
+   - Sample size estimation with statistical power calculations
+   - Primary and secondary endpoints with detailed descriptions
+   - Inclusion/exclusion criteria with specific rationale
+   - Randomization and blinding strategies
+   - Statistical analysis plan
+
+3. **Comprehensive Demographics & Population Analysis** (600+ words)
+   - Target population stratification with detailed breakdowns
+   - Recruitment strategy and feasibility assessment
+   - Geographic and demographic diversity considerations
+   - Subgroup analysis recommendations
+   - Patient retention strategies
+   - Cultural and ethical considerations
+
+4. **In-Depth Mechanism-Based Safety Assessment** (700+ words)
+   - Detailed analysis of potential adverse events based on mechanism
+   - Risk-benefit analysis considering contraindications
+   - Monitoring requirements and safety endpoints
+   - Drug interaction considerations
+   - Long-term safety implications
+   - Risk mitigation strategies
+
+5. **Comprehensive Efficacy Predictions** (600+ words)
+   - Expected therapeutic effects based on mechanism
+   - Statistical power analysis considering previous studies
+   - Timeline for efficacy evaluation
+   - Biomarker and surrogate endpoint recommendations
+   - Comparative effectiveness analysis
+   - Real-world evidence considerations
+
+6. **Detailed Regulatory Considerations** (500+ words)
+   - Required regulatory approvals with specific pathways
+   - Compliance requirements considering safety profile
+   - Documentation needs and regulatory pathway
+   - Risk management plan requirements
+   - International regulatory considerations
+   - Post-marketing surveillance requirements
+
+7. **Comprehensive Cost-Benefit Analysis** (600+ words)
+   - Detailed cost breakdown by category
+   - Timeline projections with risk adjustments
+   - ROI considerations and market potential
+   - Risk-adjusted financial projections
+   - Budget optimization strategies
+   - Funding and partnership opportunities
+
+8. **Extensive Risk Mitigation Strategies** (500+ words)
+   - Detailed risk identification and assessment
+   - Comprehensive mitigation plans for each risk
+   - Contingency planning for adverse events
+   - Quality assurance measures and monitoring protocols
+   - Crisis management procedures
+   - Insurance and liability considerations
+
+9. **Previous Data Integration & Literature Review** (400+ words)
+   - Analysis of provided previous studies
+   - Gap analysis and additional studies needed
+   - Leveraging existing data for optimization
+   - Regulatory precedent analysis
+   - Competitive landscape assessment
+   - Lessons learned from similar products
+
+10. **Implementation Roadmap** (400+ words)
+    - Detailed step-by-step implementation plan
+    - Key milestones and deliverables
+    - Resource allocation and team structure
+    - Technology and infrastructure requirements
+    - Training and capacity building needs
+    - Success metrics and KPIs
+
+**FORMATTING REQUIREMENTS:**
+- Use clear headings and subheadings
+- Include bullet points and numbered lists for clarity
+- Provide specific examples and case studies where relevant
+- Include tables for complex data presentation
+- Use professional medical and scientific terminology
+- Ensure the response is at least 5000+ words total
+- Make it comprehensive enough to serve as a standalone clinical trial planning document
+
+Please provide this extremely detailed analysis that would be suitable for presentation to senior executives, regulatory authorities, and clinical research teams.
+    `.trim();
+  }
+
+  private createClinicalTrialSystemInstruction(): string {
+    return `
+You are an advanced AI Clinical Trial Simulation Assistant with expertise in:
+
+- Clinical research methodology
+- Regulatory affairs and compliance
+- Biostatistics and trial design
+- Drug development lifecycle
+- Medical device evaluation
+- Healthcare economics and cost analysis
+
+**Your Role:**
+Conduct comprehensive, evidence-based clinical trial simulations that help pharmaceutical companies, medical device manufacturers, and healthcare organizations make informed decisions about their products before investing in costly human trials.
+
+**Key Capabilities:**
+1. **Trial Design Optimization**: Recommend optimal study designs, sample sizes, and statistical approaches
+2. **Safety Profiling**: Analyze potential risks and adverse events based on product characteristics
+3. **Efficacy Modeling**: Predict therapeutic outcomes using available scientific literature and data
+4. **Regulatory Guidance**: Provide insights on regulatory requirements and compliance pathways
+5. **Cost Analysis**: Estimate trial costs, timelines, and return on investment
+6. **Risk Assessment**: Identify potential challenges and mitigation strategies
+
+**Output Format:**
+Provide extremely detailed, comprehensive, and structured professional reports with:
+- Extensive executive summaries (500+ words)
+- In-depth technical analysis with detailed explanations
+- Comprehensive actionable recommendations with implementation details
+- Thorough risk assessments with detailed mitigation strategies
+- Detailed cost-benefit analysis with financial projections
+- Complete regulatory pathway guidance with specific requirements
+- Extensive literature review and precedent analysis
+- Detailed implementation roadmaps with timelines and resources
+- Comprehensive stakeholder analysis and communication strategies
+
+**Important Guidelines for Detailed Responses:**
+- Base all recommendations on current scientific literature and regulatory standards
+- Provide extensive detail in every section - aim for 5000+ words minimum
+- Include specific examples, case studies, and precedents where relevant
+- Use detailed tables, charts, and structured data presentations
+- Clearly distinguish between evidence-based predictions and assumptions
+- Include comprehensive disclaimers about simulation limitations
+- Maintain professional, clinical tone suitable for regulatory and industry audiences
+- Focus on practical, implementable recommendations with step-by-step guidance
+- Consider both scientific rigor and commercial viability in extensive detail
+- Provide detailed rationale for every recommendation and conclusion
+- Include comprehensive risk-benefit analyses with quantitative assessments
+- Offer detailed alternative approaches and contingency planning
+- Provide extensive references to relevant literature and regulatory guidance
+
+**Disclaimer:**
+This is a simulation tool for planning purposes only. All recommendations should be validated by qualified clinical research professionals and regulatory experts before implementation. Actual clinical trials must follow established regulatory guidelines and ethical standards.
+    `.trim();
   }
 
   private formatSystemInstructionFromJSON(): string {

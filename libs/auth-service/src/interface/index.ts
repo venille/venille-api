@@ -220,3 +220,88 @@ export class AvailabilityCheckInfo {
   @ApiProperty({ type: Boolean, example: false })
   isAvailable: boolean;
 }
+
+export class ClinicalTrialSimulationDTO {
+  @ApiProperty({
+    example: 'CardioMax Pro',
+    description: 'Name of the health product to be tested.',
+  })
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(100)
+  productName: string;
+
+  @ApiProperty({
+    example: 'Pharmaceutical Drug',
+    description:
+      'Type of product being tested (e.g., Pharmaceutical Drug, Medical Device, Supplement).',
+  })
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(50)
+  productType: string;
+
+  @ApiProperty({
+    example: 'Type 2 Diabetes',
+    description: 'The medical condition the product is intended to treat.',
+  })
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(100)
+  targetCondition: string;
+
+  @ApiProperty({
+    example:
+      'A novel oral medication designed to improve glucose control in patients with Type 2 Diabetes. Dosage: 500mg twice daily with meals. Key features include sustained release formulation and minimal side effects.',
+    description:
+      'Detailed description of the product including intended use, dosage, and key features.',
+  })
+  @IsString()
+  @IsOptional()
+  @MaxLength(1000)
+  productDescription?: string;
+
+  @ApiProperty({
+    example:
+      'Adults aged 18-65, both genders, all ethnicities, global regions, patients with HbA1c 7-10%, no severe renal impairment',
+    description:
+      'Target demographics for the clinical trial including age range, gender, ethnicity, geographic regions, and comorbidities.',
+  })
+  @IsString()
+  @IsOptional()
+  @MaxLength(1000)
+  targetDemographics?: string;
+
+  @ApiProperty({
+    example:
+      'The product works by inhibiting SGLT2 transporters in the proximal tubule of the kidney, reducing glucose reabsorption and increasing urinary glucose excretion. This mechanism helps lower blood glucose levels independently of insulin secretion.',
+    description:
+      'Expected mechanism of action - how the product works and what biological pathways it targets.',
+  })
+  @IsString()
+  @IsOptional()
+  @MaxLength(2000)
+  mechanismOfAction?: string;
+
+  @ApiProperty({
+    example:
+      'Phase I study in 24 healthy volunteers showed 30% reduction in glucose reabsorption. Preclinical studies in diabetic rats demonstrated 25% improvement in glucose tolerance. Published research on similar SGLT2 inhibitors shows consistent efficacy.',
+    description:
+      'Previous studies, preclinical data, pilot studies, or relevant research findings.',
+  })
+  @IsString()
+  @IsOptional()
+  @MaxLength(2000)
+  previousStudies?: string;
+
+  @ApiProperty({
+    example:
+      'Common side effects include increased urination, urinary tract infections, and genital yeast infections. Contraindicated in patients with severe renal impairment (eGFR <30), diabetic ketoacidosis, or hypersensitivity to the drug. Drug interactions with diuretics and insulin.',
+    description:
+      'Known risks, side effects, drug interactions, and contraindications.',
+  })
+  @IsString()
+  @IsOptional()
+  @MaxLength(2000)
+  knownRisks?: string;
+}

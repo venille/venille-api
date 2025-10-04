@@ -2,8 +2,9 @@ import { ConfigService } from '@nestjs/config';
 import { Inject, Injectable } from '@nestjs/common';
 import { EmailSenderService } from '../../../helper-service/src/services/email-sender.service';
 import { AppLogger } from '../../../common/src/logger/logger.service';
-import { ContactUsDTO } from '../interface';
+import { ContactUsDTO, GirlifiedBioContactUsDTO } from '../interface';
 import { contactUsEmailTemplate } from '../templates/emails/support/contact_us_email_template';
+import { girlifiedBioContactUsEmailTemplate } from '../templates/emails/support/girlified_bio_contact_us_email_template';
 
 @Injectable()
 export class SupportService {
@@ -35,6 +36,34 @@ export class SupportService {
       this.logger.log('[SEND-CONTACT-US-SUCCESS]');
     } catch (error) {
       this.logger.error(`[SEND-CONTACT-US-FAILED] :: ${error}`);
+
+      throw error;
+    }
+  }
+
+  async handleGirlifiedBioContactUsService(payload: GirlifiedBioContactUsDTO) {
+    try {
+      this.logger.log('[SEND-GIRLIFIED-BIO-CONTACT-US-PROCESSING]');
+
+      const emailTemplate = await girlifiedBioContactUsEmailTemplate(
+        payload.name,
+        payload.email,
+        payload.companyOrganization,
+        payload.inquiryType,
+        payload.message,
+      );
+
+      // console.log('PAYLOAD - ', payload);
+
+      this.emailSenderService.sendGirlifiedEmail({
+        html: emailTemplate,
+        sub: 'Girlified Bio Customer Inquiry',
+        to_email: 'info@girlified.com.ng',
+      });
+
+      this.logger.log('[SEND-GIRLIFIED-BIO-CONTACT-US-SUCCESS]');
+    } catch (error) {
+      this.logger.error(`[SEND-GIRLIFIED-BIO-CONTACT-US-FAILED] :: ${error}`);
 
       throw error;
     }

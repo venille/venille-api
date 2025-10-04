@@ -57,6 +57,48 @@ export class ContactUsDTO {
   message: string;
 }
 
+export class GirlifiedBioContactUsDTO {
+  @ApiProperty({
+    example: 'Gyang Ibrahim',
+    description: 'The name of the user',
+  })
+  @IsNotEmpty()
+  @IsString()
+  name: string;
+
+  @ApiProperty({
+    example: 'gyangibrahim@yopmail.com',
+    description: 'The email of the user',
+  })
+  @IsNotEmpty()
+  @IsEmail()
+  email: string;
+
+  @ApiProperty({
+    example: 'Google Inc',
+    description: 'Company/Organization of the sender',
+  })
+  @IsNotEmpty()
+  @IsString()
+  companyOrganization: string;
+
+  @ApiProperty({
+    example: 'B2B Sales',
+    description: 'Type of Inquiry',
+  })
+  @IsNotEmpty()
+  @IsString()
+  inquiryType: string;
+
+  @ApiProperty({
+    example: 'I want to book an appointment but I am not sure how to do it.',
+    description: 'The message from the user',
+  })
+  @IsNotEmpty()
+  @IsString()
+  message: string;
+}
+
 export interface PromotedSubscriptionReceiptProductInfo {
   name: string;
   imageUrl: string;

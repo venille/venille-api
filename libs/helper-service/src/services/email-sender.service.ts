@@ -54,6 +54,7 @@ export class EmailSenderService {
       console.error('Error sending email:', error);
     }
   }
+  
   async sendGirlifiedEmail(config: {
     from_name?: string;
     from_email?: string;

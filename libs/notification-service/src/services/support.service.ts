@@ -57,7 +57,7 @@ export class SupportService {
 
       this.emailSenderService.sendGirlifiedEmail({
         html: emailTemplate,
-        sub: 'Girlified Bio Customer Inquiry',
+        sub: 'Girlified-Bio [GreenSurf] Customer Inquiry',
         to_email: 'info@girlified.com.ng',
       });
 

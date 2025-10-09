@@ -349,168 +349,46 @@ ${knownRisks || 'No known risks or contraindications provided'}
 
 
 **Simulation Request:**
-Please provide a detailed clinical trial simulation report that includes:
+Please provide a concise clinical trial simulation report that includes:
 
-1. **Trial Design Analysis**
-   - Recommended study design (randomized controlled trial, crossover, etc.)
-   - Sample size estimation based on target demographics
-   - Primary and secondary endpoints
-   - Inclusion/exclusion criteria considering demographics and safety profile
-
-
-2. **Demographics & Population Analysis**
-   - Target population stratification based on provided demographics
-   - Recruitment strategy and feasibility
-   - Geographic and demographic diversity considerations
-   - Subgroup analysis recommendations
-
-
-3. **Mechanism-Based Safety Assessment**
-   - Potential adverse events based on mechanism of action and known risks
-   - Risk-benefit analysis considering contraindications
-   - Monitoring requirements and safety endpoints
-   - Drug interaction considerations
-
-
-4. **Efficacy Predictions**
-   - Expected therapeutic effects based on mechanism of action
-   - Statistical power analysis considering previous studies
-   - Timeline for efficacy evaluation
-   - Biomarker and surrogate endpoint recommendations
-
-
-5. **Regulatory Considerations**
-   - Required regulatory approvals based on product type and target condition
-   - Compliance requirements considering safety profile
-   - Documentation needs and regulatory pathway
-   - Risk management plan requirements
-
-
-6. **Cost-Benefit Analysis**
-   - Estimated trial costs considering demographics and safety requirements
-   - Timeline projections based on previous studies
-   - ROI considerations and market potential
-   - Risk-adjusted financial projections
-
-
-7. **Risk Mitigation Strategies**
-   - Identified risks based on known contraindications and mechanism
-   - Mitigation plans for safety concerns
-   - Contingency planning for adverse events
-   - Quality assurance measures and monitoring protocols
-
-
-8. **Previous Data Integration**
-   - Analysis of provided previous studies and their relevance
-   - Gap analysis and additional studies needed
-   - Leveraging existing data for trial design optimization
-   - Regulatory precedent and competitive landscape
-
-
-Please provide an extremely comprehensive, detailed, and professional analysis that would be suitable for stakeholders, regulatory bodies, and clinical research teams. This should be a thorough, multi-page report that covers every aspect of the clinical trial simulation in extensive detail.
-
-
-**REQUIREMENTS FOR DETAILED RESPONSE:**
-
-1. **Executive Summary** (500+ words)
-   - Comprehensive overview of the product and its potential
+1. **Executive Summary** 
+   - Product overview and potential
    - Key findings and recommendations
-   - Risk-benefit analysis summary
-   - Market opportunity assessment
+   - Risk-benefit summary
 
+2. **Trial Design** 
+   - Recommended study design
+   - Sample size estimation
+   - Primary/secondary endpoints
+   - Inclusion/exclusion criteria
 
-2. **Detailed Trial Design Analysis** (800+ words)
-   - Recommended study design with detailed justification
-   - Sample size estimation with statistical power calculations
-   - Primary and secondary endpoints with detailed descriptions
-   - Inclusion/exclusion criteria with specific rationale
-   - Randomization and blinding strategies
-   - Statistical analysis plan
+3. **Safety Assessment** 
+   - Potential adverse events
+   - Risk-benefit analysis
+   - Monitoring requirements
 
+4. **Efficacy Predictions** 
+   - Expected therapeutic effects
+   - Statistical considerations
+   - Timeline for evaluation
 
-3. **Comprehensive Demographics & Population Analysis** (600+ words)
-   - Target population stratification with detailed breakdowns
-   - Recruitment strategy and feasibility assessment
-   - Geographic and demographic diversity considerations
-   - Subgroup analysis recommendations
-   - Patient retention strategies
-   - Cultural and ethical considerations
+5. **Regulatory & Cost Analysis** 
+   - Required approvals
+   - Estimated costs and timeline
+   - ROI considerations
 
+6. **Risk Mitigation**
+   - Key risks and mitigation strategies
+   - Contingency planning
 
-4. **In-Depth Mechanism-Based Safety Assessment** (700+ words)
-   - Detailed analysis of potential adverse events based on mechanism
-   - Risk-benefit analysis considering contraindications
-   - Monitoring requirements and safety endpoints
-   - Drug interaction considerations
-   - Long-term safety implications
-   - Risk mitigation strategies
+**Requirements:**
+- Use clear headings and bullet points
+- Provide specific examples where relevant
+- Use professional medical terminology
+- Keep response concise but comprehensive
+- Focus on practical, actionable recommendations
 
-
-5. **Comprehensive Efficacy Predictions** (600+ words)
-   - Expected therapeutic effects based on mechanism
-   - Statistical power analysis considering previous studies
-   - Timeline for efficacy evaluation
-   - Biomarker and surrogate endpoint recommendations
-   - Comparative effectiveness analysis
-   - Real-world evidence considerations
-
-
-6. **Detailed Regulatory Considerations** (500+ words)
-   - Required regulatory approvals with specific pathways
-   - Compliance requirements considering safety profile
-   - Documentation needs and regulatory pathway
-   - Risk management plan requirements
-   - International regulatory considerations
-   - Post-marketing surveillance requirements
-
-
-7. **Comprehensive Cost-Benefit Analysis** (600+ words)
-   - Detailed cost breakdown by category
-   - Timeline projections with risk adjustments
-   - ROI considerations and market potential
-   - Risk-adjusted financial projections
-   - Budget optimization strategies
-   - Funding and partnership opportunities
-
-
-8. **Extensive Risk Mitigation Strategies** (500+ words)
-   - Detailed risk identification and assessment
-   - Comprehensive mitigation plans for each risk
-   - Contingency planning for adverse events
-   - Quality assurance measures and monitoring protocols
-   - Crisis management procedures
-   - Insurance and liability considerations
-
-
-9. **Previous Data Integration & Literature Review** (400+ words)
-   - Analysis of provided previous studies
-   - Gap analysis and additional studies needed
-   - Leveraging existing data for optimization
-   - Regulatory precedent analysis
-   - Competitive landscape assessment
-   - Lessons learned from similar products
-
-
-10. **Implementation Roadmap** (400+ words)
-    - Detailed step-by-step implementation plan
-    - Key milestones and deliverables
-    - Resource allocation and team structure
-    - Technology and infrastructure requirements
-    - Training and capacity building needs
-    - Success metrics and KPIs
-
-
-**FORMATTING REQUIREMENTS:**
-- Use clear headings and subheadings
-- Include bullet points and numbered lists for clarity
-- Provide specific examples and case studies where relevant
-- Do not use tables; instead, present a clear list of contents and bullet/numbered lists
-- Use professional medical and scientific terminology
-- Ensure the response is at least 5000+ words total
-- Make it comprehensive enough to serve as a standalone clinical trial planning document
-
-
-Please provide this extremely detailed analysis that would be suitable for presentation to senior executives, regulatory authorities, and clinical research teams.
+Please provide this streamlined analysis suitable for stakeholders and clinical research teams.
     `.trim();
   }
 
@@ -536,32 +414,32 @@ You are an AI Clinical Trial Simulation Assistant for pharmaceutical and healthc
 
 
 **Output Requirements:**
-Provide comprehensive professional reports with:
+Provide concise professional reports with:
 
-- Executive summary (500+ words)
+- Executive summary (200-300 words)
 
-- Technical analysis with detailed explanations
+- Technical analysis with clear explanations
 
-- Actionable recommendations with implementation details
+- Actionable recommendations with key details
 
 - Risk assessments with mitigation strategies
 
-- Cost-benefit analysis with financial projections
+- Cost-benefit analysis with projections
 
 - Regulatory pathway guidance
 
-- Literature review and precedent analysis
+- Literature review and precedents
 
-- Implementation roadmaps with timelines
+- Implementation timelines
 
 
 
 **Quality Standards:**
 - Base on current scientific literature and regulatory standards
 
-- Aim for 5000+ words minimum with extensive detail
+- Aim for 1500-2000 words total (concise but comprehensive)
 
-- Include specific examples, case studies, and precedents
+- Include specific examples and case studies
 
 - Use bullet points and numbered lists (no tables)
 
@@ -571,9 +449,9 @@ Provide comprehensive professional reports with:
 
 - Focus on practical, implementable recommendations
 
-- Provide detailed rationale for all conclusions
+- Provide clear rationale for conclusions
 
-- Include comprehensive risk-benefit analyses
+- Include risk-benefit analyses
 
 - Offer alternative approaches and contingency planning
 

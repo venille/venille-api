@@ -2,9 +2,14 @@ import { ConfigService } from '@nestjs/config';
 import { Inject, Injectable } from '@nestjs/common';
 import { EmailSenderService } from '../../../helper-service/src/services/email-sender.service';
 import { AppLogger } from '../../../common/src/logger/logger.service';
-import { ContactUsDTO, GirlifiedBioContactUsDTO } from '../interface';
+import {
+  ContactUsDTO,
+  GeotekWaterMonitorContactUsDTO,
+  GirlifiedBioContactUsDTO,
+} from '../interface';
 import { contactUsEmailTemplate } from '../templates/emails/support/contact_us_email_template';
 import { girlifiedBioContactUsEmailTemplate } from '../templates/emails/support/girlified_bio_contact_us_email_template';
+import { geotekWaterMonitorContactUsEmailTemplate } from '../templates/emails/support/geotek_water_monitor_contact_us_email_template';
 
 @Injectable()
 export class SupportService {
@@ -64,6 +69,41 @@ export class SupportService {
       this.logger.log('[SEND-GIRLIFIED-BIO-CONTACT-US-SUCCESS]');
     } catch (error) {
       this.logger.error(`[SEND-GIRLIFIED-BIO-CONTACT-US-FAILED] :: ${error}`);
+
+      throw error;
+    }
+  }
+
+  async handleGeoTekWaterContactUsService(
+    payload: GeotekWaterMonitorContactUsDTO,
+  ) {
+    try {
+      this.logger.log('[SEND-GEOTEK-WATER-CONTACT-US-PROCESSING]');
+
+      const emailTemplate = geotekWaterMonitorContactUsEmailTemplate(
+        payload.organizationName,
+        payload.projectType,
+        payload.surveyTypes,
+        payload.latitude,
+        payload.longitude,
+        payload.additionalNotes,
+        payload.urgencyLevel,
+        payload.contactName,
+        payload.email,
+        payload.phoneNumber,
+      );
+
+      // console.log('PAYLOAD - ', payload);
+
+      this.emailSenderService.sendGeotekEmail({
+        html: emailTemplate,
+        sub: 'Geotek Water Monitor - Customer Inquiry',
+        to_email: 'geotekwater@gmail.com',
+      });
+
+      this.logger.log('[SEND-GEOTEK-WATER-CONTACT-US-SUCCESS]');
+    } catch (error) {
+      this.logger.error(`[SEND-GEOTEK-WATER-CONTACT-US-FAILED] :: ${error}`);
 
       throw error;
     }

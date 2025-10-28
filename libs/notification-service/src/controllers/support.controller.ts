@@ -3,7 +3,7 @@ import {
   ApiOkResponse,
   ApiInternalServerErrorResponse,
 } from '@nestjs/swagger';
-import { ContactUsDTO, GirlifiedBioContactUsDTO } from '../interface';
+import { ContactUsDTO, GeotekWaterMonitorContactUsDTO, GirlifiedBioContactUsDTO } from '../interface';
 import { SupportService } from '../services/support.service';
 import { Get, Req, Post, Controller, Body } from '@nestjs/common';
 
@@ -28,5 +28,16 @@ export class SupportController {
     @Body() body: GirlifiedBioContactUsDTO,
   ) {
     return await this.supportService.handleGirlifiedBioContactUsService(body);
+  }
+
+  @ApiTags('geotek-water-monitor-support')
+  @Post('geotek-water-monitor-contact-us')
+  @ApiOkResponse()
+  @ApiInternalServerErrorResponse()
+  async geotekWaterMonitorContactUs(
+    @Req() req: Request,
+    @Body() body: GeotekWaterMonitorContactUsDTO,
+  ) {
+    return await this.supportService.handleGeoTekWaterContactUsService(body);
   }
 }

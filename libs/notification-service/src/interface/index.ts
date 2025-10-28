@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsArray, IsOptional } from 'class-validator';
 import { IsString } from 'class-validator';
 
 export interface EmailRequest {
@@ -97,6 +97,88 @@ export class GirlifiedBioContactUsDTO {
   @IsNotEmpty()
   @IsString()
   message: string;
+}
+
+export class GeotekWaterMonitorContactUsDTO {
+  @ApiProperty({
+    example: 'Acme Corporation',
+    description: 'The name of the organization',
+  })
+  @IsNotEmpty()
+  @IsString()
+  organizationName: string;
+
+  @ApiProperty({
+    example: 'Water Quality Assessment',
+    description: 'The type of project',
+  })
+  @IsNotEmpty()
+  @IsString()
+  projectType: string;
+
+  @ApiProperty({
+    example: ['Environmental Impact', 'Water Quality Testing'],
+    description: 'Types of surveys required',
+  })
+  @IsNotEmpty()
+  @IsArray()
+  surveyTypes: string[];
+
+  @ApiProperty({
+    example: '40.7128',
+    description: 'Latitude coordinate',
+  })
+  @IsNotEmpty()
+  @IsString()
+  latitude: string;
+
+  @ApiProperty({
+    example: '-74.0060',
+    description: 'Longitude coordinate',
+  })
+  @IsNotEmpty()
+  @IsString()
+  longitude: string;
+
+  @ApiProperty({
+    example: 'Additional project requirements and specifications',
+    description: 'Additional notes about the project',
+  })
+  @IsOptional()
+  @IsString()
+  additionalNotes: string;
+
+  @ApiProperty({
+    example: 'High',
+    description: 'Urgency level of the request',
+  })
+  @IsNotEmpty()
+  @IsString()
+  urgencyLevel: string;
+
+  @ApiProperty({
+    example: 'John Doe',
+    description: 'Name of the contact person',
+  })
+  @IsNotEmpty()
+  @IsString()
+  contactName: string;
+
+  @ApiProperty({
+    example: 'john.doe@example.com',
+    description: 'Email address of the contact person',
+  })
+  @IsNotEmpty()
+  @IsEmail()
+  email: string;
+
+  @ApiProperty({
+    example: '+1-555-123-4567',
+    description: 'Phone number of the contact person',
+  })
+  @IsNotEmpty()
+  @IsString()
+  phoneNumber: string;
 }
 
 export interface PromotedSubscriptionReceiptProductInfo {

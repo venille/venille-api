@@ -251,6 +251,15 @@ export class ClinicalTrialSimulationDTO {
   targetCondition: string;
 
   @ApiProperty({
+    example: 'Discovery',
+    description: 'The stage of the drug\'s development.',
+  })
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(100)
+  developmentStage: string;
+
+  @ApiProperty({
     example:
       'A novel oral medication designed to improve glucose control in patients with Type 2 Diabetes. Dosage: 500mg twice daily with meals. Key features include sustained release formulation and minimal side effects.',
     description:

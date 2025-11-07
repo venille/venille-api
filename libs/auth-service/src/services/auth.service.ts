@@ -448,7 +448,7 @@ export class AuthService {
   }
 
   private createClinicalTrialPrompt(
-    simulationData: any,
+    simulationData: ClinicalTrialSimulationDTO,
     files: Express.Multer.File[],
   ): string {
     const hasImages = Array.isArray(files) && files.length > 0;
@@ -456,6 +456,7 @@ export class AuthService {
       productName,
       productType,
       targetCondition,
+      developmentStage,
       productDescription,
       targetDemographics,
       mechanismOfAction,
@@ -478,6 +479,7 @@ Known risk context to consider:
 - Product Name: ${productName}
 - Product Type: ${productType}
 - Target Condition: ${targetCondition}
+- Development Stage: ${developmentStage || 'Not specified'}
 - Product Description: ${productDescription || 'No additional description provided'}
 
 **Target Demographics:**

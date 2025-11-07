@@ -4,6 +4,9 @@ import { CommandBus } from '@nestjs/cqrs';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Inject, Injectable } from '@nestjs/common';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
+import { randomUUID } from 'crypto';
 import {
   AvailabilityCheckInfo,
   ClinicalTrialSimulationDTO,
@@ -26,6 +29,7 @@ export class AuthService {
     private configService: ConfigService,
     private authEmailNotificationService: AuthEmailNotificationService,
     @Inject('Logger') private readonly logger: AppLogger,
+    @Inject(CACHE_MANAGER) private readonly cache: Cache,
     @InjectRepository(Account)
     private readonly userRepository: Repository<Account>,
   ) {
@@ -256,18 +260,56 @@ export class AuthService {
   }
 
   async generateGirlifiedAIReport(
+    files: Express.Multer.File[],
     simulationData: ClinicalTrialSimulationDTO,
+    threadId?: string,
   ): Promise<string> {
     try {
       this.logger.log(`[CLINICAL-TRIAL-SIMULATION-PROCESSING]`);
 
+      const effectiveThreadId = threadId || randomUUID();
+
       // Create a comprehensive prompt for clinical trial simulation
-      const clinicalTrialPrompt =
-        this.createClinicalTrialPrompt(simulationData);
+      const clinicalTrialPrompt = this.createClinicalTrialPrompt(
+        simulationData,
+        files,
+      );
+
+      // Build multimodal contents: prompt text + all uploaded images
+      const parts: Array<any> = [{ text: clinicalTrialPrompt }];
+
+      if (Array.isArray(files)) {
+        for (const file of files) {
+          if (!file) continue;
+          const base64 = file.buffer?.toString('base64');
+          if (!base64) continue;
+          parts.push({
+            inlineData: {
+              mimeType: file.mimetype,
+              data: base64,
+            },
+          });
+        }
+      }
+
+      // Append user turn to cache (only if a threadId was provided)
+      if (effectiveThreadId) {
+        await this.appendThreadMessage(effectiveThreadId, {
+          role: 'user',
+          text: clinicalTrialPrompt,
+          filesCount: Array.isArray(files) ? files.length : 0,
+          timestamp: Date.now(),
+        });
+      }
 
       const response: GenerateContentResponse =
         await this.geminiAI.models.generateContent({
-          contents: clinicalTrialPrompt,
+          contents: [
+            {
+              role: 'user' as const,
+              parts,
+            },
+          ],
           config: {
             systemInstruction: this.createClinicalTrialSystemInstruction(),
           },
@@ -278,10 +320,42 @@ export class AuthService {
 
       this.logger.log(`[CLINICAL-TRIAL-SIMULATION-SUCCESS]`);
 
-      return response.text;
+      let outputText = response.text ?? '';
+
+      if (effectiveThreadId) {
+        const responseTextWithThreadId = `Thread ID: ${effectiveThreadId}\n\n${outputText}`;
+
+        // Append assistant turn to cache
+        await this.appendThreadMessage(effectiveThreadId, {
+          role: 'assistant',
+          text: responseTextWithThreadId,
+          timestamp: Date.now(),
+        });
+
+        outputText = responseTextWithThreadId;
+      }
+
+      console.log('[RESPONSE] :: ', outputText);
+
+      return outputText;
     } catch (error) {
       this.logger.error(`[CLINICAL-TRIAL-SIMULATION-ERROR] :: ${error}`);
     }
+  }
+
+  private async appendThreadMessage(
+    threadId: string,
+    message: {
+      role: 'user' | 'assistant';
+      text: string;
+      timestamp: number;
+      filesCount?: number;
+    },
+  ): Promise<void> {
+    const key = `ai:threads:${threadId}`;
+    const existing = ((await this.cache.get(key)) as any[]) || [];
+    existing.push(message);
+    await this.cache.set(key, existing, 60 * 60 * 24); // 24h TTL
   }
 
   async generateVellaAiAPI(query: string): Promise<string> {
@@ -310,7 +384,11 @@ export class AuthService {
     }
   }
 
-  private createClinicalTrialPrompt(simulationData: any): string {
+  private createClinicalTrialPrompt(
+    simulationData: any,
+    files: Express.Multer.File[],
+  ): string {
+    const hasImages = Array.isArray(files) && files.length > 0;
     const {
       productName,
       productType,
@@ -323,7 +401,15 @@ export class AuthService {
     } = simulationData;
 
     return `
-Please conduct a comprehensive AI Clinical Trial Simulation for the following health product:
+Regulatory Intelligence / FDA Simulation
+
+Objective: Predict submission outcome risk and provide targeted improvements to maximize FDA approval odds for the proposed protocol/submission.
+
+Evidence base to leverage: historical FDA review letters, Complete Response Letters (CRLs), approval/denial precedents, indication-specific benchmarks, prior dossiers, and FDA reviewer comments where applicable.
+
+Known risk context to consider:
+- High rejection causes: ~73% of key submissions (IND/BLA/NDA) rejected due to incomplete or inaccurate data.
+- Data quality/documentation: ~32% of submissions show data quality issues that undermine credibility and delay approval.
 
 **Product Information:**
 - Product Name: ${productName}
@@ -331,64 +417,41 @@ Please conduct a comprehensive AI Clinical Trial Simulation for the following he
 - Target Condition: ${targetCondition}
 - Product Description: ${productDescription || 'No additional description provided'}
 
-
 **Target Demographics:**
 ${targetDemographics || 'No specific demographics provided'}
-
 
 **Mechanism of Action:**
 ${mechanismOfAction || 'No mechanism of action provided'}
 
-
 **Previous Studies/Data:**
 ${previousStudies || 'No previous studies or data provided'}
-
 
 **Known Risks & Contraindications:**
 ${knownRisks || 'No known risks or contraindications provided'}
 
+${
+  hasImages
+    ? `**Accompanying Visual Evidence (Images Provided: ${files.length}):**
+- Analyze all uploaded images provided with this request.
+- Extract clinically relevant visual observations (e.g., labeling/IFU, device placement/fit, dermatologic response) that could impact regulatory assessment, safety narrative, or evidence quality.
+- Clearly indicate when insights are derived from images and incorporate them in your decision.
+`
+    : ''
+}
 
-**Simulation Request:**
-Please provide a concise clinical trial simulation report that includes:
+Decision criteria to apply (regulatory-first):
+- Evidence completeness/accuracy: protocol coherence, endpoint justifications, statistical plan adequacy, sample size rationale, biomarker strategy.
+- Safety/benefit profile: adverse event risk management, monitoring plans, known risk mitigations.
+- Submission strategy quality: dossier structure, clarity, cross-referencing, response-to-previous-FDA-feedback (if any), alignment with precedents and guidance.
+- Predictive approval signals: endpoints, study size, control/comparator arms, inclusion/exclusion criteria vs indication benchmarks.
+- Documentation/data quality: traceability, auditability, and error risks.
+- Explainability and audit trail: ensure recommendations are justifiable and auditable per FDA expectations (Jan 2025 draft guidance on AI decision support).
 
-1. **Executive Summary** 
-   - Product overview and potential
-   - Key findings and recommendations
-   - Risk-benefit summary
+Strict output contract — return only the following:
+- Approval Rating (<number>–100)  (NO COLON). Output exactly this label followed by a space and the score range beginning with a single integer from 0 to 100 and ending with 100. Example: "Approval Rating (62–100)"
 
-2. **Trial Design** 
-   - Recommended study design
-   - Sample size estimation
-   - Primary/secondary endpoints
-   - Inclusion/exclusion criteria
 
-3. **Safety Assessment** 
-   - Potential adverse events
-   - Risk-benefit analysis
-   - Monitoring requirements
-
-4. **Efficacy Predictions** 
-   - Expected therapeutic effects
-   - Statistical considerations
-   - Timeline for evaluation
-
-5. **Regulatory & Cost Analysis** 
-   - Required approvals
-   - Estimated costs and timeline
-   - ROI considerations
-
-6. **Risk Mitigation**
-   - Key risks and mitigation strategies
-   - Contingency planning
-
-**Requirements:**
-- Use clear headings and bullet points
-- Provide specific examples where relevant
-- Use professional medical terminology
-- Keep response concise but comprehensive
-- Focus on practical, actionable recommendations
-
-Please provide this streamlined analysis suitable for stakeholders and clinical research teams.
+- Areas to Improve: Bullet list of specific, actionable improvements across evidence, design choices (endpoints, sample size, biomarkers, comparators), dossier structure, documentation quality, or auditability. Omit this section if none.
     `.trim();
   }
 

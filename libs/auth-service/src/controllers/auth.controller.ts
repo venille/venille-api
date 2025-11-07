@@ -18,6 +18,7 @@ import {
 import {
   ApiBadRequestResponse,
   ApiBody,
+  ApiExtraModels,
   ApiConflictResponse,
   ApiConsumes,
   ApiNotFoundResponse,
@@ -25,6 +26,7 @@ import {
   ApiQuery,
   ApiTags,
   ApiUnauthorizedResponse,
+  getSchemaPath,
 } from '@nestjs/swagger';
 import {
   SignInCommand,
@@ -45,9 +47,12 @@ import {
   Query,
   Req,
   UploadedFile,
+  Res,
+  UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { GirlifiedAIInfo } from '../interface/schema';
 
 @Controller({ path: '' })
 export class AuthController {
@@ -167,17 +172,46 @@ export class AuthController {
 
   @ApiTags('ai')
   @Post('generate-girlified-ai-report')
+  // @ApiOkResponse({ type: GirlifiedAIInfo })
   @ApiOkResponse({ type: String })
+  @ApiExtraModels(ClinicalTrialSimulationDTO)
+  @UseInterceptors(FilesInterceptor('files'))
+  @ApiConsumes('multipart/form-data')
   @ApiBody({
-    type: ClinicalTrialSimulationDTO,
-    description: 'AI Clinical Trial Simulation parameters',
+    description:
+      'Provide AI Clinical Trial Simulation parameters and upload image files of your test strips.',
+    required: true,
+    schema: {
+      type: 'object',
+      allOf: [{ $ref: getSchemaPath(ClinicalTrialSimulationDTO) }],
+      properties: {
+        files: {
+          type: 'array',
+          items: {
+            type: 'string',
+            format: 'binary',
+          },
+        },
+      },
+    },
+  })
+  @ApiQuery({
+    type: String,
+    name: 'threadId',
+    required: false,
+    // example: '190039',
+    description: 'Thread ID of the chat conversation.',
   })
   @ApiConflictResponse()
   async generateGirlifiedAIReport(
     @Req() req: Request,
     @Body() body: ClinicalTrialSimulationDTO,
+    @Query('threadId') threadId?: string,
+    @Res({ passthrough: true }) res?: any,
+    @UploadedFiles() files?: Express.Multer.File[],
   ): Promise<string> {
-    return await this.authService.generateGirlifiedAIReport(body);
+    // ): Promise<GirlifiedAIInfo> {
+    return await this.authService.generateGirlifiedAIReport(files, body, threadId);
   }
 
   @ApiTags('ai')

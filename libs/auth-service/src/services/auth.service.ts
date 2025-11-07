@@ -343,6 +343,69 @@ export class AuthService {
     }
   }
 
+  async generateGirlifiedAIChatReport(
+    query: string,
+    threadId: string,
+  ): Promise<string> {
+    try {
+      this.logger.log(`[CLINICAL-TRIAL-SIMULATION-PROCESSING]`);
+
+      const key = `ai:threads:${threadId}`;
+      const history =
+        ((await this.cache.get(key)) as Array<{
+          role: 'user' | 'assistant';
+          text: string;
+        }>) || [];
+
+      const contents = history.map((message) => ({
+        role: message.role as 'user' | 'assistant',
+        parts: [{ text: message.text }],
+      }));
+
+      contents.push({
+        role: 'user' as const,
+        parts: [{ text: query }],
+      });
+
+      const response: GenerateContentResponse =
+        await this.geminiAI.models.generateContent({
+          contents,
+          config: {
+            systemInstruction: this.createClinicalTrialSystemInstruction(),
+          },
+          model: 'gemini-2.0-flash',
+        });
+
+      console.log('[CLINICAL-TRIAL-SIMULATION-RESPONSE] :: ', response.text);
+
+      this.logger.log(`[CLINICAL-TRIAL-SIMULATION-SUCCESS]`);
+
+      let outputText = response.text ?? '';
+
+      await this.appendThreadMessage(threadId, {
+        role: 'user',
+        text: query,
+        timestamp: Date.now(),
+      });
+
+      // const responseTextWithThreadId = `Thread ID: ${threadId}\n\n${outputText}`;
+
+      await this.appendThreadMessage(threadId, {
+        role: 'assistant',
+        text: outputText,
+        timestamp: Date.now(),
+      });
+
+      outputText = outputText;
+
+      console.log('[RESPONSE] :: ', outputText);
+
+      return outputText;
+    } catch (error) {
+      this.logger.error(`[CLINICAL-TRIAL-SIMULATION-ERROR] :: ${error}`);
+    }
+  }
+
   private async appendThreadMessage(
     threadId: string,
     message: {

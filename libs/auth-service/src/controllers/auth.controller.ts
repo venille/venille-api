@@ -215,6 +215,35 @@ export class AuthController {
   }
 
   @ApiTags('ai')
+  @Post('generate-girlified-ai-chat-report')
+  // @ApiOkResponse({ type: GirlifiedAIInfo })
+  @ApiOkResponse({ type: String })
+  @UseInterceptors(FilesInterceptor('files'))
+  @ApiQuery({
+    type: String,
+    name: 'threadId',
+    required: false,
+    // example: '190039',
+    description: 'Thread ID of the chat conversation.',
+  })
+  @ApiQuery({
+    type: String,
+    name: 'query',
+    required: false,
+    // example: '190039',
+    description: 'Follow up query of the chat conversation.',
+  })
+  @ApiConflictResponse()
+  async generateGirlifiedAIChatReport(
+    @Req() req: Request,
+    @Query('query') query: string,
+    @Query('threadId') threadId: string,
+  ): Promise<string> {
+    // ): Promise<GirlifiedAIInfo> {
+    return await this.authService.generateGirlifiedAIChatReport(query, threadId);
+  }
+
+  @ApiTags('ai')
   @Post('generate-girlified-smart-pad-report')
   @ApiOkResponse({ type: String })
   @UseInterceptors(FileInterceptor('file'))

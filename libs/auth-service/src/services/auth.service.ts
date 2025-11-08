@@ -514,9 +514,10 @@ Decision criteria to apply (regulatory-first):
 
 Strict output contract — return only the following:
 - Approval Rating: Output exactly this label followed by a space and a percentage value from 0% to 100% (NO COLON). Example: "Approval Rating 62%"
-- Areas to Improve: Bullet list of specific, actionable improvements across evidence, design choices (endpoints, sample size, biomarkers, comparators), dossier structure, documentation quality, or auditability. Omit this section if none. Example "Here are steps to take to improve your approval chances"
-    `.trim();
-  }
+- Here are steps to take to improve your approval chances: Bullet list of specific, actionable improvements across evidence, design choices (endpoints, sample size, biomarkers, comparators), dossier structure, documentation quality, or auditability. Omit this section if none.
+`.trim();
+}
+// - Areas to Improve: Bullet list of specific, actionable improvements across evidence, design choices (endpoints, sample size, biomarkers, comparators), dossier structure, documentation quality, or auditability. Omit this section if none.
 
   private createClinicalTrialSystemInstruction(threadId?: string): string {
     const base = `

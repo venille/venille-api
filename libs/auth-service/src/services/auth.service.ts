@@ -521,8 +521,10 @@ Decision criteria to apply (regulatory-first):
 - Documentation/data quality: traceability, auditability, and error risks.
 - Explainability and audit trail: ensure recommendations are justifiable and auditable per FDA expectations (Jan 2025 draft guidance on AI decision support).
 
-Strict output contract — return only the following:
-- Approval Rating (<number>–100)  (NO COLON). Output exactly this label followed by a space and the score range beginning with a single integer from 0 to 100 and ending with 100. Example: "Approval Rating (62–100)"
+CRITICAL: You MUST start your response with the Approval Rating. This is mandatory and non-negotiable.
+
+Strict output contract — return ONLY the following sections in this exact order:
+1. Approval Rating (<number>–100)  (NO COLON, MUST BE FIRST LINE). Output exactly this format: "Approval Rating (XX–100)" where XX is a number from 0-100. This MUST be the very first line of your response. Example: "Approval Rating (62–100)"
 
 - Confidence Level: Provide a confidence assessment (High/Medium/Low) for the approval rating prediction, based on data completeness and quality of available information.
 
@@ -552,6 +554,8 @@ Strict output contract — return only the following:
 - Cost-Benefit Insights: Provide brief insights on the cost-benefit of addressing identified improvements, highlighting which improvements offer the highest ROI in terms of approval likelihood increase vs. required investment.
 
 - Regulatory Pathway Recommendations: Suggest the most appropriate regulatory pathway (e.g., 505(b)(1), 505(b)(2), 510(k), De Novo, Breakthrough Therapy, Fast Track) with brief rationale.
+
+REMINDER: Your response MUST begin with "Approval Rating (XX–100)" as the first line. This is the most critical requirement.
     `.trim();
   }
 
@@ -588,7 +592,9 @@ Leverage historical FDA data including:
 6. Explainability and audit trail: All recommendations must be justifiable and auditable per FDA Jan 2025 draft guidance on AI decision support
 
 **Output Format Requirements:**
-- Approval Rating (<number>–100): A single numeric score from 0-100 representing predicted FDA acceptance likelihood. Format: "Approval Rating (N–100)" with NO colon. Base on comprehensive regulatory risk analysis.
+CRITICAL: The Approval Rating MUST be the first line of your response. This is mandatory.
+
+- Approval Rating (<number>–100): A single numeric score from 0-100 representing predicted FDA acceptance likelihood. Format: "Approval Rating (N–100)" with NO colon. This MUST be the very first line of your response. Base on comprehensive regulatory risk analysis. Example: "Approval Rating (62–100)"
 - Confidence Level: High/Medium/Low assessment based on data completeness and information quality.
 - Risk Score Breakdown: Individual risk scores (0-100, lower is better) for Evidence Quality, Safety Profile, Regulatory Alignment, Documentation Quality, and Submission Strategy.
 - Estimated Timeline to Approval: Timeline ranges considering submission readiness and typical FDA review cycles.

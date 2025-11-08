@@ -447,6 +447,9 @@ export class AuthService {
     }
   }
 
+//   **Previous Studies/Data:**
+// ${previousStudies || 'No previous studies or data provided'}
+
   private createClinicalTrialPrompt(
     simulationData: ClinicalTrialSimulationDTO,
     files: Express.Multer.File[],
@@ -460,7 +463,7 @@ export class AuthService {
       productDescription,
       targetDemographics,
       mechanismOfAction,
-      previousStudies,
+      // previousStudies,
       knownRisks,
     } = simulationData;
 
@@ -487,9 +490,6 @@ ${targetDemographics || 'No specific demographics provided'}
 
 **Mechanism of Action:**
 ${mechanismOfAction || 'No mechanism of action provided'}
-
-**Previous Studies/Data:**
-${previousStudies || 'No previous studies or data provided'}
 
 **Known Risks & Contraindications:**
 ${knownRisks || 'No known risks or contraindications provided'}

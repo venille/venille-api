@@ -292,16 +292,16 @@ export class ClinicalTrialSimulationDTO {
   @MaxLength(2000)
   mechanismOfAction?: string;
 
-  @ApiProperty({
-    example:
-      'Phase I study in 24 healthy volunteers showed 30% reduction in glucose reabsorption. Preclinical studies in diabetic rats demonstrated 25% improvement in glucose tolerance. Published research on similar SGLT2 inhibitors shows consistent efficacy.',
-    description:
-      'Previous studies, preclinical data, pilot studies, or relevant research findings.',
-  })
-  @IsString()
-  @IsOptional()
-  @MaxLength(2000)
-  previousStudies?: string;
+  // @ApiProperty({
+  //   example:
+  //     'Phase I study in 24 healthy volunteers showed 30% reduction in glucose reabsorption. Preclinical studies in diabetic rats demonstrated 25% improvement in glucose tolerance. Published research on similar SGLT2 inhibitors shows consistent efficacy.',
+  //   description:
+  //     'Previous studies, preclinical data, pilot studies, or relevant research findings.',
+  // })
+  // @IsString()
+  // @IsOptional()
+  // @MaxLength(2000)
+  // previousStudies?: string;
 
   @ApiProperty({
     example:

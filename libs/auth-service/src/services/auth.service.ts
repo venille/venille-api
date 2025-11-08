@@ -452,15 +452,14 @@ export class AuthService {
   // ${previousStudies || 'No previous studies or data provided'}
   // - Product Description: ${productDescription || 'No additional description provided'}
 
-
   // **Target Demographics:**
-// ${targetDemographics || 'No specific demographics provided'}
+  // ${targetDemographics || 'No specific demographics provided'}
 
-// **Mechanism of Action:**
-// ${mechanismOfAction || 'No mechanism of action provided'}
+  // **Mechanism of Action:**
+  // ${mechanismOfAction || 'No mechanism of action provided'}
 
-// **Known Risks & Contraindications:**
-// ${knownRisks || 'No known risks or contraindications provided'}
+  // **Known Risks & Contraindications:**
+  // ${knownRisks || 'No known risks or contraindications provided'}
 
   private createClinicalTrialPrompt(
     simulationData: ClinicalTrialSimulationDTO,
@@ -514,7 +513,7 @@ Decision criteria to apply (regulatory-first):
 - Explainability and audit trail: ensure recommendations are justifiable and auditable per FDA expectations (Jan 2025 draft guidance on AI decision support).
 
 Strict output contract — return only the following:
-- Approval Rating (<number>–100) (NO COLON). Output exactly this label followed by a space and the score range beginning with a single integer from 0 to 100 and ending with 100. Example: "Approval Rating (62–100)"
+- Approval Rating: Output exactly this label followed by a space and a percentage value from 0% to 100% (NO COLON). Example: "Approval Rating 62%"
 - Areas to Improve: Bullet list of specific, actionable improvements across evidence, design choices (endpoints, sample size, biomarkers, comparators), dossier structure, documentation quality, or auditability. Omit this section if none.
     `.trim();
   }
@@ -552,7 +551,7 @@ Leverage historical FDA data including:
 6. Explainability and audit trail: All recommendations must be justifiable and auditable per FDA Jan 2025 draft guidance on AI decision support
 
 **Output Format Requirements:**
-- Approval Rating (<number>–100): A single numeric score from 0-100 representing predicted FDA acceptance likelihood. Format: "Approval Rating (N–100)" with NO colon. Base on comprehensive regulatory risk analysis.
+- Approval Rating: A single percentage value from 0% to 100% representing predicted FDA acceptance likelihood. Format: "Approval Rating XX%" with NO colon. Base on comprehensive regulatory risk analysis. Example: "Approval Rating 62%"
 - Areas to Improve: Bullet list of specific, actionable improvements across:
   * Evidence quality (protocol, endpoints, statistics, sample size, biomarkers)
   * Design choices (comparators, inclusion/exclusion criteria)

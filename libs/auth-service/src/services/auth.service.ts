@@ -310,9 +310,9 @@ export class AuthService {
               parts,
             },
           ],
-          // config: {
-          //   systemInstruction: this.createClinicalTrialSystemInstruction(),
-          // },
+          config: {
+            systemInstruction: this.createClinicalTrialSystemInstruction(),
+          },
           model: 'gemini-2.0-flash',
         });
 

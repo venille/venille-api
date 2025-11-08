@@ -241,7 +241,7 @@ export class ClinicalTrialSimulationDTO {
   @MaxLength(50)
   productType: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     example: 'Type 2 Diabetes',
     description: 'The medical condition the product is intended to treat.',
   })
@@ -259,7 +259,7 @@ export class ClinicalTrialSimulationDTO {
   @MaxLength(100)
   developmentStage: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     example:
       'A novel oral medication designed to improve glucose control in patients with Type 2 Diabetes. Dosage: 500mg twice daily with meals. Key features include sustained release formulation and minimal side effects.',
     description:
@@ -270,7 +270,7 @@ export class ClinicalTrialSimulationDTO {
   @MaxLength(1000)
   productDescription?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     example:
       'Adults aged 18-65, both genders, all ethnicities, global regions, patients with HbA1c 7-10%, no severe renal impairment',
     description:
@@ -281,7 +281,7 @@ export class ClinicalTrialSimulationDTO {
   @MaxLength(1000)
   targetDemographics?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     example:
       'The product works by inhibiting SGLT2 transporters in the proximal tubule of the kidney, reducing glucose reabsorption and increasing urinary glucose excretion. This mechanism helps lower blood glucose levels independently of insulin secretion.',
     description:
@@ -303,7 +303,7 @@ export class ClinicalTrialSimulationDTO {
   // @MaxLength(2000)
   // previousStudies?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     example:
       'Common side effects include increased urination, urinary tract infections, and genital yeast infections. Contraindicated in patients with severe renal impairment (eGFR <30), diabetic ketoacidosis, or hypersensitivity to the drug. Drug interactions with diuretics and insulin.',
     description:

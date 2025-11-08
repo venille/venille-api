@@ -448,7 +448,18 @@ export class AuthService {
   }
 
   //   **Previous Studies/Data:**
+  // - Target Condition: ${targetCondition}
   // ${previousStudies || 'No previous studies or data provided'}
+  // - Product Description: ${productDescription || 'No additional description provided'}
+
+  // **Target Demographics:**
+  // ${targetDemographics || 'No specific demographics provided'}
+
+  // **Mechanism of Action:**
+  // ${mechanismOfAction || 'No mechanism of action provided'}
+
+  // **Known Risks & Contraindications:**
+  // ${knownRisks || 'No known risks or contraindications provided'}
 
   private createClinicalTrialPrompt(
     simulationData: ClinicalTrialSimulationDTO,
@@ -481,18 +492,7 @@ Known risk context to consider:
 **Product Information:**
 - Product Name: ${productName}
 - Product Type: ${productType}
-- Target Condition: ${targetCondition}
 - Development Stage: ${developmentStage || 'Not specified'}
-- Product Description: ${productDescription || 'No additional description provided'}
-
-**Target Demographics:**
-${targetDemographics || 'No specific demographics provided'}
-
-**Mechanism of Action:**
-${mechanismOfAction || 'No mechanism of action provided'}
-
-**Known Risks & Contraindications:**
-${knownRisks || 'No known risks or contraindications provided'}
 
 ${
   hasImages

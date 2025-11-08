@@ -246,7 +246,7 @@ export class ClinicalTrialSimulationDTO {
     description: 'The medical condition the product is intended to treat.',
   })
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   @MaxLength(100)
   targetCondition: string;
 

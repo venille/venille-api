@@ -483,6 +483,15 @@ Regulatory Intelligence / FDA Simulation
 
 Objective: Predict submission outcome risk and provide targeted improvements to maximize FDA approval odds for the proposed protocol/submission.
 
+**Primary Deliverable - Approval Rating:**
+Calculate and return an Approval Rating (0-100) representing the predicted FDA acceptance likelihood. This rating must be based on comprehensive analysis of all provided information including product details, decision criteria, and any visual evidence. The rating should reflect:
+- Overall regulatory risk profile
+- Alignment with FDA standards and historical precedents
+- Evidence quality and completeness
+- Safety/benefit balance
+- Submission strategy strength
+- Documentation quality
+
 Evidence base to leverage: historical FDA review letters, Complete Response Letters (CRLs), approval/denial precedents, indication-specific benchmarks, prior dossiers, and FDA reviewer comments where applicable.
 
 Known risk context to consider:

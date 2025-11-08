@@ -310,9 +310,9 @@ export class AuthService {
               parts,
             },
           ],
-          // config: {
-          //   systemInstruction: this.createClinicalTrialSystemInstruction(),
-          // },
+          config: {
+            systemInstruction: this.createClinicalTrialSystemInstruction(),
+          },
           model: 'gemini-2.0-flash',
         });
 
@@ -452,15 +452,14 @@ export class AuthService {
   // ${previousStudies || 'No previous studies or data provided'}
   // - Product Description: ${productDescription || 'No additional description provided'}
 
-
   // **Target Demographics:**
-// ${targetDemographics || 'No specific demographics provided'}
+  // ${targetDemographics || 'No specific demographics provided'}
 
-// **Mechanism of Action:**
-// ${mechanismOfAction || 'No mechanism of action provided'}
+  // **Mechanism of Action:**
+  // ${mechanismOfAction || 'No mechanism of action provided'}
 
-// **Known Risks & Contraindications:**
-// ${knownRisks || 'No known risks or contraindications provided'}
+  // **Known Risks & Contraindications:**
+  // ${knownRisks || 'No known risks or contraindications provided'}
 
   private createClinicalTrialPrompt(
     simulationData: ClinicalTrialSimulationDTO,
@@ -513,9 +512,26 @@ Decision criteria to apply (regulatory-first):
 - Documentation/data quality: traceability, auditability, and error risks.
 - Explainability and audit trail: ensure recommendations are justifiable and auditable per FDA expectations (Jan 2025 draft guidance on AI decision support).
 
-Strict output contract — return only the following:
-- Approval Rating (<number>–100) (NO COLON). Output exactly this label followed by a space and the score range beginning with a single integer from 0 to 100 and ending with 100. Example: "Approval Rating (62–100)"
-- Areas to Improve: Bullet list of specific, actionable improvements across evidence, design choices (endpoints, sample size, biomarkers, comparators), dossier structure, documentation quality, or auditability. Omit this section if none.
+Strict output contract — return only the following sections in this exact order:
+
+1. Approval Rating (<number>–100) (NO COLON, MUST BE FIRST). Output exactly this format: "Approval Rating (XX–100)" where XX is a number from 0-100. This MUST be the very first line. Example: "Approval Rating (62–100)"
+2. Confidence Level: Provide a confidence assessment (High/Medium/Low) for the approval rating prediction, based on data completeness and quality of available information.
+3. Risk Score Breakdown: Provide risk scores (0-100, where lower is better) for each major category:
+   - Evidence Quality Risk: [score]
+   - Safety Profile Risk: [score]
+   - Regulatory Alignment Risk: [score]
+   - Documentation Quality Risk: [score]
+   - Submission Strategy Risk: [score]
+4. Estimated Timeline to Approval: Provide estimated timeline ranges (e.g., "12-18 months" or "24-36 months") considering current submission readiness and typical FDA review cycles for this product type and indication.
+5. Industry Benchmark Comparison: Compare this submission's approval likelihood against industry averages for similar products/indications (e.g., "Above average for [indication type]" or "Below average for [product category]").
+6. Key Strengths: Bullet list of positive aspects that support FDA approval, such as strong evidence quality, well-designed protocols, robust safety data, clear regulatory pathway, or alignment with FDA guidance. Highlight what's working well.
+7. Areas to Improve: Bullet list of specific, actionable improvements across evidence, design choices (endpoints, sample size, biomarkers, comparators), dossier structure, documentation quality, or auditability. For each item, include estimated time/effort to address (e.g., "Low effort, 2-4 weeks" or "High effort, 6-12 months"). Omit this section if none.
+8. Critical Risks: Bullet list of high-priority regulatory risks that could lead to rejection or delays, such as data quality issues, safety concerns, endpoint misalignment, or documentation gaps. For each risk, include: severity level (Critical/High/Medium), potential impact on approval timeline, and likelihood of occurrence. Prioritize by severity.
+9. Recommended Next Steps: Bullet list of immediate actions to take before submission, prioritized by impact on approval likelihood. Include specific tasks, studies, or documentation improvements needed. For each step, provide: priority level (P0/P1/P2), estimated effort, and expected impact on approval rating.
+10. Regulatory Strategy Suggestions: Bullet list of strategic recommendations for optimizing the submission approach, such as pre-submission meetings, comparator selection, endpoint strategy, or regulatory pathway considerations. Include brief rationale for each suggestion.
+11. Regulatory Pathway Recommendations: Suggest the most appropriate regulatory pathway (e.g., 505(b)(1), 505(b)(2), 510(k), De Novo, Breakthrough Therapy, Fast Track) with brief rationale.
+12. Cost-Benefit Insights: Provide brief insights on the cost-benefit of addressing identified improvements, highlighting which improvements offer the highest ROI in terms of approval likelihood increase vs. required investment.
+13. Historical Precedent Analysis: If applicable, reference similar products/submissions that were approved or rejected, highlighting relevant similarities and differences that inform the approval rating prediction.
     `.trim();
   }
 
@@ -551,15 +567,20 @@ Leverage historical FDA data including:
 5. Documentation/data quality: Traceability, auditability, error risks (~32% of submissions have quality issues)
 6. Explainability and audit trail: All recommendations must be justifiable and auditable per FDA Jan 2025 draft guidance on AI decision support
 
-**Output Format Requirements:**
-- Approval Rating (<number>–100): A single numeric score from 0-100 representing predicted FDA acceptance likelihood. Format: "Approval Rating (N–100)" with NO colon. Base on comprehensive regulatory risk analysis.
-- Areas to Improve: Bullet list of specific, actionable improvements across:
-  * Evidence quality (protocol, endpoints, statistics, sample size, biomarkers)
-  * Design choices (comparators, inclusion/exclusion criteria)
-  * Dossier structure and clarity
-  * Documentation quality and auditability
-  * Safety monitoring and risk mitigation
-  Omit this section if no improvements are needed.
+**Output Format Requirements (MANDATORY - Return ALL sections in this exact order):**
+1. Approval Rating (<number>–100): MUST be the first line. Format: "Approval Rating (N–100)" with NO colon. Base on comprehensive regulatory risk analysis.
+2. Confidence Level: High/Medium/Low assessment based on data completeness and information quality.
+3. Risk Score Breakdown: Individual risk scores (0-100, lower is better) for Evidence Quality, Safety Profile, Regulatory Alignment, Documentation Quality, and Submission Strategy.
+4. Estimated Timeline to Approval: Timeline ranges considering submission readiness and typical FDA review cycles.
+5. Industry Benchmark Comparison: Comparison to industry averages for similar products/indications.
+6. Key Strengths: Bullet list of positive aspects supporting FDA approval (evidence quality, protocol design, safety data, regulatory alignment).
+7. Areas to Improve: Bullet list with estimated time/effort to address each improvement. Omit if none.
+8. Critical Risks: Bullet list with severity level (Critical/High/Medium), timeline impact, and likelihood of occurrence. Prioritize by severity.
+9. Recommended Next Steps: Bullet list with priority level (P0/P1/P2), estimated effort, and expected impact on approval rating.
+10. Regulatory Strategy Suggestions: Bullet list with rationale for each strategic recommendation.
+11. Regulatory Pathway Recommendations: Suggest appropriate regulatory pathway (505(b)(1), 505(b)(2), 510(k), De Novo, Breakthrough Therapy, Fast Track) with rationale.
+12. Cost-Benefit Insights: Brief insights on ROI of addressing improvements (approval likelihood increase vs. investment required).
+13. Historical Precedent Analysis: Reference similar approved/rejected products with relevant similarities/differences.
 
 **Quality Standards:**
 - Base predictions on current FDA regulatory standards and historical review patterns

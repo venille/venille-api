@@ -26,7 +26,7 @@ export class FetchDashboardInfoQueryHandler
     @InjectRepository(PeriodTracker)
     private readonly periodTrackerRepository: Repository<PeriodTracker>,
     @InjectRepository(PeriodTrackerRecord)
-    private readonly periodRecordRepository: Repository<PeriodTrackerRecord>,
+    private readonly periodTrackerRecordRepository: Repository<PeriodTrackerRecord>,
   ) {}
 
   async execute(query: FetchDashboardInfoQuery): Promise<DashboardInfo> {
@@ -43,7 +43,7 @@ export class FetchDashboardInfoQueryHandler
         },
       });
 
-      const periodRecord = await this.periodRecordRepository.findOne({
+      const periodRecord = await this.periodTrackerRecordRepository.findOne({
         where: {
           account: {
             id: secureUser.id,

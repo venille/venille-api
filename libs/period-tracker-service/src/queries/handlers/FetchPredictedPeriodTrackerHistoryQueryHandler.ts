@@ -44,7 +44,7 @@ export class FetchPredictedPeriodTrackerHistoryQueryHandler
     @InjectRepository(PeriodTracker)
     private readonly periodTrackerRepository: Repository<PeriodTracker>,
     @InjectRepository(PeriodTrackerRecord)
-    private readonly periodRecordRepository: Repository<PeriodTrackerRecord>,
+    private readonly periodTrackerRecordRepository: Repository<PeriodTrackerRecord>,
     @InjectRepository(Account)
     private readonly accountRepository: Repository<Account>,
   ) {}
@@ -67,7 +67,7 @@ export class FetchPredictedPeriodTrackerHistoryQueryHandler
         this.periodTrackerRepository.findOne({
           where: { account: { id: secureUser.id } },
         }),
-        this.periodRecordRepository.find({
+        this.periodTrackerRecordRepository.find({
           where: { account: { id: secureUser.id } },
           order: { startDate: 'ASC' },
           // take: 1,
@@ -156,35 +156,6 @@ export class FetchPredictedPeriodTrackerHistoryQueryHandler
               );
             });
 
-            // Calculate base cycle information for predictions
-            const { cycleStartDate: predictedCycleStart } =
-              calculateCycleDayCount(
-                currentDate,
-                lastPeriodStartDate,
-                cycleLengthDays,
-              );
-            const predictedPeriodStart = predictedCycleStart;
-            const predictedPeriodEnd = addDays(
-              predictedPeriodStart,
-              periodLengthDays,
-            );
-
-            let isPredictedPeriodDay: boolean;
-            if (monthHasActualPeriod) {
-              // For months with actual period records, only mark days as period days if they're within an actual record
-              isPredictedPeriodDay = isWithinActualPeriod;
-            } else {
-              // For months without records, use predicted dates based on cycle
-              isPredictedPeriodDay = isWithinInterval(currentDate, {
-                start: predictedPeriodStart,
-                end: predictedPeriodEnd,
-              });
-            }
-
-            // Calculate cycle day
-            let cycleDay: number;
-            let cycleStartDate: Date;
-
             // Find the most recent actual period that started at or before this date
             const mostRecentActualPeriod = periodRecords
               .filter((record) => {
@@ -203,6 +174,38 @@ export class FetchPredictedPeriodTrackerHistoryQueryHandler
             const baselineStartDate = mostRecentActualPeriod
               ? new Date(mostRecentActualPeriod.startDate)
               : lastPeriodStartDate;
+
+            // Calculate base cycle information for predictions
+            const { cycleStartDate: predictedCycleStart } =
+              calculateCycleDayCount(
+                currentDate,
+                baselineStartDate,
+                cycleLengthDays,
+              );
+            const predictedPeriodStart = predictedCycleStart;
+            const predictedPeriodEnd = addDays(
+              predictedPeriodStart,
+              periodLengthDays,
+            );
+
+            let isPredictedPeriodDay: boolean;
+            if (isWithinActualPeriod) {
+              // Always mark as period day if it falls within an actual record
+              isPredictedPeriodDay = true;
+            } else if (monthHasActualPeriod) {
+              // For months with actual period records, don't predict additional periods
+              isPredictedPeriodDay = false;
+            } else {
+              // For months without an actual period start, use predicted dates based on cycle
+              isPredictedPeriodDay = isWithinInterval(currentDate, {
+                start: predictedPeriodStart,
+                end: predictedPeriodEnd,
+              });
+            }
+
+            // Calculate cycle day
+            let cycleDay: number;
+            let cycleStartDate: Date;
 
             // Calculate days since the baseline period
             const currentDateStr = currentDate.toISOString().split('T')[0];

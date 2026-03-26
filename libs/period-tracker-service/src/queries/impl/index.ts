@@ -16,3 +16,7 @@ export class FetchPredictedPeriodTrackerHistoryQuery {
   constructor(public readonly secureUser: SecureUserPayload) {}
 }
 
+export class FetchUserPredictedPeriodTrackerHistoryQuery {
+  constructor(public readonly accountId: number) {}
+}
+

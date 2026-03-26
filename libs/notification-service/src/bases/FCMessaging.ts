@@ -5,8 +5,9 @@ async function sendNotification(
   token: string,
   payload: FCMNotificationPayload,
 ) {
-  console.log('Sending FCM notification');
   try {
+    console.log('Sending FCM notification');
+
     const timestamp = new Date().getTime();
 
     const res = await messaging.getMessaging().send({

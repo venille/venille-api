@@ -1,3 +1,4 @@
+import { MenstrualPhase } from '../constants/enums';
 import {
   Entity,
   Column,
@@ -9,7 +10,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Account } from './account.model';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { LogPeriodSymptomEnum } from '../constants/enums';
 
 @Entity()
@@ -262,6 +263,9 @@ export class PeriodDayInfo {
     type: String,
   })
   insights: string;
+
+  @ApiProperty({ example: MenstrualPhase.MENSTRUAL_PHASE, enum: MenstrualPhase })
+  currentPhase: MenstrualPhase;
 }
 
 export class MonthlyPeriodInfo {

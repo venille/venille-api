@@ -80,7 +80,7 @@ export class PeriodTrackerController {
     @Req() req: Request,
     @SecureUser() secureUser: SecureUserPayload,
   ): Promise<PeriodTrackerHistory> {
-    return this.queryBus.execute(
+    return await this.queryBus.execute(
       new FetchPredictedPeriodTrackerHistoryQuery(secureUser),
     );
   }

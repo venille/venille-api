@@ -17,14 +17,14 @@ import {
   MonthlyPeriodInfo,
   PeriodTrackerHistory,
 } from '@app/common/src/models/period.record.model';
-import { Account } from '@app/common/src/models/account.model';
-import { MenstrualPhase } from '@app/common/src/constants/enums';
 import {
-  generateDailyInsight,
-  calculateCycleDayCount,
-  calculateFollicularPhaseLength,
+generateDailyInsight,
+calculateCycleDayCount,
+calculateFollicularPhaseLength,
 } from '@app/common/src/calculator/period.calculator';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Account } from '@app/common/src/models/account.model';
+import { MenstrualPhase } from '@app/common/src/constants/enums';
 import { FetchPredictedPeriodTrackerHistoryQuery } from '../impl';
 import { AppLogger } from 'libs/common/src/logger/logger.service';
 import { QueryHandler, IQueryHandler, QueryBus } from '@nestjs/cqrs';
@@ -397,6 +397,7 @@ export class FetchPredictedPeriodTrackerHistoryQueryHandler
               isFertileWindow,
               isPredictedOvulationDay,
               insights,
+              currentPhase,
             });
 
             // Update previous cycle day count for next iteration

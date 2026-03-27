@@ -33,8 +33,8 @@ export class PeriodTrackerCronService {
   ) { }
 
   // !MORNING -> MENSTRUAL PHASE NOTIFICATION
-  // @Cron('*/60 * * * * *', { timeZone: 'Africa/Lagos' })
-  @Cron('05 10 * * *', { timeZone: 'Africa/Lagos' })
+  @Cron('*/60 * * * * *', { timeZone: 'Africa/Lagos' })
+  // @Cron('05 10 * * *', { timeZone: 'Africa/Lagos' })
   async morningMenstrualPhaseCronHandler() {
     try {
       this.logger.log(`[MORNING-MENSTRUAL-PHASE-CRONJOB-PROCESSING]`);

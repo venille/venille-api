@@ -144,5 +144,5 @@ dist
 **/libs/common/src/database/migrations/*
 **/libs/common/src/database/migrations_temp/*
 
-# ./libs/common/src/firebase/firebase.json
-# **/libs/common/src/firebase/firebase.json
+./libs/common/src/firebase/firebase.json
+**/libs/common/src/firebase/firebase.json

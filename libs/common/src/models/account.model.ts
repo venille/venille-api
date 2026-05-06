@@ -105,11 +105,11 @@ export class Account {
 
   @Column({
     nullable: true,
-    default: 'https://medexer.s3.amazonaws.com/avatars/avatar.png',
+    default: 'https://afritint-media.s3.eu-north-1.amazonaws.com/versions/original/36c0b149-a6af-481e-a251-dd3138510afc.png',
   })
   @ApiPropertyOptional({
     description:
-      'Profile photo e.g https://medexer.s3.amazonaws.com/avatars/avatar.png',
+      'Profile photo e.g https://afritint-media.s3.eu-north-1.amazonaws.com/versions/original/36c0b149-a6af-481e-a251-dd3138510afc.png',
   })
   profilePhoto: string;
 
@@ -222,7 +222,7 @@ export class Account {
   })
 
   lastLogin: Date;
-  
+
   @Column({ default: '', nullable: true })
   @ApiPropertyOptional({
     description: 'Signup verification hash',
@@ -281,7 +281,7 @@ export class AccountInfo {
   stateArea: string;
 
   @ApiProperty({
-    example: 'https://medexer.s3.amazonaws.com/avatars/avatar.png',
+    example: 'https://afritint-media.s3.eu-north-1.amazonaws.com/versions/original/36c0b149-a6af-481e-a251-dd3138510afc.png',
   })
   profilePhoto: string;
 

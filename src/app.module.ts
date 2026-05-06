@@ -9,6 +9,7 @@ import { CacheModule } from '@nestjs/cache-manager';
 import { HealthModule } from './health/health.module';
 import { AuthServiceModule } from 'libs/auth-service/src';
 import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { AdminServiceModule } from '@app/admin-service/src';
 import { CommonModule } from 'libs/common/src/common.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from 'libs/common/src/auth/jwt.strategy';
@@ -26,6 +27,7 @@ import { NotificationServiceModule } from '@app/notification-service/src/notific
     HealthModule,
     CommonModule,
     AuthServiceModule,
+    AdminServiceModule,
     AccountServiceModule,
     EngagementServiceModule,
     NotificationServiceModule,
@@ -44,6 +46,10 @@ import { NotificationServiceModule } from '@app/notification-service/src/notific
       inject: [ConfigService],
     }),
     RouterModule.register([
+      {
+        path: 'v1/admin',
+        module: AdminServiceModule,
+      },
       {
         path: 'v1/account',
         module: AccountServiceModule,

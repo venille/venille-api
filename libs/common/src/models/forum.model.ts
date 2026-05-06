@@ -104,12 +104,12 @@ export class ForumInfo {
   category: ForumCategory;
 
   @ApiProperty({
-    example: 'https://medexer.s3.amazonaws.com/avatars/avatar.png',
+    example: 'https://afritint-media.s3.eu-north-1.amazonaws.com/versions/original/36c0b149-a6af-481e-a251-dd3138510afc.png',
   })
   image: string;
 
   @ApiProperty({
-    example: 'https://medexer.s3.amazonaws.com/avatars/avatar.png',
+    example: 'https://afritint-media.s3.eu-north-1.amazonaws.com/versions/original/36c0b149-a6af-481e-a251-dd3138510afc.png',
   })
   authorPhoto: string;
 
@@ -174,7 +174,7 @@ export class ForumCommentInfo {
   content: string;
 
   @ApiProperty({
-    example: 'https://medexer.s3.amazonaws.com/avatars/avatar.png',
+    example: 'https://afritint-media.s3.eu-north-1.amazonaws.com/versions/original/36c0b149-a6af-481e-a251-dd3138510afc.png',
   })
   authorPhoto: string;
 

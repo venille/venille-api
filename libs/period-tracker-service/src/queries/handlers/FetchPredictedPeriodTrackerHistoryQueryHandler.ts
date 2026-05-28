@@ -41,12 +41,12 @@ export class FetchPredictedPeriodTrackerHistoryQueryHandler
     private readonly queryBus: QueryBus,
     @Inject('Logger') private readonly logger: AppLogger,
     @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
+    @InjectRepository(Account)
+    private readonly accountRepository: Repository<Account>,
     @InjectRepository(PeriodTracker)
     private readonly periodTrackerRepository: Repository<PeriodTracker>,
     @InjectRepository(PeriodTrackerRecord)
     private readonly periodTrackerRecordRepository: Repository<PeriodTrackerRecord>,
-    @InjectRepository(Account)
-    private readonly accountRepository: Repository<Account>,
   ) {}
 
   async execute(

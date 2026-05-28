@@ -49,8 +49,8 @@ jobs:
           USER: ${{ secrets.EC2_USER_VENILLE_SERVER}}
           KEY: ${{ secrets.EC2_SSH_KEY_VENILLE_SERVER}}
         run: |
-          echo "$KEY" > keys-medexer-server.pem && chmod 600 keys-medexer-server.pem
-          ssh -o StrictHostKeyChecking=no -i keys-medexer-server.pem ${USER}@${HOST} '
+          echo "$KEY" > keys-afritint-aws-server.pem && chmod 600 keys-afritint-aws-server.pem
+          ssh -o StrictHostKeyChecking=no -i keys-afritint-aws-server.pem ${USER}@${HOST} '
             pwd &&
             cd staging &&
             git pull origin staging &&
@@ -74,12 +74,12 @@ jobs:
           USER: ${{ secrets.EC2_USER_VENILLE_SERVER}}
           KEY: ${{ secrets.EC2_SSH_KEY_VENILLE_SERVER}}
         run: |
-          echo "$KEY" > keys-medexer-server.pem && chmod 600 keys-medexer-server.pem
-          ssh -o StrictHostKeyChecking=no -i keys-medexer-server.pem ${USER}@${HOST} '
+          echo "$KEY" > keys-afritint-aws-server.pem && chmod 600 keys-afritint-aws-server.pem
+          ssh -o StrictHostKeyChecking=no -i keys-afritint-aws-server.pem ${USER}@${HOST} '
             pwd &&
-            cd infra &&
+            cd venille-infra &&
             git pull origin master &&
             npm install &&
             npm run build
-            pm2 restart infra
+            pm2 restart venille-infra
           '

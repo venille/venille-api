@@ -81,5 +81,5 @@ jobs:
             git pull origin master &&
             npm install &&
             npm run build
-            pm2 restart venille-infra
+            pm2 restart infra-venille
           '

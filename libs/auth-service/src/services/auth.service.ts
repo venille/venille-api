@@ -170,7 +170,7 @@ export class AuthService {
             - If the image is invalid, do not continue analysis.
             `,
           },
-          model: 'gemini-2.0-flash',
+          model: 'gemini-3.1-flash-lite',
         });
 
       this.logger.log(`[TEST-OPENAI-API-SUCCESS]`);
@@ -244,7 +244,7 @@ export class AuthService {
             - If the image is invalid, do not continue analysis.
             `,
           },
-          model: 'gemini-2.0-flash',
+          model: 'gemini-3.1-flash-lite',
         });
 
       this.logger.log(`[PROCESS-GREENEDEN-GPT-SUCCESS]`);
@@ -309,7 +309,7 @@ export class AuthService {
           // config: {
           //   systemInstruction: this.createClinicalTrialSystemInstruction(),
           // },
-          model: 'gemini-2.0-flash',
+          model: 'gemini-3.1-flash-lite',
         });
 
       console.log('[CLINICAL-TRIAL-SIMULATION-RESPONSE] :: ', response.text);
@@ -369,7 +369,7 @@ export class AuthService {
           config: {
             systemInstruction: this.createClinicalTrialSystemInstruction(threadId),
           },
-          model: 'gemini-2.0-flash',
+          model: 'gemini-3.1-flash-lite',
         });
 
       console.log('[CLINICAL-TRIAL-SIMULATION-RESPONSE] :: ', response.text);
@@ -430,7 +430,7 @@ export class AuthService {
           config: {
             systemInstruction: systemInstruction,
           },
-          model: 'gemini-2.0-flash',
+          model: 'gemini-3.1-flash-lite',
         });
 
       console.log('[AI-MANAGER-RESPONSE] :: ', response.text);
